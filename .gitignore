@@ -1,6 +1,7 @@
 /target/
-/.idea/
-/web-project.iml/
+/.idea/*
+*.iml
+
 ### Java ###
 # Compiled class file
 *.class
