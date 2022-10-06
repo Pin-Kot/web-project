@@ -1,6 +1,7 @@
 /target/
 /.idea/*
 *.iml
+*.properties
 
 ### Java ###
 # Compiled class file
