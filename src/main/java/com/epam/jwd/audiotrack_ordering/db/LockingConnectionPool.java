@@ -7,6 +7,7 @@ import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.epam.jwd.audiotrack_ordering.exception.CouldNotInitializeConnectionPool;
@@ -22,61 +23,65 @@ public class LockingConnectionPool implements ConnectionPool {
     public static final String DB_URL = "db.url";
     public static final String DB_USER = "db.user";
     public static final String DB_PASSWORD = "db.password";
+    public static final String DB_INITIAL_POOL_SIZE = "db.initialPoolSize";
+    public static final double THRESHOLD = 0.25;
 
-    private static final int INITIAL_CONNECTIONS_AMOUNT = 8;
     private final Queue<ProxyConnection> availableConnections = new ArrayDeque<>();
     private final List<ProxyConnection> givenAwayConnections = new ArrayList<>();
 
     private boolean initialized = false;
 
     private static LockingConnectionPool instance = null;
-    private static final ReentrantLock Lock = new ReentrantLock();
+    private static final ReentrantLock LOCK = new ReentrantLock();
+    private static final Condition CONDITION = LOCK.newCondition();
 
-    private LockingConnectionPool(){}
+    private LockingConnectionPool() {
+    }
 
     public static LockingConnectionPool getInstance() {
         if (instance == null) {
             try {
-                Lock.lock();
-                    if (instance == null) {
-                        instance = new LockingConnectionPool();
-                    }
-                } finally {
-                    Lock.unlock();
+                LOCK.lock();
+                if (instance == null) {
+                    instance = new LockingConnectionPool();
                 }
+            } finally {
+                LOCK.unlock();
             }
+        }
         return instance;
     }
 
     @Override
     public boolean isInitialized() {
-        Lock.lock();
+        LOCK.lock();
         try {
             return initialized;
         } finally {
-            Lock.unlock();
+            LOCK.unlock();
         }
     }
 
     @Override
     public boolean init() {
-        Lock.lock();
+        LOCK.lock();
         try {
             if (!initialized) {
                 registerDrivers();
-                initializedConnections(INITIAL_CONNECTIONS_AMOUNT, true);
+                initializedConnections(Integer.parseInt(paramFromProperties(receiveProperties(), DB_INITIAL_POOL_SIZE)),
+                        true);
                 initialized = true;
                 return true;
             }
         } finally {
-            Lock.unlock();
+            LOCK.unlock();
         }
         return false;
     }
 
     @Override
     public boolean shutDown() {
-        Lock.lock();
+        LOCK.lock();
         try {
             if (initialized) {
                 closeConnections();
@@ -85,23 +90,32 @@ public class LockingConnectionPool implements ConnectionPool {
                 return true;
             }
         } finally {
-            Lock.unlock();
+            LOCK.unlock();
         }
         return false;
     }
 
     @Override
     public Connection takeConnection() throws InterruptedException {
-        Lock.lock();
+        LOCK.lock();
         try {
             while (availableConnections.isEmpty()) {
-                this.wait();
+                CONDITION.await();
             }
             final ProxyConnection connection = availableConnections.poll();
+            LOG.trace("{} take connection...", Thread.currentThread().getName());
+            LOG.trace("available connection size {}", availableConnections.size());
             givenAwayConnections.add(connection);
+            LOG.trace("given away connection size {}", givenAwayConnections.size());
+            LOG.trace("current size {}", obtainCurrentPoolSize());
+            if (availableConnections.size() < THRESHOLD * obtainCurrentPoolSize()) {
+                LOG.warn("need to initialize new connections");
+                initializedConnections(Integer.parseInt(paramFromProperties(receiveProperties(),
+                        DB_INITIAL_POOL_SIZE)), true);
+            }
             return connection;
         } finally {
-            Lock.unlock();
+            LOCK.unlock();
         }
     }
 
@@ -109,14 +123,22 @@ public class LockingConnectionPool implements ConnectionPool {
     @SuppressWarnings("SuspiciousMethodCalls")
     public void returnConnection(Connection connection) {
         try {
-            Lock.lock();
+            LOCK.lock();
             if (givenAwayConnections.remove(connection)) {
                 availableConnections.add((ProxyConnection) connection);
+                LOG.trace("{} return connection...", Thread.currentThread().getName());
+                LOG.trace("current size {}", obtainCurrentPoolSize());
+                if (availableConnections.size() > Integer.parseInt(paramFromProperties(receiveProperties(),
+                        DB_INITIAL_POOL_SIZE))) {
+                    LOG.warn("free connections found, extra connection will remove");
+                    availableConnections.remove(connection);
+                    LOG.trace("new current size {}", obtainCurrentPoolSize());
+                }
             } else {
                 LOG.warn("Attempt to add unknown connection to Connection Pool. Connection {}", connection);
             }
         } finally {
-            Lock.unlock();
+            LOCK.unlock();
         }
     }
 
@@ -138,6 +160,11 @@ public class LockingConnectionPool implements ConnectionPool {
             }
         }
     }
+
+    private int obtainCurrentPoolSize() {
+        return availableConnections.size() + givenAwayConnections.size();
+    }
+
     private void closeConnections() {
         closeConnections(this.availableConnections);
         closeConnections(this.givenAwayConnections);
@@ -157,6 +184,7 @@ public class LockingConnectionPool implements ConnectionPool {
             LOG.error("Could not close connection", e);
         }
     }
+
     private void registerDrivers() {
         LOG.trace("registering sql drivers");
         try {
@@ -179,7 +207,7 @@ public class LockingConnectionPool implements ConnectionPool {
         }
     }
 
-    private Properties receiveProperties()  {
+    private Properties receiveProperties() {
         Properties prop = new Properties();
         try {
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream(PROPERTY_FILE_NAME);
@@ -195,4 +223,5 @@ public class LockingConnectionPool implements ConnectionPool {
     private String paramFromProperties(Properties prop, String param) {
         return prop.getProperty(param);
     }
+
 }

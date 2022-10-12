@@ -44,23 +44,45 @@ public class Application {
 
         LOG.trace("Program start");
 
-        final ConnectionPool cp = ConnectionPool.locking();
-        cp.init();
-        final List<User> users;
-        final LocalDate date = LocalDate.of(1990, 6, 1);
-        try {
-//            users = fetchUsersFromDb();
-            users = executePrepared(
-                    FIND_USR_OLDER_THAN_SQL,
-                    Application::extractUser,
-                    st -> st.setDate(1, Date.valueOf(date)));
-        } catch (InterruptedException e) {
-            LOG.info("interrupted fetching users, closing pool");
-            ConnectionPool.locking().shutDown();
-            return;
-        }
-        users.forEach(user -> LOG.info("found user {}", user));
-        cp.shutDown();
+        Thread thread1 = new JThread("Thread1");
+        Thread thread2 = new JThread("Thread2");
+        Thread thread3 = new JThread("Thread3");
+        Thread thread4 = new JThread("Thread4");
+        Thread thread5 = new JThread("Thread5");
+        Thread thread6 = new JThread("Thread6");
+        Thread thread7 = new JThread("Thread7");
+        Thread thread8 = new JThread("Thread8");
+        Thread thread9 = new JThread("Thread9");
+        Thread thread10 = new JThread("Thread10");
+
+        thread1.start();
+        thread2.start();
+        thread3.start();
+        thread4.start();
+        thread5.start();
+        thread6.start();
+        thread7.start();
+        thread8.start();
+        thread9.start();
+        thread10.start();
+
+//        final ConnectionPool cp = ConnectionPool.locking();
+//        cp.init();
+//        final List<User> users;
+//        final LocalDate date = LocalDate.of(1990, 6, 1);
+//        try {
+////            users = fetchUsersFromDb();
+//            users = executePrepared(
+//                    FIND_USR_OLDER_THAN_SQL,
+//                    Application::extractUser,
+//                    st -> st.setDate(1, Date.valueOf(date)));
+//        } catch (InterruptedException e) {
+//            LOG.info("interrupted fetching users, closing pool");
+//            ConnectionPool.locking().shutDown();
+//            return;
+//        }
+//        users.forEach(user -> LOG.info("found user {}", user));
+//        cp.shutDown();
 
         LOG.trace("Program end");
     }
@@ -153,4 +175,35 @@ public class Application {
         }
     }
 
+    static class JThread extends Thread {
+
+        private final Logger LOG = LogManager.getLogger(JThread.class);
+        private final ConnectionPool CONNECTION_POOL = ConnectionPool.locking();
+
+        JThread(String name) {
+            super(name);
+        }
+
+        public void run() {
+            System.out.printf("%s started... \n", Thread.currentThread().getName());
+            CONNECTION_POOL.init();
+            final List<User> users;
+            try {
+                users = Application.fetchUsersFromDb();
+
+            } catch (InterruptedException e) {
+                LOG.info("interrupted fetching users. closing pool");
+                CONNECTION_POOL.shutDown();
+                return;
+            }
+            users.forEach(user -> LOG.info("{} Found {}", Thread.currentThread().getName(), user));
+//        try {
+//            wait(100);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+            CONNECTION_POOL.shutDown();
+            System.out.printf("%s fiished... \n", Thread.currentThread().getName());
+        }
+    }
 }
