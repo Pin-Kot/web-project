@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.epam.jwd.audiotrack_ordering.exception.CouldNotInitializeConnectionPool;
+import com.epam.jwd.audiotrack_ordering.exception.CouldNotInitializeConnectionPoolError;
 import com.epam.jwd.audiotrack_ordering.exception.ResourceLoadingFailedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -156,7 +156,7 @@ public class LockingConnectionPool implements ConnectionPool {
         } catch (SQLException e) {
             LOG.error("Error occurred creating connection");
             if (failOnConnectionException) {
-                throw new CouldNotInitializeConnectionPool("Failed to create connection", e);
+                throw new CouldNotInitializeConnectionPoolError("Failed to create connection", e);
             }
         }
     }
@@ -191,7 +191,7 @@ public class LockingConnectionPool implements ConnectionPool {
             DriverManager.registerDriver(DriverManager.getDriver(paramFromProperties(receiveProperties(), DB_URL)));
         } catch (SQLException e) {
             LOG.error("could not register drivers", e);
-            throw new CouldNotInitializeConnectionPool("Unsuccessful db driver registration attempt", e);
+            throw new CouldNotInitializeConnectionPoolError("Unsuccessful db driver registration attempt", e);
         }
     }
 

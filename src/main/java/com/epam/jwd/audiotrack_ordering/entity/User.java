@@ -7,7 +7,7 @@ import java.util.Objects;
 public class User implements Entity {
 
     private static final long serialVersionUID = -6855337589302892701L;
-    
+
     private final Long id;
     private final String firstName;
     private final String lastName;
