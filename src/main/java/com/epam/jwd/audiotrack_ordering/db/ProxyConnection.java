@@ -29,6 +29,10 @@ public class ProxyConnection implements Connection {
         this.pool = pool;
     }
 
+    Connection getConnection() {
+        return connection;
+    }
+
     ConnectionPool getPool() {
         return pool;
     }

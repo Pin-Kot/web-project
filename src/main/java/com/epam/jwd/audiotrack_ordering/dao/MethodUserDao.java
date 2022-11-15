@@ -2,16 +2,19 @@ package com.epam.jwd.audiotrack_ordering.dao;
 
 import com.epam.jwd.audiotrack_ordering.db.ConnectionPool;
 import com.epam.jwd.audiotrack_ordering.entity.User;
-import com.epam.jwd.audiotrack_ordering.exception.EntityExtractionFailedException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
-public class MethodUserDao extends CommonDao<User> implements UserDao {
+public final class MethodUserDao extends CommonDao<User> implements UserDao {
 
     private static final Logger LOG = LogManager.getLogger(MethodUserDao.class);
 
@@ -23,6 +26,8 @@ public class MethodUserDao extends CommonDao<User> implements UserDao {
     private static final String BIRTHDAY_FIELD_NAME = "birthday";
     private static final String DISCOUNT_FIELD_NAME = "discount";
     private static final String ACCOUNT_ID_FIELD_NAME = "account_id";
+    private static final List<String> FIELDS = Arrays.asList("id", "first_name", "last_name", "email", "birthday",
+            "discount", "account_id");
 
     private MethodUserDao(ConnectionPool pool) {
         super(pool, LOG);
@@ -34,36 +39,27 @@ public class MethodUserDao extends CommonDao<User> implements UserDao {
     }
 
     @Override
-    protected User extractResult(ResultSet rs) throws EntityExtractionFailedException {
-        try {
-            return new User(rs.getLong(ID_FIELD_NAME), rs.getString(FIRST_NAME_FIELD_NAME),
-                    rs.getString(LAST_NAME_FIELD_NAME), rs.getString(EMAIL_FIELD_NAME),
-                    rs.getDate(BIRTHDAY_FIELD_NAME), rs.getBigDecimal(DISCOUNT_FIELD_NAME),
-                    rs.getLong(ACCOUNT_ID_FIELD_NAME));
-        } catch (SQLException e) {
-            LOG.error("sql exception occurred extracting user from ResultSet", e);
-            throw new EntityExtractionFailedException("");
-        }
+    protected List<String> getFields() {
+        return FIELDS;
     }
 
     @Override
-    public User create(User entity) {
-        return null;
+    protected User extractResult(ResultSet rs) throws SQLException {
+        return new User(rs.getLong(ID_FIELD_NAME), rs.getString(FIRST_NAME_FIELD_NAME),
+                rs.getString(LAST_NAME_FIELD_NAME), rs.getString(EMAIL_FIELD_NAME),
+                rs.getDate(BIRTHDAY_FIELD_NAME), rs.getBigDecimal(DISCOUNT_FIELD_NAME),
+                rs.getLong(ACCOUNT_ID_FIELD_NAME));
     }
 
     @Override
-    public Optional<User> read(Long id) {
-        return Optional.empty();
-    }
-
-    @Override
-    public boolean delete(Long id) {
-        return false;
-    }
-
-    @Override
-    public User update(User entity) {
-        return null;
+    protected void fillEntity(PreparedStatement statement, User entity) throws SQLException {
+        statement.setLong(1, entity.getId());
+        statement.setString(2, entity.getFirstName());
+        statement.setString(3, entity.getLastName());
+        statement.setString(4, entity.getEmail());
+        statement.setDate(5, (Date) entity.getBirthday());
+        statement.setBigDecimal(6, entity.getDiscount());
+        statement.setLong(7, entity.getAccId());
     }
 
     @Override
@@ -76,6 +72,6 @@ public class MethodUserDao extends CommonDao<User> implements UserDao {
     }
 
     private static class Holder {
-        public static final UserDao INSTANCE = new MethodUserDao(ConnectionPool.locking());
+        public static final UserDao INSTANCE = new MethodUserDao(ConnectionPool.transactionalInstance());
     }
 }

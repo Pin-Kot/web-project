@@ -1,5 +1,12 @@
 package com.epam.jwd.audiotrack_ordering.web.controller;
 
+import com.epam.jwd.audiotrack_ordering.db.ConnectionPool;
+import com.epam.jwd.audiotrack_ordering.web.command.Command;
+import com.epam.jwd.audiotrack_ordering.web.command.CommandRequest;
+import com.epam.jwd.audiotrack_ordering.web.command.CommandResponse;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,36 +15,45 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import com.epam.jwd.audiotrack_ordering.db.ConnectionPool;
-import com.epam.jwd.audiotrack_ordering.web.command.Command;
-import com.epam.jwd.audiotrack_ordering.web.command.CommandResponse;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 @WebServlet("/controller")
-public class MainServlet extends HttpServlet {
+public class Controller extends HttpServlet {
 
     private static final long serialVersionUID = -3200784533800128813L;
 
-    private static final Logger LOG = LogManager.getLogger(MainServlet.class);
+    private static final Logger LOG = LogManager.getLogger(Controller.class);
+
+    private static final String COMMAND_NAME_PARAM = "command";
+
+    private final RequestFactory requestFactory = RequestFactory.getInstance();
 
     @Override
     public void init() {
-        ConnectionPool.locking().init();
+        ConnectionPool.transactionalInstance().init();
     }
 
     @Override
     public void destroy() {
-        ConnectionPool.locking().shutDown();
+        ConnectionPool.transactionalInstance().shutDown();
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
-        LOG.trace("caught req and resp in doGet method");
-        final String commandName = req.getParameter("command");
+    protected void doGet(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
+        LOG.trace("caught httpRequest and httpResponse in doGet method");
+        processRequest(httpRequest, httpResponse);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
+        LOG.trace("caught httpRequest and httpResponse in doPost method");
+        processRequest(httpRequest, httpResponse);
+    }
+
+    private void processRequest(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
+        final String commandName = httpRequest.getParameter(COMMAND_NAME_PARAM);
         final Command command = Command.of(commandName);
-        final CommandResponse commandResponse = command.execute(null);
-        proceedWithResponse(req, resp, commandResponse);
+        final CommandRequest requestRequest = requestFactory.createRequest(httpRequest);
+        final CommandResponse commandResponse = command.execute(requestRequest);
+        proceedWithResponse(httpRequest, httpResponse, commandResponse);
     }
 
     private void proceedWithResponse(HttpServletRequest req, HttpServletResponse resp,

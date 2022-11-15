@@ -20,7 +20,7 @@ public class Artist implements Entity {
 
     @Override
     public Long getId() {
-        return null;
+        return id;
     }
 
     public String getName() {

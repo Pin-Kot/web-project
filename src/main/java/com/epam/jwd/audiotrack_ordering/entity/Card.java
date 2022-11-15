@@ -25,7 +25,7 @@ public class Card implements Entity {
 
     @Override
     public Long getId() {
-        return null;
+        return id;
     }
 
     public String getHolderName() {

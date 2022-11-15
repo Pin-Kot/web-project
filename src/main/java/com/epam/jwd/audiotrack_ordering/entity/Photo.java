@@ -20,7 +20,7 @@ public class Photo implements Entity {
 
     @Override
     public Long getId() {
-        return null;
+        return id;
     }
 
     public String getFilePath() {

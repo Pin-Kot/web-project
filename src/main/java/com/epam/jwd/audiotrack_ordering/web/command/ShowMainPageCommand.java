@@ -4,6 +4,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class ShowMainPageCommand implements Command {
 
+    private static final String JSP_MAIN_PATH = "/WEB-INF/jsp/main.jsp";
     private static ShowMainPageCommand instance = null;
     private static final ReentrantLock LOCK = new ReentrantLock();
 
@@ -21,6 +22,7 @@ public class ShowMainPageCommand implements Command {
         return instance;
     }
 
+
     private static final CommandResponse FORWARD_TO_MAIN_PAGE_RESPONSE = new CommandResponse() {
         @Override
         public boolean isRedirect() {
@@ -29,7 +31,7 @@ public class ShowMainPageCommand implements Command {
 
         @Override
         public String getPath() {
-            return "/WEB-INF/jsp/main.jsp";
+            return JSP_MAIN_PATH;
         }
     };
 

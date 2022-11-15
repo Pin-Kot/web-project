@@ -1,6 +1,5 @@
 package com.epam.jwd.audiotrack_ordering.db;
 
-import com.epam.jwd.audiotrack_ordering.entity.Entity;
 import com.epam.jwd.audiotrack_ordering.exception.EntityExtractionFailedException;
 
 import java.sql.ResultSet;
@@ -9,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @FunctionalInterface
-public interface ResultSetExtractor <T extends Entity> {
+public interface ResultSetExtractor <T> {
 
     T extract(ResultSet resultSet) throws EntityExtractionFailedException;
 

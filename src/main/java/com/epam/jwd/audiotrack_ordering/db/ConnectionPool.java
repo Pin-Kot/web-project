@@ -16,7 +16,11 @@ public interface ConnectionPool {
 
     void returnConnection(Connection connection);
 
-    static ConnectionPool locking() {
+    static ConnectionPool lockingInstance() {
         return LockingConnectionPool.getInstance();
+    }
+
+    static ConnectionPool transactionalInstance() {
+        return TransactionConnectionPool.getInstance();
     }
 }

@@ -29,7 +29,7 @@ public class Order implements Entity {
 
     @Override
     public Long getId() {
-        return null;
+        return id;
     }
 
     public Date getDate() {

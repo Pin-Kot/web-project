@@ -6,7 +6,13 @@ import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Properties;
+import java.util.Queue;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -67,7 +73,6 @@ public class LockingConnectionPool implements ConnectionPool {
         LOCK.lock();
         try {
             if (!initialized) {
-                registerDrivers();
                 initializedConnections(Integer.parseInt(paramFromProperties(receiveProperties(), DB_INITIAL_POOL_SIZE)),
                         true);
                 initialized = true;
@@ -182,16 +187,6 @@ public class LockingConnectionPool implements ConnectionPool {
             LOG.info("closed connection {}", connection);
         } catch (SQLException e) {
             LOG.error("Could not close connection", e);
-        }
-    }
-
-    private void registerDrivers() {
-        LOG.trace("registering sql drivers");
-        try {
-            DriverManager.registerDriver(DriverManager.getDriver(paramFromProperties(receiveProperties(), DB_URL)));
-        } catch (SQLException e) {
-            LOG.error("could not register drivers", e);
-            throw new CouldNotInitializeConnectionPoolError("Unsuccessful db driver registration attempt", e);
         }
     }
 

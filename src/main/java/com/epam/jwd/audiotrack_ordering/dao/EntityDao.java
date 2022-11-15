@@ -16,4 +16,5 @@ public interface EntityDao<T extends Entity> {
     T update(T entity);
 
     boolean delete(Long id);
+
 }

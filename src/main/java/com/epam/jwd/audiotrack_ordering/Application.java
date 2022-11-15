@@ -101,7 +101,7 @@ public class Application {
     //    Prepared Statement
     private static <T extends Entity> List<T> executePrepared(String sql, ResultSetExtractor<T> extractor,
                                                               StatementPreparer statementPreparation) throws InterruptedException {
-        try (final Connection connection = ConnectionPool.locking()
+        try (final Connection connection = ConnectionPool.lockingInstance()
                 .takeConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)) {
             if (statementPreparation != null) {
@@ -124,7 +124,7 @@ public class Application {
 
     private static <T extends Entity> T executeSinglePrepared(String sql, ResultSetExtractor<T> extractor,
                                                               StatementPreparer statementPreparation) throws InterruptedException {
-        try (final Connection connection = ConnectionPool.locking().takeConnection();
+        try (final Connection connection = ConnectionPool.lockingInstance().takeConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)) {
             if (statementPreparation != null) {
                 statementPreparation.accept(statement);
@@ -146,7 +146,7 @@ public class Application {
 
     //    Custom Statement
     private static <T extends Entity> List<T> executeStatement(String sql, ResultSetExtractor<T> extractor) throws InterruptedException {
-        try (final Connection connection = ConnectionPool.locking().takeConnection();
+        try (final Connection connection = ConnectionPool.lockingInstance().takeConnection();
              final Statement statement = connection.createStatement();
              final ResultSet resultSet = statement.executeQuery(sql)) {
             return extractor.extractAll(resultSet);
@@ -178,7 +178,7 @@ public class Application {
     static class JThread extends Thread {
 
         private final Logger LOG = LogManager.getLogger(JThread.class);
-        private final ConnectionPool CONNECTION_POOL = ConnectionPool.locking();
+        private final ConnectionPool CONNECTION_POOL = ConnectionPool.lockingInstance();
 
         JThread(String name) {
             super(name);

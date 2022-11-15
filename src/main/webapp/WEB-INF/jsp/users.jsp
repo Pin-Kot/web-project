@@ -6,12 +6,25 @@
 </head>
 <body>
 <h3>users</h3>
-<url>
-    <li>user1</li>
-    <li>user2</li>
-    <li>user3</li>
-    <li>user4</li>
-    <li>user5</li>
-</url>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Date Of Birthday</th>
+        <th>Discount, %</th>
+    </tr>
+    <c:forEach var="user" items="${requestScope.users}">
+        <tr>
+            <td>${user.id}</td>
+            <td>${user.firstName}</td>
+            <td>${user.lastName}</td>
+            <td>${user.email}</td>
+            <td>${user.birthday}</td>
+            <td>${user.discount}</td>
+        </tr>
+    </c:forEach>
+</table>
 </body>
 </html>

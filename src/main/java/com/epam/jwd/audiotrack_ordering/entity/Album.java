@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Album implements Entity {
 
-    private static final long serialVersionUID = -3307258511436325318L;
+    private static final long serialVersionUID = -8424936441348145479L;
 
     private final Long id;
     private final String title;
@@ -28,7 +28,7 @@ public class Album implements Entity {
 
     @Override
     public Long getId() {
-        return null;
+        return id;
     }
 
     public String getTitle() {
@@ -41,6 +41,15 @@ public class Album implements Entity {
 
     public AlbumType getType() {
         return type;
+    }
+
+    public static AlbumType typeOf(String name) {
+        for (AlbumType type : AlbumType.values()) {
+            if (type.name().equalsIgnoreCase(name)) {
+                return type;
+            }
+        }
+        throw new IllegalArgumentException("No type found with name: [" + name + "]");
     }
 
     @Override

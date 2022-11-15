@@ -4,10 +4,12 @@ import java.util.Objects;
 
 public class Account implements Entity {
 
+    private static final long serialVersionUID = -8704655277160314746L;
+
     private final Long id;
-    private String login;
-    private String password;
-    private Role role;
+    private final String login;
+    private final String password;
+    private final Role role;
 
     private enum Role {
         ADMIN, USER, UNAUTHORIZED
@@ -26,7 +28,7 @@ public class Account implements Entity {
 
     @Override
     public Long getId() {
-        return null;
+        return id;
     }
 
     public String getLogin() {
@@ -39,6 +41,15 @@ public class Account implements Entity {
 
     public Role getRole() {
         return role;
+    }
+
+    public static Account.Role roleOf(String name) {
+        for (Account.Role role : Account.Role.values()) {
+            if (role.name().equalsIgnoreCase(name)) {
+                return role;
+            }
+        }
+        return Role.USER;
     }
 
     @Override

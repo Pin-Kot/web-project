@@ -25,7 +25,7 @@ public class Audiotrack implements Entity {
 
     @Override
     public Long getId() {
-        return null;
+        return id;
     }
 
     public String getTitle() {
