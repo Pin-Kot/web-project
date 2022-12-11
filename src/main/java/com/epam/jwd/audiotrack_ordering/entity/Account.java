@@ -2,6 +2,8 @@ package com.epam.jwd.audiotrack_ordering.entity;
 
 import java.util.Objects;
 
+import static com.epam.jwd.audiotrack_ordering.entity.Role.USER;
+
 public class Account implements Entity {
 
     private static final long serialVersionUID = -8704655277160314746L;
@@ -11,10 +13,6 @@ public class Account implements Entity {
     private final String password;
     private final Role role;
 
-    private enum Role {
-        ADMIN, USER, UNAUTHORIZED
-    }
-
     public Account(Long id, String login, String password, Role role) {
         this.id = id;
         this.login = login;
@@ -22,8 +20,8 @@ public class Account implements Entity {
         this.role = role;
     }
 
-    public Account(String login, String password, Role role) {
-        this(null, login, password, role);
+    public Account(Long id, String login, String password) {
+        this(id, login, password, USER);
     }
 
     @Override
@@ -43,13 +41,8 @@ public class Account implements Entity {
         return role;
     }
 
-    public static Account.Role roleOf(String name) {
-        for (Account.Role role : Account.Role.values()) {
-            if (role.name().equalsIgnoreCase(name)) {
-                return role;
-            }
-        }
-        return Role.USER;
+    public Account withPassword(String password) {
+        return new Account(id, login, password);
     }
 
     @Override

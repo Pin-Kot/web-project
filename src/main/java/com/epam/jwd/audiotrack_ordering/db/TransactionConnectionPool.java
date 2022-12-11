@@ -42,7 +42,7 @@ public final class TransactionConnectionPool implements ConnectionPool {
     @Override
     public void returnConnection(Connection connection) {
         if (!transactionManager.getTransactionId().isPresent()) {
-             connectionPool.returnConnection(((ProxyConnection) connection).getConnection());
+            connectionPool.returnConnection(((ProxyConnection) connection).getConnection());
         }
     }
 
@@ -57,6 +57,6 @@ public final class TransactionConnectionPool implements ConnectionPool {
     private static class Holder {
         private static final ConnectionPool INSTANCE =
                 new TransactionConnectionPool(LockingConnectionPool.getInstance(),
-                TransactionManager.getInstance());
+                        TransactionManager.getInstance());
     }
 }

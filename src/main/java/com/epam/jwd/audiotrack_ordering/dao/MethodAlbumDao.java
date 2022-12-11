@@ -17,14 +17,14 @@ public final class MethodAlbumDao extends CommonDao<Album> implements AlbumDao {
 
     private static final Logger LOG = LogManager.getLogger(MethodAlbumDao.class);
 
-    public static final String ALBUM_TABLE_NAME = "album";
-    public static final String ID_FIELD_NAME = "id";
-    public static final String TITLE_FIELD_NAME = "title";
-    public static final String YEAR_FIELD_NAME = "year";
-    public static final String TYPE_FIELD_NAME = "type";
-    public static final List<String> FIELDS = Arrays.asList("id", "title", "year", "type");
+    private static final String ALBUM_TABLE_NAME = "album";
+    private static final String ID_FIELD_NAME = "id";
+    private static final String TITLE_FIELD_NAME = "title";
+    private static final String YEAR_FIELD_NAME = "year";
+    private static final String TYPE_FIELD_NAME = "type";
+    private static final List<String> FIELDS = Arrays.asList("id", "title", "year", "type");
 
-    protected MethodAlbumDao(ConnectionPool pool) {
+    private MethodAlbumDao(ConnectionPool pool) {
         super(pool, LOG);
     }
 
@@ -36,6 +36,11 @@ public final class MethodAlbumDao extends CommonDao<Album> implements AlbumDao {
     @Override
     protected List<String> getFields() {
         return FIELDS;
+    }
+
+    @Override
+    protected String getIdFieldName() {
+        return ID_FIELD_NAME;
     }
 
     @Override

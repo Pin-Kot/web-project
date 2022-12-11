@@ -4,6 +4,7 @@ import com.epam.jwd.audiotrack_ordering.dao.AlbumDao;
 import com.epam.jwd.audiotrack_ordering.entity.Album;
 
 import java.util.List;
+import java.util.Optional;
 
 public class AlbumService implements EntityService<Album> {
 
@@ -16,5 +17,10 @@ public class AlbumService implements EntityService<Album> {
     @Override
     public List<Album> findAll() {
         return albumDao.read();
+    }
+
+    @Override
+    public Optional<Album> create(Album entity) {
+        return Optional.empty();
     }
 }

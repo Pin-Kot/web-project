@@ -36,6 +36,11 @@ public final class MethodArtistDao extends CommonDao<Artist> implements ArtistDa
     }
 
     @Override
+    protected String getIdFieldName() {
+        return ID_FIELD_NAME;
+    }
+
+    @Override
     protected Artist extractResult(ResultSet rs) throws SQLException {
         return new Artist(rs.getLong(ID_FIELD_NAME),
                 rs.getString(NAME_FIELD_NAME));

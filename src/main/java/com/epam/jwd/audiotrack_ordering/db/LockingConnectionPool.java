@@ -78,10 +78,10 @@ public class LockingConnectionPool implements ConnectionPool {
                 initialized = true;
                 return true;
             }
+            return false;
         } finally {
             LOCK.unlock();
         }
-        return false;
     }
 
     @Override
@@ -94,10 +94,10 @@ public class LockingConnectionPool implements ConnectionPool {
                 initialized = false;
                 return true;
             }
+            return false;
         } finally {
             LOCK.unlock();
         }
-        return false;
     }
 
     @Override
@@ -159,7 +159,7 @@ public class LockingConnectionPool implements ConnectionPool {
                 availableConnections.add(proxyConnection);
             }
         } catch (SQLException e) {
-            LOG.error("Error occurred creating connection");
+            LOG.error("Error occurred creating connection", e);
             if (failOnConnectionException) {
                 throw new CouldNotInitializeConnectionPoolError("Failed to create connection", e);
             }
@@ -218,5 +218,4 @@ public class LockingConnectionPool implements ConnectionPool {
     private String paramFromProperties(Properties prop, String param) {
         return prop.getProperty(param);
     }
-
 }

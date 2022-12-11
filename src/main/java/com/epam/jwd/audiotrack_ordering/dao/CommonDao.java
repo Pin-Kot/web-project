@@ -21,11 +21,10 @@ import static java.lang.String.join;
 
 public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
 
-    protected static final String SELECT_ALL_FROM = "select * from ";
+    protected static final String SELECT_ALL_FROM = "select %s from ";
     protected static final String WHERE_FIELD = " where %s = ?";
     protected static final String SPACE = " ";
 
-    private static final String ID_FIELD_NAME = "id";
     private static final String INSERT_INTO = "insert into %s (%s)";
 
     private static final String COMMA = ", ";
@@ -39,8 +38,8 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
     protected CommonDao(ConnectionPool pool, Logger logger) {
         this.pool = pool;
         this.logger = logger;
-        this.selectAllExpression = SELECT_ALL_FROM + getTableName();
-        this.selectByIdExpression = selectAllExpression + SPACE + format(WHERE_FIELD, ID_FIELD_NAME);
+        this.selectAllExpression = format(SELECT_ALL_FROM, String.join(COMMA, getFields())) + getTableName();
+        this.selectByIdExpression = selectAllExpression + SPACE + format(WHERE_FIELD, getIdFieldName());
         this.insertSql = format(INSERT_INTO, getTableName(), join(COMMA, getFields()));
     }
 
@@ -151,9 +150,9 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
         return Collections.emptyList();
     }
 
-    protected <G> Optional<G> executePreparedForGenericEntity(String sql,
-                                                              ResultSetExtractor<G> extractor,
-                                                              StatementPreparer statementPreparation) throws InterruptedException {
+    protected <G> Optional<G> executePreparedForGenericEntity(String sql, ResultSetExtractor<G> extractor,
+                                                              StatementPreparer statementPreparation)
+            throws InterruptedException {
         try (final Connection connection = pool.takeConnection();
              final PreparedStatement statement = connection.prepareStatement(sql)) {
             if (statementPreparation != null) {
@@ -204,11 +203,11 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
         }
     }
 
-    ;
-
     protected abstract String getTableName();
 
     protected abstract List<String> getFields();
+
+    protected abstract String getIdFieldName();
 
     protected abstract T extractResult(ResultSet rs) throws SQLException;
 

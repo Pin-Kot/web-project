@@ -8,7 +8,7 @@ public interface ArtistDao extends EntityDao<Artist> {
 
     Optional<Artist> findByName(String name);
 
-    static ArtistDao getInstance(){
+    static ArtistDao getInstance() {
         return MethodArtistDao.getInstance();
     }
 }

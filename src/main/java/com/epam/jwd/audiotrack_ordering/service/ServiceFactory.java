@@ -7,7 +7,7 @@ public interface ServiceFactory {
 
     <T extends Entity> EntityService<T> serviceFor(Class<T> entityClass);
 
-    default AccountService userService() {
+    default AccountService accountService() {
         return (AccountService) serviceFor(Account.class);
     }
 

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @FunctionalInterface
-public interface ResultSetExtractor <T> {
+public interface ResultSetExtractor<T> {
 
     T extract(ResultSet resultSet) throws EntityExtractionFailedException;
 

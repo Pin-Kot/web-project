@@ -44,6 +44,11 @@ public final class MethodUserDao extends CommonDao<User> implements UserDao {
     }
 
     @Override
+    protected String getIdFieldName() {
+        return ID_FIELD_NAME;
+    }
+
+    @Override
     protected User extractResult(ResultSet rs) throws SQLException {
         return new User(rs.getLong(ID_FIELD_NAME), rs.getString(FIRST_NAME_FIELD_NAME),
                 rs.getString(LAST_NAME_FIELD_NAME), rs.getString(EMAIL_FIELD_NAME),
