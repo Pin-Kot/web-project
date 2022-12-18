@@ -54,7 +54,6 @@ public class LoginCommand implements Command {
 
     @Override
     public CommandResponse execute(CommandRequest request) {
-
         final String login = request.getParameter(LOGIN_REQUEST_PARAM_NAME);
         final String password = request.getParameter(PASSWORD_REQUEST_PARAM_NAME);
         final Optional<Account> account = accountService.authenticate(login, password);

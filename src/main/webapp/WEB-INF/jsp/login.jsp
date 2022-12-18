@@ -6,19 +6,18 @@
 </head>
 <body>
 <h3>Please log in:</h3>
-<form name="login-form" action="/controller?command=login" method="post">
+<form name="login-form" action="${pageContext.request.contextPath}/controller?command=login" method="post">
 
     <label for="login-input">Login:</label>
-    <input id="login-input" type="text" name="login" value="" />
+    <input id="login-input" type="text" name="login" value=""/>
     <br>
     <label for="password-input">Password:</label>
-    <input id="password-input" type="password" name="password" value="" />
+    <input id="password-input" type="password" name="password" value=""/>
     <br/>
     <c:if test="${not empty requestScope.errorLoginPassMessage}">
         <b>${requestScope.errorLoginPassMessage}</b>
         <br>
     </c:if>
-
     <input type="submit" value="Log in"/>
 </form>
 </body>

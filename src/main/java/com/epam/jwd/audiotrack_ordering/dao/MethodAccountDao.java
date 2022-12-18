@@ -18,16 +18,15 @@ import static java.lang.String.format;
 
 public final class MethodAccountDao extends CommonDao<Account> implements AccountDao {
 
-    private static final String ACCOUNT_TABLE_NAME = "account";
-
     private static final Logger LOG = LogManager.getLogger(MethodAccountDao.class);
 
-    private static final List<String> FIELDS = Arrays.asList("id", "login", "acc_password", "role");
+    private static final String ACCOUNT_TABLE_NAME = "account";
     private static final String ID_FIELD_NAME = "id";
     private static final String LOGIN_FIELD_NAME = "login";
     private static final String PASSWORD_FIELD_NAME = "acc_password";
     private static final String ROLE_FIELD_NAME = "role";
     private static final String DELIMITER = ", ";
+    private static final List<String> FIELDS = Arrays.asList("id", "login", "acc_password", "role");
 
     private final String selectByLoginExpression;
 

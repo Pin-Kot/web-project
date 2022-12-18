@@ -24,6 +24,10 @@ public class Account implements Entity {
         this(id, login, password, USER);
     }
 
+    public Account(String login, String password, Role role) {
+        this(null, login, password, role);
+    }
+
     @Override
     public Long getId() {
         return id;

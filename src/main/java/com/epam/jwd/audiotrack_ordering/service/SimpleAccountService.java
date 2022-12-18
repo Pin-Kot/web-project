@@ -44,6 +44,11 @@ public class SimpleAccountService implements AccountService {
         }
     }
 
+    @Override
+    public Optional<Account> findAccountByLogin(String login) {
+        return accountDao.readAccountByLogin(login);
+    }
+
     private void protectFromAttack(byte[] enteredPassword) {
         verifyer.verify(enteredPassword, DUMMY_PASSWORD);
     }

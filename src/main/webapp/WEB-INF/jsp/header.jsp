@@ -6,10 +6,11 @@
          pageEncoding="UTF-8" %>
 <fmt:setLocale value="${sessionScope.lang}"/>
 
-<fmt:setBundle basename="l10n.page.main" var="loc" />
+<fmt:setBundle basename="l10n.page.main" var="loc"/>
 <fmt:message bundle="${loc}" key="label.title" var="pageTitle"/>
 <fmt:message bundle="${loc}" key="label.links.logout" var="logoutLink"/>
 <fmt:message bundle="${loc}" key="label.links.login" var="loginLink"/>
+<fmt:message bundle="${loc}" key="label.links.sign_up" var="sign_upLink"/>
 <fmt:message bundle="${loc}" key="label.links.home_page" var="home_pageLink"/>
 <html>
 <head>
@@ -23,34 +24,38 @@
 
 <ul id="menu">
     <li><a href="${pageContext.request.contextPath}/controller?command=main_page">${home_pageLink}</a></li>
-    <li><form name="lang" action="${pageContext.request.contextPath}/controller?command=change_language" method="post">
-        <select class="select-css" name="lang" onchange="submit()">
-            <option>
-                <c:choose>
-                    <c:when test="${sessionScope.lang eq 'en_US'}">
-                        English
-                    </c:when>
-                    <c:when test="${sessionScope.lang eq 'ru_RU'}">
-                        Русский
-                    </c:when>
-                    <c:otherwise>
-                    </c:otherwise>
-                </c:choose>
-            </option>
-            <option>English</option>
-            <option>Russian</option>
-        </select>
-        <%--    </label>--%>
-    </form></li>
+    <li>
+        <form name="lang" action="${pageContext.request.contextPath}/controller?command=change_language" method="post">
+            <select class="select-css" name="lang" onchange="submit()">
+                <option>
+                    <c:choose>
+                        <c:when test="${sessionScope.lang eq 'en_US'}">
+                            English
+                        </c:when>
+                        <c:when test="${sessionScope.lang eq 'ru_RU'}">
+                            Русский
+                        </c:when>
+                        <c:otherwise>
+                        </c:otherwise>
+                    </c:choose>
+                </option>
+                <option>English</option>
+                <option>Russian</option>
+            </select>
+            <%--    </label>--%>
+        </form>
+    </li>
 
-<c:choose>
-    <c:when test="${not empty sessionScope.account}">
-        <a href="${pageContext.request.contextPath}/controller?command=logout">${logoutLink}</a>
-    </c:when>
-    <c:otherwise>
-        <a href="${pageContext.request.contextPath}/controller?command=show_login">${loginLink}</a>
-    </c:otherwise>
-</c:choose>
+    <c:choose>
+        <c:when test="${not empty sessionScope.account}">
+            <a href="${pageContext.request.contextPath}/controller?command=logout">${logoutLink}</a>
+        </c:when>
+        <c:otherwise>
+            <a href="${pageContext.request.contextPath}/controller?command=show_login">${loginLink}</a>
+            <br>
+            <a href="${pageContext.request.contextPath}/controller?command=show_sign_up">${sign_upLink}</a>
+        </c:otherwise>
+    </c:choose>
 </ul>
 </body>
 </html>

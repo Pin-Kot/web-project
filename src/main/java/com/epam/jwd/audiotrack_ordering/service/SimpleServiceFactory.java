@@ -31,7 +31,8 @@ public class SimpleServiceFactory implements ServiceFactory {
             final String className = clazz.getSimpleName();
             switch (className) {
                 case "Account":
-                    return ProxyEntityService.of(new SimpleAccountService(AccountDao.getInstance(), BCrypt.withDefaults(), BCrypt.verifyer()));
+                    return ProxyEntityService.of(new SimpleAccountService(AccountDao.getInstance(),
+                            BCrypt.withDefaults(), BCrypt.verifyer()));
                 case "Album":
                     return new AlbumService(AlbumDao.getInstance());
                 case "Artist":
