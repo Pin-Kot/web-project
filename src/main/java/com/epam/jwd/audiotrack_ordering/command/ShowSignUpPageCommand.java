@@ -34,8 +34,6 @@ public class ShowSignUpPageCommand implements Command {
         return instance;
     }
 
-
-
     @Override
     public CommandResponse execute(CommandRequest request) {
         return requestFactory.createForwardResponse(propertyContext.get(SIGN_UP_PAGE));

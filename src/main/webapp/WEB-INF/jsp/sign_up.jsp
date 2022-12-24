@@ -7,7 +7,6 @@
 <body>
 <h3>Please register:</h3>
 <form name="sign_up-form" action="${pageContext.request.contextPath}/controller?command=sign_up" method="post">
-
     <label for="login-input">Create a login:</label>
     <input id="login-input" type="text" name="login" value=""/>
     <br>
@@ -19,15 +18,15 @@
     <br/>
     <c:choose>
         <c:when test="${not empty requestScope.errorAccountExistMessage}">
-            <b>${requestScope.errorAccountExistMessage}</b>
+            <b style="color: red">${requestScope.errorAccountExistMessage}</b>
             <br>
         </c:when>
         <c:when test="${not empty requestScope.errorSignUpPassMessage}">
-            <b>${requestScope.errorSignUpPassMessage}</b>
+            <b style="color: red">${requestScope.errorSignUpPassMessage}</b>
             <br>
         </c:when>
         <c:when test="${not empty requestScope.errorPasswordMismatchMessage}">
-            <b>${requestScope.errorPasswordMismatchMessage}</b>
+            <b style="color: orange">${requestScope.errorPasswordMismatchMessage}</b>
             <br/>
         </c:when>
     </c:choose>

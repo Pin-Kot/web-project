@@ -4,15 +4,18 @@
 <%--<%@ page import="com.epam.jwd.audiotrack_ordering.entity.Role" %>--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"
          pageEncoding="UTF-8" %>
-<fmt:setLocale value="${sessionScope.lang}"/>
 
+<fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="l10n.page.main" var="loc"/>
+
 <fmt:message bundle="${loc}" key="label.title" var="pageTitle"/>
 <fmt:message bundle="${loc}" key="label.links.logout" var="logoutLink"/>
 <fmt:message bundle="${loc}" key="label.links.login" var="loginLink"/>
 <fmt:message bundle="${loc}" key="label.links.sign_up" var="sign_upLink"/>
 <fmt:message bundle="${loc}" key="label.links.home_page" var="home_pageLink"/>
-<html>
+<fmt:message bundle="${loc}" key="label.links.personal_data" var="personal_data_pageLink"/>
+
+<html lang="${sessionScope.lang}">
 <head>
     <title>${pageTitle}</title>
 </head>
@@ -49,6 +52,8 @@
     <c:choose>
         <c:when test="${not empty sessionScope.account}">
             <a href="${pageContext.request.contextPath}/controller?command=logout">${logoutLink}</a>
+            <br>
+            <a href="${pageContext.request.contextPath}/controller?command=show_personal_data">${personal_data_pageLink}</a>
         </c:when>
         <c:otherwise>
             <a href="${pageContext.request.contextPath}/controller?command=show_login">${loginLink}</a>

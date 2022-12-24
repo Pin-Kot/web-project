@@ -14,6 +14,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static java.lang.String.format;
+import static java.lang.String.join;
+
 public final class MethodUserDao extends CommonDao<User> implements UserDao {
 
     private static final Logger LOG = LogManager.getLogger(MethodUserDao.class);
@@ -26,11 +29,22 @@ public final class MethodUserDao extends CommonDao<User> implements UserDao {
     private static final String BIRTHDAY_FIELD_NAME = "birthday";
     private static final String DISCOUNT_FIELD_NAME = "discount";
     private static final String ACCOUNT_ID_FIELD_NAME = "account_id";
+    private static final String DELIMITER = ", ";
+    private static final String UPDATE = "update %s";
+    private static final String SET_FIELD = "set %s = ?";
+
     private static final List<String> FIELDS = Arrays.asList("id", "first_name", "last_name", "email", "birthday",
             "discount", "account_id");
 
+    private final String selectByAccountIdExpression;
+    private final String updateSqlByExpression;
+
+
     private MethodUserDao(ConnectionPool pool) {
         super(pool, LOG);
+        this.selectByAccountIdExpression = format(SELECT_ALL_FROM, String.join(DELIMITER, getFields())) + getTableName()
+                + SPACE + format(WHERE_FIELD, ACCOUNT_ID_FIELD_NAME);
+        this.updateSqlByExpression = format(UPDATE, getTableName()) + SPACE + format(SET_FIELD, join(DELIMITER, getFields()));
     }
 
     @Override
@@ -70,6 +84,17 @@ public final class MethodUserDao extends CommonDao<User> implements UserDao {
     @Override
     public Optional<User> findByEmail(String email) {
         return Optional.empty();
+    }
+
+    public Optional<User> findUserByAccountId(Long accountId) {
+        try {
+            return executePreparedForGenericEntity(selectByAccountIdExpression,
+                    this::extractResultCatchingException, st -> st.setLong(1, accountId));
+        } catch (InterruptedException e) {
+            LOG.info("takeConnection interrupted", e);
+            Thread.currentThread().interrupt();
+            return Optional.empty();        }
+
     }
 
     static UserDao getInstance() {

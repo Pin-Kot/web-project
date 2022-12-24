@@ -8,6 +8,8 @@ public interface UserDao extends EntityDao<User> {
 
     Optional<User> findByEmail(String email);
 
+    Optional<User> findUserByAccountId(Long accountId);
+
     static UserDao getInstance() {
         return MethodUserDao.getInstance();
     }

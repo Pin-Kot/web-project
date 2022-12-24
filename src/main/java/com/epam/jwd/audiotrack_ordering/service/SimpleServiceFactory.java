@@ -40,7 +40,7 @@ public class SimpleServiceFactory implements ServiceFactory {
                 case "Track":
                     return ProxyEntityService.of(new TrackService(TrackDao.getInstance()));
                 case "User":
-                    return ProxyEntityService.of(new UserService(UserDao.getInstance()));
+                    return ProxyEntityService.of(new SimpleUserService(UserDao.getInstance()));
                 default:
                     throw new IllegalArgumentException(String.format(SERVICE_NOT_FOUND, className));
             }

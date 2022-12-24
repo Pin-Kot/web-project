@@ -15,7 +15,7 @@
     <input id="password-input" type="password" name="password" value=""/>
     <br/>
     <c:if test="${not empty requestScope.errorLoginPassMessage}">
-        <b>${requestScope.errorLoginPassMessage}</b>
+        <b style="color: red">${requestScope.errorLoginPassMessage}</b>
         <br>
     </c:if>
     <input type="submit" value="Log in"/>

@@ -9,8 +9,6 @@
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="l10n.page.main" var="loc" />
 
-<html lang="${sessionScope.lang}"
-
 <fmt:message bundle="${loc}" key="label.title" var="pageTitle"/>
 <fmt:message bundle="${loc}" key="label.invitation" var="invitationMessage"/>
 <fmt:message bundle="${loc}" key="label.welcome" var="welcomeMessage"/>
@@ -22,7 +20,7 @@
 <fmt:message bundle="${loc}" key="label.links.logout" var="logoutLink"/>
 <fmt:message bundle="${loc}" key="label.links.login" var="loginLink"/>
 
-<html>
+<html lang="${sessionScope.lang}">
 <head>
     <title>${pageTitle}</title>
 </head>

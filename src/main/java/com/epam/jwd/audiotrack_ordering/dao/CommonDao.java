@@ -22,17 +22,16 @@ import static java.lang.String.join;
 public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
 
     protected static final String SELECT_ALL_FROM = "select %s from ";
-    protected static final String WHERE_FIELD = " where %s = ?";
+    protected static final String WHERE_FIELD = "where %s = ?";
     protected static final String SPACE = " ";
-
     private static final String INSERT_INTO = "insert into %s (%s)";
-
     private static final String COMMA = ", ";
 
     protected final ConnectionPool pool;
     private final String selectAllExpression;
     private final String selectByIdExpression;
     private final String insertSql;
+
     private final Logger logger;
 
     protected CommonDao(ConnectionPool pool, Logger logger) {
@@ -41,6 +40,7 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
         this.selectAllExpression = format(SELECT_ALL_FROM, String.join(COMMA, getFields())) + getTableName();
         this.selectByIdExpression = selectAllExpression + SPACE + format(WHERE_FIELD, getIdFieldName());
         this.insertSql = format(INSERT_INTO, getTableName(), join(COMMA, getFields()));
+
     }
 
     @Override

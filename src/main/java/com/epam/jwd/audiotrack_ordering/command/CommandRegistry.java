@@ -19,6 +19,7 @@ public enum CommandRegistry {
     LOGIN(LoginCommand.getInstance(), "login", UNAUTHORIZED),
     LOGIN_PAGE(ShowLoginPageCommand.getInstance(), "show_login", UNAUTHORIZED),
     LOGOUT(LogoutCommand.getInstance(), "logout", USER, ADMIN),
+    PERSONAL_DATA_PAGE(ShowPersonalDataCommand.getInstance(), "show_personal_data", USER, ADMIN),
     SIGN_UP(SignUpCommand.getInstance(), "sign_up", UNAUTHORIZED),
     SIGN_UP_PAGE(ShowSignUpPageCommand.getInstance(), "show_sign_up", UNAUTHORIZED),
     TRACK_PAGE(ShowTracksPageCommand.getInstance(), "show_tracks"),
