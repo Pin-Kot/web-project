@@ -10,20 +10,22 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-@WebFilter(filterName = "SessionLocaleFilter", urlPatterns = "/*")
+@WebFilter(filterName = "SessionLocaleFilter", urlPatterns = {"/*"})
 public class SessionLocaleFilter implements Filter {
 
     private static final String LANGUAGE_ATTRIBUTE_NAME = "lang";
-    public static final String REQUEST_PARAMETER_NAME = "sessionLocale";
+    private static final String DEFAULT_LANGUAGE = "en_US";
+    private static final String NULL_VALUE = "null";
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        if (request.getParameter(REQUEST_PARAMETER_NAME) != null) {
-            request.getSession().setAttribute(LANGUAGE_ATTRIBUTE_NAME, request.getParameter(REQUEST_PARAMETER_NAME));
+        String currentLanguage = (String) request.getSession().getAttribute(LANGUAGE_ATTRIBUTE_NAME);
+        if (currentLanguage == null || currentLanguage.equals(NULL_VALUE)) {
+            request.getSession().setAttribute(LANGUAGE_ATTRIBUTE_NAME, DEFAULT_LANGUAGE);
         }
-        filterChain.doFilter(request, servletResponse);
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 
     @Override

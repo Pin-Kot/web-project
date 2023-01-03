@@ -30,8 +30,8 @@ public class SignUpCommand implements Command {
     private static final String ERROR_ACCOUNT_EXIST_ATTRIBUTE = "errorAccountExistMessage";
     private static final String ACCOUNT_ALREADY_EXISTS_MESSAGE = "Account already exists";
 
-    public static final String ERROR_PASSWORD_MISMATCH_ATTRIBUTE = "errorPasswordMismatchMessage";
-    public static final String PASSWORDS_DO_NOT_MATCH_MESSAGE = "Passwords don't match";
+    private static final String ERROR_PASSWORD_MISMATCH_ATTRIBUTE = "errorPasswordMismatchMessage";
+    private static final String PASSWORDS_DO_NOT_MATCH_MESSAGE = "Passwords don't match";
 
     private static SignUpCommand instance = null;
     private static final ReentrantLock LOCK = new ReentrantLock();
@@ -74,6 +74,7 @@ public class SignUpCommand implements Command {
                 && !accountService.findAccountByLogin(login).isPresent()) {
             Account newAccount = new Account(login, password, USER);
             accountService.create(newAccount);
+            request.addToSession(ACCOUNT_ATTRIBUTE_NAME, newAccount);
             return requestFactory.createForwardResponse(propertyContext.get(INDEX_PAGE));
         } else {
             if (accountService.findAccountByLogin(login).isPresent()) {

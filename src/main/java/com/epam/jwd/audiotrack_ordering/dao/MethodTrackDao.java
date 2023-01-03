@@ -23,13 +23,12 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
     private static final String TITLE_FIELD_NAME = "title";
     private static final String YEAR_FIELD_NAME = "year";
     private static final String PRICE_FIELD_NAME = "price";
-    private static final String DELIMITER = ", ";
 
     private final String selectByTitleExpression;
 
     private MethodTrackDao(ConnectionPool pool) {
         super(pool, LOG);
-        this.selectByTitleExpression = format(SELECT_ALL_FROM, String.join(DELIMITER, getFields())) + getTableName()
+        this.selectByTitleExpression = format(SELECT_ALL_FROM, String.join(COMMA, getFields())) + getTableName()
                 + SPACE + format(WHERE_FIELD, TITLE_FIELD_NAME);
     }
 

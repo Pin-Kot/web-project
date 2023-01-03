@@ -1,7 +1,7 @@
 package com.epam.jwd.audiotrack_ordering.entity;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class User implements Entity {
@@ -12,11 +12,11 @@ public class User implements Entity {
     private final String firstName;
     private final String lastName;
     private final String email;
-    private final Date birthday;
+    private final LocalDate birthday;
     private final BigDecimal discount;
     private final Long accId;
 
-    public User(Long id, String firstName, String lastName, String email, Date birthday,
+    public User(Long id, String firstName, String lastName, String email, LocalDate birthday,
                 BigDecimal discount, Long accId) {
         this.id = id;
         this.firstName = firstName;
@@ -27,7 +27,7 @@ public class User implements Entity {
         this.accId = accId;
     }
 
-    public User(String firstName, String lastName, String email, Date birthday,
+    public User(String firstName, String lastName, String email, LocalDate birthday,
                 BigDecimal discount, Long accId) {
         this(null, firstName, lastName, email, birthday,
                 discount, accId);
@@ -51,7 +51,7 @@ public class User implements Entity {
         return email;
     }
 
-    public Date getBirthday() {
+    public LocalDate getBirthday() {
         return birthday;
     }
 

@@ -9,6 +9,8 @@ public class ChangeLanguageCommand implements Command {
 
     private static final String INDEX_PAGE = "page.index";
     private static final String LANGUAGE_REQUEST_PARAM_NAME = "lang";
+    private static final String englishLocalValue = "en_US";
+    private static final String russianLocalValue = "ru_RU";
 
     private static ChangeLanguageCommand instance = null;
     private static final ReentrantLock LOCK = new ReentrantLock();
@@ -41,10 +43,11 @@ public class ChangeLanguageCommand implements Command {
         final String lang = request.getParameter(LANGUAGE_REQUEST_PARAM_NAME);
         switch (lang) {
             case "English":
-                request.addToSession(LANGUAGE_REQUEST_PARAM_NAME, "en_US");
+                request.addToSession(LANGUAGE_REQUEST_PARAM_NAME, englishLocalValue);
                 break;
             case "Russian":
-                request.addToSession(LANGUAGE_REQUEST_PARAM_NAME, "ru_RU");
+                request.addToSession(LANGUAGE_REQUEST_PARAM_NAME, russianLocalValue);
+                break;
         }
         return requestFactory.createRedirectResponse(propertyContext.get(INDEX_PAGE));
     }

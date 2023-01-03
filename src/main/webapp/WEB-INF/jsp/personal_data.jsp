@@ -12,6 +12,8 @@
     <p>email: ${requestScope.user.email}</p>
     <p>birthday: ${requestScope.user.birthday}</p>
     <p>discount: ${requestScope.user.discount}</p>
+    <br>
+    <a href="${pageContext.request.contextPath}/controller?command=show_editor">edit data</a>
 </c:if>
 <c:if test="${not empty requestScope.errorInvalidUserData}">
     <b style="color: red">${requestScope.errorInvalidUserData}</b>

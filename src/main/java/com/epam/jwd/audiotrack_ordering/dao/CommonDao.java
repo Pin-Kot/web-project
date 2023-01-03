@@ -24,8 +24,8 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
     protected static final String SELECT_ALL_FROM = "select %s from ";
     protected static final String WHERE_FIELD = "where %s = ?";
     protected static final String SPACE = " ";
+    protected static final String COMMA = ", ";
     private static final String INSERT_INTO = "insert into %s (%s)";
-    private static final String COMMA = ", ";
 
     protected final ConnectionPool pool;
     private final String selectAllExpression;

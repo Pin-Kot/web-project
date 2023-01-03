@@ -1,6 +1,5 @@
 package com.epam.jwd.audiotrack_ordering.service;
 
-import com.epam.jwd.audiotrack_ordering.controller.SimplePropertyContext;
 import com.epam.jwd.audiotrack_ordering.dao.UserDao;
 import com.epam.jwd.audiotrack_ordering.entity.User;
 
@@ -29,12 +28,17 @@ public class SimpleUserService implements UserService {
     }
 
     @Override
+    public Optional<User> updateUser(User user) {
+        return Optional.ofNullable(userDao.update(user));
+    }
+
+    @Override
     public List<User> findAll() {
         return userDao.read();
     }
 
     @Override
-    public Optional<User> create(User entity) {
-        return Optional.ofNullable(userDao.create(entity));
+    public Optional<User> create(User user) {
+        return Optional.ofNullable(userDao.create(user));
     }
 }

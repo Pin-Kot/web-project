@@ -2,7 +2,6 @@ package com.epam.jwd.audiotrack_ordering.dao;
 
 import com.epam.jwd.audiotrack_ordering.db.ConnectionPool;
 import com.epam.jwd.audiotrack_ordering.entity.Account;
-
 import com.epam.jwd.audiotrack_ordering.entity.Role;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,7 +14,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static java.lang.String.format;
-import static java.lang.String.join;
 
 public final class MethodAccountDao extends CommonDao<Account> implements AccountDao {
 
@@ -26,14 +24,13 @@ public final class MethodAccountDao extends CommonDao<Account> implements Accoun
     private static final String LOGIN_FIELD_NAME = "login";
     private static final String PASSWORD_FIELD_NAME = "acc_password";
     private static final String ROLE_FIELD_NAME = "role";
-    private static final String DELIMITER = ", ";
     private static final List<String> FIELDS = Arrays.asList("id", "login", "acc_password", "role");
 
     private final String selectByLoginExpression;
 
     private MethodAccountDao(ConnectionPool pool) {
         super(pool, LOG);
-        this.selectByLoginExpression = format(SELECT_ALL_FROM, String.join(DELIMITER, getFields())) + getTableName()
+        this.selectByLoginExpression = format(SELECT_ALL_FROM, String.join(COMMA, getFields())) + getTableName()
                 + SPACE + format(WHERE_FIELD, LOGIN_FIELD_NAME);
     }
 
@@ -62,7 +59,7 @@ public final class MethodAccountDao extends CommonDao<Account> implements Accoun
     protected void fillEntity(PreparedStatement statement, Account entity) throws SQLException {
         statement.setLong(1, entity.getId());
         statement.setString(2, entity.getLogin());
-        statement.setString(3, entity.getLogin());
+        statement.setString(3, entity.getPassword());
         statement.setString(4, String.valueOf(entity.getRole()));
     }
 

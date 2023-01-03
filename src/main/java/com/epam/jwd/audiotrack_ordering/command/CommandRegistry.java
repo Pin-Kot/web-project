@@ -15,6 +15,8 @@ public enum CommandRegistry {
     ALBUMS_PAGE(ShowAlbumsPageCommand.getInstance(), "show_albums"),
     ARTISTS_PAGE(ShowArtistsPageCommand.getInstance(), "show_artists"),
     CHANGE_LANGUAGE(ChangeLanguageCommand.getInstance(), "change_language"),
+    EDIT(EditUserDataCommand.getInstance(), "edit_data", USER, ADMIN),
+    EDIT_PAGE(ShowEditDataPageCommand.getInstance(), "show_editor", USER, ADMIN),
     ERROR_PAGE(ShowErrorPageCommand.getInstance(), "show_error", UNAUTHORIZED),
     LOGIN(LoginCommand.getInstance(), "login", UNAUTHORIZED),
     LOGIN_PAGE(ShowLoginPageCommand.getInstance(), "show_login", UNAUTHORIZED),

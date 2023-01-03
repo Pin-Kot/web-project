@@ -7,6 +7,8 @@ public interface UserService extends EntityService<User> {
 
         Optional<User> findUserByAccountId(Long accountId);
 
+        Optional<User> updateUser(User user);
+
         static UserService getInstance() {
                 return SimpleUserService.getInstance();
         }

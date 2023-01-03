@@ -167,7 +167,7 @@ public class Application {
         try {
             return new User(resultSet.getLong(ID_COLUMN_NAME), resultSet.getString(FIRST_NAME_COLUMN_NAME),
                     resultSet.getString(LAST_NAME_COLUMN_NAME), resultSet.getString(EMAIL_COLUMN_NAME),
-                    resultSet.getDate(BIRTHDAY_COLUMN_NAME), resultSet.getBigDecimal(DISCOUNT_COLUMN_NAME),
+                    resultSet.getDate(BIRTHDAY_COLUMN_NAME).toLocalDate(), resultSet.getBigDecimal(DISCOUNT_COLUMN_NAME),
                     resultSet.getLong(ACCOUNT_ID_COLUMN_NAME));
         } catch (SQLException e) {
             LOG.error("could not extract value from result set", e);
