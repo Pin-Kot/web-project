@@ -15,6 +15,7 @@
 <fmt:message bundle="${loc}" key="label.welcome" var="welcomeMessage"/>
 <fmt:message bundle="${loc}" key="label.links.users" var="usersLink"/>
 <fmt:message bundle="${loc}" key="label.links.accounts" var="accountsLink"/>
+<fmt:message bundle="${loc}" key="label.links.admin" var="adminLink"/>
 <fmt:message bundle="${loc}" key="label.links.artists" var="artistsLink"/>
 <fmt:message bundle="${loc}" key="label.links.albums" var="albumsLink"/>
 <fmt:message bundle="${loc}" key="label.links.tracks" var="tracksLink"/>
@@ -33,11 +34,10 @@
 </style>
 <h1>${invitationMessage}</h1>
 <jwds:welcomeAccount text="${welcomeMessage}"/>
-
 <br>
+
 <c:if test="${not empty sessionScope.account && sessionScope.account.role eq Role.ADMIN}">
-        <li><a href="${pageContext.request.contextPath}/controller?command=show_users">${usersLink}</a> </li>
-        <li><a href="${pageContext.request.contextPath}/controller?command=show_accounts">${accountsLink}</a></li>
+    <li><a href="${pageContext.request.contextPath}/controller?command=show_admin">${adminLink}</a> </li>
     <br>
 </c:if>
 
@@ -47,7 +47,7 @@
 <br>
 <%--<c:choose>--%>
 <%--    <c:when test="${not empty sessionScope.account}">--%>
-<%--        <a href="${pageContext.request.contextPath}/controller?command=logout">${logoutLink}</a>--%>
+<%--        <a href="${pageContext.request.cont  extPath}/controller?command=logout">${logoutLink}</a>--%>
 <%--    </c:when>--%>
 <%--    <c:otherwise>--%>
 <%--        <a href="${pageContext.request.contextPath}/controller?command=show_login">${loginLink}</a>--%>

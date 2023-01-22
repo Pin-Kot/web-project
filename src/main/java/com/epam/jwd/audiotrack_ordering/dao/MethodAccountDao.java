@@ -110,21 +110,6 @@ public final class MethodAccountDao extends CommonDao<Account> implements Accoun
         }
     }
 
-//    @Override
-//    public void update(Account account) {
-//        try {
-//            final int rowsUpdated = executePreparedUpdate(updatePasswordByAccountIdExpression, st -> fillPasswordWithId(st, account));
-//            if (rowsUpdated > 0) {
-//                LOG.info("Updated successfully. New password for account with login {}", account.getLogin());
-//            } else {
-//                LOG.error("Update error occurred");
-//            }
-//        } catch (InterruptedException e) {
-//            LOG.info("takeConnection interrupted", e);
-//            Thread.currentThread().interrupt();
-//        }
-//    }
-
     static AccountDao getInstance() {
         return MethodAccountDao.Holder.INSTANCE;
     }

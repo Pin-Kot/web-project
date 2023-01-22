@@ -10,14 +10,12 @@
     <tr>
         <th>ID</th>
         <th>Login</th>
-        <th>Password</th>
         <th>Role</th>
     </tr>
     <c:forEach var="account" items="${requestScope.accounts}">
         <tr>
             <td>${account.id}</td>
             <td>${account.login}</td>
-            <td>${account.password}</td>
             <td>${account.role}</td>
         </tr>
     </c:forEach>
