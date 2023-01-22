@@ -13,9 +13,7 @@ import static com.epam.jwd.audiotrack_ordering.entity.Role.USER;
 
 public class SignUpCommand implements Command {
 
-    private static final String INDEX_PAGE = "page.index";
     private static final String SIGN_UP_PAGE = "page.sign_up";
-
 
     private static final String ACCOUNT_ATTRIBUTE_NAME = "account";
     private static final String LOGIN_REQUEST_PARAM_NAME = "login";
@@ -32,6 +30,9 @@ public class SignUpCommand implements Command {
 
     private static final String ERROR_PASSWORD_MISMATCH_ATTRIBUTE = "errorPasswordMismatchMessage";
     private static final String PASSWORDS_DO_NOT_MATCH_MESSAGE = "Passwords don't match";
+
+    private static final String SERVICE_NEW_ACCOUNT_CREATED_ATTRIBUTE = "serviceNewAccountCreatedMessage";
+    private static final String NEW_ACCOUNT_HAS_SUCCESSFULLY_CREATED_MESSAGE = "New account has successfully created";
 
     private static SignUpCommand instance = null;
     private static final ReentrantLock LOCK = new ReentrantLock();
@@ -67,28 +68,25 @@ public class SignUpCommand implements Command {
         if (request.sessionExists() && request.retrieveFromSession(ACCOUNT_ATTRIBUTE_NAME).isPresent()) {
             throw new IllegalArgumentException(ACCOUNT_HAS_ALREADY_LOGGED_IN_MESSAGE);
         }
+
         final String login = request.getParameter(LOGIN_REQUEST_PARAM_NAME);
         final String password = request.getParameter(PASSWORD_REQUEST_PARAM_NAME);
         final String doublePassword = request.getParameter(DOUBLE_PASSWORD_REQUEST_PARAM_NAME);
-        if (AccountValidator.getInstance().isAllValid(login, password) && doublePassword.equals(password)
-                && !accountService.findAccountByLogin(login).isPresent()) {
-            Account newAccount = new Account(login, password, USER);
-            accountService.create(newAccount);
-            request.addToSession(ACCOUNT_ATTRIBUTE_NAME, newAccount);
-            return requestFactory.createForwardResponse(propertyContext.get(INDEX_PAGE));
-        } else {
-            if (accountService.findAccountByLogin(login).isPresent()) {
-                request.addAttributeToJSP(ERROR_ACCOUNT_EXIST_ATTRIBUTE, ACCOUNT_ALREADY_EXISTS_MESSAGE);
-            } else {
-                if (!AccountValidator.getInstance().isAllValid(login, password)) {
-                    request.addAttributeToJSP(ERROR_SIGN_UP_PASS_ATTRIBUTE, ERROR_SIGN_UP_PASS_MESSAGE);
-                } else {
-                    if (!doublePassword.equals(password)) {
-                        request.addAttributeToJSP(ERROR_PASSWORD_MISMATCH_ATTRIBUTE, PASSWORDS_DO_NOT_MATCH_MESSAGE);
-                    }
-                }
-            }
+
+        if (!AccountValidator.getInstance().isAllValid(login, password)) {
+            request.addAttributeToJSP(ERROR_SIGN_UP_PASS_ATTRIBUTE, ERROR_SIGN_UP_PASS_MESSAGE);
             return requestFactory.createForwardResponse(propertyContext.get(SIGN_UP_PAGE));
         }
+        if (accountService.findAccountByLogin(login).isPresent()) {
+            request.addAttributeToJSP(ERROR_ACCOUNT_EXIST_ATTRIBUTE, ACCOUNT_ALREADY_EXISTS_MESSAGE);
+            return requestFactory.createForwardResponse(propertyContext.get(SIGN_UP_PAGE));
+        }
+        if (!doublePassword.equals(password)) {
+            request.addAttributeToJSP(ERROR_PASSWORD_MISMATCH_ATTRIBUTE, PASSWORDS_DO_NOT_MATCH_MESSAGE);
+            return requestFactory.createForwardResponse(propertyContext.get(SIGN_UP_PAGE));
+        }
+        accountService.create(new Account(login, password, USER));
+        request.addAttributeToJSP(SERVICE_NEW_ACCOUNT_CREATED_ATTRIBUTE, NEW_ACCOUNT_HAS_SUCCESSFULLY_CREATED_MESSAGE);
+        return requestFactory.createForwardResponse(propertyContext.get(SIGN_UP_PAGE));
     }
 }

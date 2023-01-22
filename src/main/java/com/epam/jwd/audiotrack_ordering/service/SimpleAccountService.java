@@ -54,14 +54,22 @@ public class SimpleAccountService implements AccountService {
     }
 
     @Override
+    public void update(Account account) {
+        accountDao.update(account.withPassword(retrieveHashedPassword(account.getPassword())));
+    }
+
+    @Override
     public List<Account> findAll() {
         return accountDao.read();
     }
 
     @Override
-    public Optional<Account> create(Account account) {
-        final char[] rawPassword = account.getPassword().toCharArray();
-        final String hashedPassword = hasher.hashToString(MIN_COST, rawPassword);
-        return Optional.ofNullable(accountDao.create(account.withPassword(hashedPassword)));
+    public void create(Account account) {
+        accountDao.create(account.withPassword(retrieveHashedPassword(account.getPassword())));
+    }
+
+    private String retrieveHashedPassword(String password) {
+        final char[] rawPassword = password.toCharArray();
+        return hasher.hashToString(MIN_COST, rawPassword);
     }
 }

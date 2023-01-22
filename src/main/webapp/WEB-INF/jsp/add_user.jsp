@@ -1,13 +1,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
 <html>
 <head>
-    <title>Edit data</title>
+    <title>Add user data</title>
 </head>
 <body>
-<h3>Please edit data</h3>
-<form name="edit_data-form" action="${pageContext.request.contextPath}/controller?command=edit_data" method="post">
+<h3>Please add user data</h3>
+<form name="add_user_data-form" action="${pageContext.request.contextPath}/controller?command=add_user" method="post">
     <label for="first_name-input">Add your first name:</label>
     <input id="first_name-input" type="text" name="firstName" value=""/>
     <br>
@@ -31,8 +30,8 @@
             <b style="color: #ff0000">${requestScope.errorAccountDoesNotExistMessage}</b>
             <br>
         </c:when>
-        <c:when test="${not empty requestScope.errorUserDoesNotExistMessage}">
-            <b style="color: #ff0000">${requestScope.errorUserDoesNotExistMessage}</b>
+        <c:when test="${not empty requestScope.errorUserAlreadyExistsMessage}">
+            <b style="color: #ff0000">${requestScope.errorUserAlreadyExistsMessage}</b>
             <br>
         </c:when>
         <c:when test="${not empty requestScope.errorEnteredDateOfBirthdayMessage}">
@@ -44,7 +43,7 @@
             <br>
         </c:when>
     </c:choose>
-    <input type="submit" value="Edit"/>
+    <input type="submit" value="Add"/>
 </form>
 </body>
 </html>

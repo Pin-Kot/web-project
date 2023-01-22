@@ -14,22 +14,14 @@ public class SimpleUserService implements UserService {
         this.userDao = userDao;
     }
 
-    static SimpleUserService getInstance() {
-        return SimpleUserService.Holder.INSTANCE;
-    }
-
-    private static class Holder {
-        public static final SimpleUserService INSTANCE = new SimpleUserService(UserDao.getInstance());
-    }
-
     @Override
     public Optional<User> findUserByAccountId(Long accountId) {
         return userDao.findUserByAccountId(accountId);
     }
 
     @Override
-    public Optional<User> updateUser(User user) {
-        return Optional.ofNullable(userDao.update(user));
+    public void update(User user) {
+        userDao.update(user);
     }
 
     @Override
@@ -38,7 +30,7 @@ public class SimpleUserService implements UserService {
     }
 
     @Override
-    public Optional<User> create(User user) {
-        return Optional.ofNullable(userDao.create(user));
+    public void create(User user) {
+        userDao.create(user);
     }
 }

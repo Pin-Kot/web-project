@@ -14,6 +14,12 @@
     <p>discount: ${requestScope.user.discount}</p>
     <br>
     <a href="${pageContext.request.contextPath}/controller?command=show_editor">edit data</a>
+    <br>
+    <a href="${pageContext.request.contextPath}/controller?command=show_password_editor">edit password</a>
+</c:if>
+<c:if test="${empty requestScope.user && not empty sessionScope.account}">
+    <p>User data is empty, please enter data</p>
+    <a href="${pageContext.request.contextPath}/controller?command=show_add_user">edit data</a>
 </c:if>
 <c:if test="${not empty requestScope.errorInvalidUserData}">
     <b style="color: red">${requestScope.errorInvalidUserData}</b>

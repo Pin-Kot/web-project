@@ -14,7 +14,6 @@ import static java.lang.String.format;
 public class WelcomeAccountTag extends TagSupport {
 
     private static final long serialVersionUID = 6113723279256202939L;
-
     private static final Logger LOG = LogManager.getLogger(WelcomeAccountTag.class);
 
     private static final String PARAGRAPH_TAGS = "<p>%s, %s</p>";

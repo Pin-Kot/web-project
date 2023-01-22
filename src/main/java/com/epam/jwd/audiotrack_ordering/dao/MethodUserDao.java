@@ -27,25 +27,22 @@ public final class MethodUserDao extends CommonDao<User> implements UserDao {
     private static final String BIRTHDAY_FIELD_NAME = "birthday";
     private static final String DISCOUNT_FIELD_NAME = "discount";
     private static final String ACCOUNT_ID_FIELD_NAME = "account_id";
-    private static final String UPDATE = "update %s";
-    private static final String SET = "set %s";
     private static final String QUERY_AND_COMMA = " = ?, ";
-    private static final String QUERY = " = ? ";
+    private static final String VALUES = "values (?, ?, ?, ?, ?, ?)";
 
     private static final List<String> FIELDS = Arrays.asList(ID_FIELD_NAME, FIRST_NAME_FIELD_NAME, LAST_NAME_FIELD_NAME,
             EMAIL_FIELD_NAME, BIRTHDAY_FIELD_NAME, DISCOUNT_FIELD_NAME, ACCOUNT_ID_FIELD_NAME);
 
+    private static final List<String> INSERT_FIELDS = Arrays.asList(FIRST_NAME_FIELD_NAME, LAST_NAME_FIELD_NAME,
+            EMAIL_FIELD_NAME, BIRTHDAY_FIELD_NAME, DISCOUNT_FIELD_NAME, ACCOUNT_ID_FIELD_NAME);
 
     private final String selectByAccountIdExpression;
-    private final String updateSql;
 
 
     private MethodUserDao(ConnectionPool pool) {
         super(pool, LOG);
         this.selectByAccountIdExpression = format(SELECT_ALL_FROM, String.join(COMMA, getFields())) + getTableName()
                 + SPACE + format(WHERE_FIELD, ACCOUNT_ID_FIELD_NAME);
-        this.updateSql = format(UPDATE, getTableName()) + SPACE
-                + format(SET, String.join(QUERY_AND_COMMA, getFields())) + QUERY + format(WHERE_FIELD, ID_FIELD_NAME);
     }
 
     @Override
@@ -56,6 +53,21 @@ public final class MethodUserDao extends CommonDao<User> implements UserDao {
     @Override
     protected List<String> getFields() {
         return FIELDS;
+    }
+
+    @Override
+    protected List<String> getInsertFields() {
+        return INSERT_FIELDS;
+    }
+
+    @Override
+    protected String getValues() {
+        return VALUES;
+    }
+
+    @Override
+    protected String getInsertRequest() {
+        return QUERY_AND_COMMA;
     }
 
     @Override
@@ -82,16 +94,23 @@ public final class MethodUserDao extends CommonDao<User> implements UserDao {
         statement.setLong(7, user.getAccId());
     }
 
-    protected void fillEntityWithId(PreparedStatement statement, User user) throws SQLException {
+    @Override
+    protected void fillInsertingEntity(PreparedStatement statement, User user) throws SQLException {
+        statement.setString(1, user.getFirstName());
+        statement.setString(2, user.getLastName());
+        statement.setString(3, user.getEmail());
+        statement.setDate(4, valueOf(user.getBirthday()));
+        statement.setBigDecimal(5, user.getDiscount());
+        statement.setLong(6, user.getAccId());
+    }
+
+    @Override
+    protected void fillUpdatingEntity(PreparedStatement statement, User user) throws SQLException {
         fillEntity(statement, user);
         statement.setLong(8, user.getId());
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
-        return Optional.empty();
-    }
-
     public Optional<User> findUserByAccountId(Long accountId) {
         try {
             return executePreparedForGenericEntity(selectByAccountIdExpression,
@@ -103,25 +122,8 @@ public final class MethodUserDao extends CommonDao<User> implements UserDao {
 
     }
 
-    @Override
-    public User update(User entity) {
-        try {
-            final int rowsUpdated = executePreparedUpdate(updateSql, st -> fillEntityWithId(st, entity));
-            if (rowsUpdated > 0) {
-                LOG.info("Updated successfully. New user data {}", entity);
-            } else {
-                LOG.error("Update error occurred");
-            }
-        } catch (InterruptedException e) {
-            LOG.info("takeConnection interrupted", e);
-            Thread.currentThread().interrupt();
-            return null;
-        }
-        return null;
-    }
-
     static UserDao getInstance() {
-        return Holder.INSTANCE;
+        return MethodUserDao.Holder.INSTANCE;
     }
 
     private static class Holder {

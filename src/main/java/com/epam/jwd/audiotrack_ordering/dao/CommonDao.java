@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static java.lang.String.format;
-import static java.lang.String.join;
 
 public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
 
@@ -26,36 +25,42 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
     protected static final String SPACE = " ";
     protected static final String COMMA = ", ";
     private static final String INSERT_INTO = "insert into %s (%s)";
+    private static final String UPDATE = "update %s";
+    private static final String SET = "set %s";
+    private static final String QUERY = " = ? ";
 
     protected final ConnectionPool pool;
     private final String selectAllExpression;
     private final String selectByIdExpression;
     private final String insertSql;
+    private final String updateAllByEntityIdExpression;
 
     private final Logger logger;
 
     protected CommonDao(ConnectionPool pool, Logger logger) {
         this.pool = pool;
         this.logger = logger;
+        this.insertSql = format(INSERT_INTO, getTableName(), String.join(COMMA, getInsertFields())) + SPACE
+                + getValues();
         this.selectAllExpression = format(SELECT_ALL_FROM, String.join(COMMA, getFields())) + getTableName();
         this.selectByIdExpression = selectAllExpression + SPACE + format(WHERE_FIELD, getIdFieldName());
-        this.insertSql = format(INSERT_INTO, getTableName(), join(COMMA, getFields()));
-
+        this.updateAllByEntityIdExpression = format(UPDATE, getTableName()) + SPACE
+                + format(SET, String.join(getInsertRequest(), getFields())) + QUERY + format(WHERE_FIELD, getIdFieldName());
     }
 
     @Override
-    public T create(T entity) {
+    public void create(T entity) {
         try {
-            final int rowsUpdated = executePreparedUpdate(insertSql, st -> fillEntity(st, entity));
+            final int rowsUpdated = executePreparedUpdate(insertSql, st -> fillInsertingEntity(st, entity));
             if (rowsUpdated > 0) {
-                return null;
+                logger.info("Added successfully. New entity {}", entity);
+            } else {
+                logger.error("Update sql error occurred");
             }
         } catch (InterruptedException e) {
             logger.info("takeConnection interrupted", e);
             Thread.currentThread().interrupt();
-            return null;
         }
-        return null;
     }
 
     @Override
@@ -82,8 +87,18 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
     }
 
     @Override
-    public T update(T entity) {
-        return null;
+    public void update(T entity) {
+        try {
+            final int rowsUpdated = executePreparedUpdate(updateAllByEntityIdExpression, st -> fillUpdatingEntity(st, entity));
+            if (rowsUpdated > 0) {
+                logger.info("Updated successfully. New user data {}", entity);
+            } else {
+                logger.error("Update error occurred");
+            }
+        } catch (InterruptedException e) {
+            logger.info("takeConnection interrupted", e);
+            Thread.currentThread().interrupt();
+        }
     }
 
     @Override
@@ -207,9 +222,19 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
 
     protected abstract List<String> getFields();
 
+    protected abstract List<String> getInsertFields();
+
+    protected abstract String getValues();
+
     protected abstract String getIdFieldName();
+
+    protected abstract String getInsertRequest();
 
     protected abstract T extractResult(ResultSet rs) throws SQLException;
 
     protected abstract void fillEntity(PreparedStatement statement, T entity) throws SQLException;
+
+    protected abstract void fillInsertingEntity(PreparedStatement statement, T entity) throws SQLException;
+
+    protected abstract void fillUpdatingEntity(PreparedStatement statement, T entity) throws SQLException;
 }

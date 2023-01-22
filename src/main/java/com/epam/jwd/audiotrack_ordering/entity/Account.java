@@ -46,7 +46,7 @@ public class Account implements Entity {
     }
 
     public Account withPassword(String password) {
-        return new Account(id, login, password);
+        return new Account(id, login, password, role);
     }
 
     @Override

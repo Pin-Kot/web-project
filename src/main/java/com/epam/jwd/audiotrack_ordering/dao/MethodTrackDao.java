@@ -17,12 +17,18 @@ import static java.lang.String.format;
 public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
 
     private static final Logger LOG = LogManager.getLogger(MethodTrackDao.class);
-    private static final List<String> FIELDS = Arrays.asList("id", "title", "year", "price");
+
     private static final String TRACK_TABLE_NAME = "track";
     private static final String ID_FIELD_NAME = "id";
     private static final String TITLE_FIELD_NAME = "title";
     private static final String YEAR_FIELD_NAME = "year";
     private static final String PRICE_FIELD_NAME = "price";
+    private static final String QUERY_AND_COMMA = " = ?, ";
+    private static final String VALUES = "values (?, ?, ?)";
+
+    private static final List<String> FIELDS = Arrays.asList(ID_FIELD_NAME, TITLE_FIELD_NAME, YEAR_FIELD_NAME,
+            PRICE_FIELD_NAME);
+    private static final List<String> INSERT_FIELDS = Arrays.asList(TITLE_FIELD_NAME, YEAR_FIELD_NAME, PRICE_FIELD_NAME);
 
     private final String selectByTitleExpression;
 
@@ -43,6 +49,21 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
     }
 
     @Override
+    protected List<String> getInsertFields() {
+        return INSERT_FIELDS;
+    }
+
+    @Override
+    protected String getValues() {
+        return VALUES;
+    }
+
+    @Override
+    protected String getInsertRequest() {
+        return QUERY_AND_COMMA;
+    }
+
+    @Override
     protected String getIdFieldName() {
         return ID_FIELD_NAME;
     }
@@ -54,11 +75,24 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
     }
 
     @Override
-    protected void fillEntity(PreparedStatement statement, Track entity) throws SQLException {
-        statement.setLong(1, entity.getId());
-        statement.setString(2, entity.getTitle());
-        statement.setInt(3, entity.getYear());
-        statement.setBigDecimal(4, entity.getPrice());
+    protected void fillEntity(PreparedStatement statement, Track track) throws SQLException {
+        statement.setLong(1, track.getId());
+        statement.setString(2, track.getTitle());
+        statement.setInt(3, track.getYear());
+        statement.setBigDecimal(4, track.getPrice());
+    }
+
+    @Override
+    protected void fillInsertingEntity(PreparedStatement statement, Track track) throws SQLException {
+        statement.setString(1, track.getTitle());
+        statement.setInt(2, track.getYear());
+        statement.setBigDecimal(3, track.getPrice());
+    }
+
+    @Override
+    protected void fillUpdatingEntity(PreparedStatement statement, Track track) throws SQLException {
+        fillEntity(statement, track);
+        statement.setLong(5, track.getId());
     }
 
     @Override

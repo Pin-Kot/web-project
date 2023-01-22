@@ -6,8 +6,8 @@
          version="4.0">
     <jsp-config>
         <taglib>
-            <taglib-uri>online-store.jwd.epam.com</taglib-uri>
-            <taglib-location>WEB-INF/tld/simpleTags.tld</taglib-location>
+            <taglib-uri>com.epam.jwd.online-store</taglib-uri>
+            <taglib-location>/WEB-INF/tld/simpleTags.tld</taglib-location>
         </taglib>
     </jsp-config>
 </web-app>

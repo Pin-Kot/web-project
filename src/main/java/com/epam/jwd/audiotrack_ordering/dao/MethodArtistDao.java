@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +20,10 @@ public final class MethodArtistDao extends CommonDao<Artist> implements ArtistDa
     private static final String ARTIST_TABLE_NAME = "artist";
     private static final String ID_FIELD_NAME = "id";
     private static final String NAME_FIELD_NAME = "name";
-    public static final List<String> FIELDS = Arrays.asList("id", "name");
+    private static final String QUERY = " = ? ";
+    private static final String VALUES = "values (?)";
+
+    public static final List<String> FIELDS = Arrays.asList(ID_FIELD_NAME, NAME_FIELD_NAME);
 
     private MethodArtistDao(ConnectionPool pool) {
         super(pool, LOG);
@@ -36,6 +40,21 @@ public final class MethodArtistDao extends CommonDao<Artist> implements ArtistDa
     }
 
     @Override
+    protected List<String> getInsertFields() {
+        return Collections.singletonList(NAME_FIELD_NAME);
+    }
+
+    @Override
+    protected String getValues() {
+        return VALUES;
+    }
+
+    @Override
+    protected String getInsertRequest() {
+        return QUERY;
+    }
+
+    @Override
     protected String getIdFieldName() {
         return ID_FIELD_NAME;
     }
@@ -47,8 +66,20 @@ public final class MethodArtistDao extends CommonDao<Artist> implements ArtistDa
     }
 
     @Override
-    protected void fillEntity(PreparedStatement statement, Artist entity) throws SQLException {
+    protected void fillEntity(PreparedStatement statement, Artist artist) throws SQLException {
+        statement.setLong(1, artist.getId());
+        statement.setString(2, artist.getName());
+    }
 
+    @Override
+    protected void fillInsertingEntity(PreparedStatement statement, Artist artist) throws SQLException {
+        statement.setString(1, artist.getName());
+    }
+
+    @Override
+    protected void fillUpdatingEntity(PreparedStatement statement, Artist artist) throws SQLException {
+        fillEntity(statement, artist);
+        statement.setLong(3, artist.getId());
     }
 
     @Override

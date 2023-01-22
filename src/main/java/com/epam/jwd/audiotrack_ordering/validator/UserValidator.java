@@ -60,6 +60,18 @@ public class UserValidator {
         return year % 4 == 0;
     }
 
+    public boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            int number = Integer.parseInt(strNum);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
+
     public boolean isYearValid(int year) {
         return year >= 1900 && year <= 2022;
     }

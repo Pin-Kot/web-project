@@ -24,7 +24,14 @@ public final class MethodAccountDao extends CommonDao<Account> implements Accoun
     private static final String LOGIN_FIELD_NAME = "login";
     private static final String PASSWORD_FIELD_NAME = "acc_password";
     private static final String ROLE_FIELD_NAME = "role";
-    private static final List<String> FIELDS = Arrays.asList("id", "login", "acc_password", "role");
+    private static final String QUERY_AND_COMMA = " = ?, ";
+    private static final String VALUES = "values (?, ?, ?)";
+
+    private static final List<String> FIELDS = Arrays.asList(ID_FIELD_NAME, LOGIN_FIELD_NAME, PASSWORD_FIELD_NAME,
+            ROLE_FIELD_NAME);
+
+    private static final List<String> INSERTING_FIELDS = Arrays.asList(LOGIN_FIELD_NAME, PASSWORD_FIELD_NAME,
+            ROLE_FIELD_NAME);
 
     private final String selectByLoginExpression;
 
@@ -45,6 +52,21 @@ public final class MethodAccountDao extends CommonDao<Account> implements Accoun
     }
 
     @Override
+    protected List<String> getInsertFields() {
+        return INSERTING_FIELDS;
+    }
+
+    @Override
+    protected String getValues() {
+        return VALUES;
+    }
+
+    @Override
+    protected String getInsertRequest() {
+        return QUERY_AND_COMMA;
+    }
+
+    @Override
     protected String getIdFieldName() {
         return ID_FIELD_NAME;
     }
@@ -56,13 +78,25 @@ public final class MethodAccountDao extends CommonDao<Account> implements Accoun
     }
 
     @Override
-    protected void fillEntity(PreparedStatement statement, Account entity) throws SQLException {
-        statement.setLong(1, entity.getId());
-        statement.setString(2, entity.getLogin());
-        statement.setString(3, entity.getPassword());
-        statement.setString(4, String.valueOf(entity.getRole()));
+    protected void fillEntity(PreparedStatement statement, Account account) throws SQLException {
+        statement.setLong(1, account.getId());
+        statement.setString(2, account.getLogin());
+        statement.setString(3, account.getPassword());
+        statement.setString(4, String.valueOf(account.getRole()));
     }
 
+    @Override
+    protected void fillInsertingEntity(PreparedStatement statement, Account account) throws SQLException {
+        statement.setString(1, account.getLogin());
+        statement.setString(2, account.getPassword());
+        statement.setString(3, String.valueOf(account.getRole()));
+    }
+
+    @Override
+    protected void fillUpdatingEntity(PreparedStatement statement, Account account) throws SQLException {
+        fillEntity(statement, account);
+        statement.setLong(5, account.getId());
+    }
 
     @Override
     public Optional<Account> readAccountByLogin(String login) {
@@ -75,6 +109,21 @@ public final class MethodAccountDao extends CommonDao<Account> implements Accoun
             return Optional.empty();
         }
     }
+
+//    @Override
+//    public void update(Account account) {
+//        try {
+//            final int rowsUpdated = executePreparedUpdate(updatePasswordByAccountIdExpression, st -> fillPasswordWithId(st, account));
+//            if (rowsUpdated > 0) {
+//                LOG.info("Updated successfully. New password for account with login {}", account.getLogin());
+//            } else {
+//                LOG.error("Update error occurred");
+//            }
+//        } catch (InterruptedException e) {
+//            LOG.info("takeConnection interrupted", e);
+//            Thread.currentThread().interrupt();
+//        }
+//    }
 
     static AccountDao getInstance() {
         return MethodAccountDao.Holder.INSTANCE;

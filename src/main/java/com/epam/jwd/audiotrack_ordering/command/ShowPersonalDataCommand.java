@@ -4,8 +4,10 @@ import com.epam.jwd.audiotrack_ordering.controller.PropertyContext;
 import com.epam.jwd.audiotrack_ordering.controller.RequestFactory;
 import com.epam.jwd.audiotrack_ordering.entity.Account;
 import com.epam.jwd.audiotrack_ordering.entity.User;
+import com.epam.jwd.audiotrack_ordering.service.ServiceFactory;
 import com.epam.jwd.audiotrack_ordering.service.UserService;
 
+import java.util.Optional;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ShowPersonalDataCommand implements Command {
@@ -37,7 +39,7 @@ public class ShowPersonalDataCommand implements Command {
                 LOCK.lock();
                 if (instance == null) {
                     instance = new ShowPersonalDataCommand(RequestFactory.getInstance(), PropertyContext.getInstance(),
-                            UserService.getInstance());
+                            ServiceFactory.getInstance().userService());
                 }
             } finally {
                 LOCK.unlock();
@@ -48,8 +50,9 @@ public class ShowPersonalDataCommand implements Command {
 
     @Override
     public CommandResponse execute(CommandRequest request) {
-        if (request.retrieveFromSession(ACCOUNT_REQUEST_PARAM_NAME).isPresent()) {
-            final Account account = (Account) request.retrieveFromSession(ACCOUNT_REQUEST_PARAM_NAME).get();
+        final Optional<Object> accountFromSession = request.retrieveFromSession(ACCOUNT_REQUEST_PARAM_NAME);
+        if (accountFromSession.isPresent()) {
+            final Account account = (Account) accountFromSession.get();
             if (userService.findUserByAccountId(account.getId()).isPresent()) {
                 final User user = userService.findUserByAccountId(account.getId()).get();
                 request.addAttributeToJSP(JSP_USER_ATTRIBUTE_NAME, user);

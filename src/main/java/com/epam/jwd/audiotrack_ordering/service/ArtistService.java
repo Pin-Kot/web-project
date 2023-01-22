@@ -4,7 +4,6 @@ import com.epam.jwd.audiotrack_ordering.dao.ArtistDao;
 import com.epam.jwd.audiotrack_ordering.entity.Artist;
 
 import java.util.List;
-import java.util.Optional;
 
 public class ArtistService implements EntityService<Artist> {
 
@@ -20,7 +19,9 @@ public class ArtistService implements EntityService<Artist> {
     }
 
     @Override
-    public Optional<Artist> create(Artist entity) {
-        return Optional.empty();
+    public void update(Artist entity) {
     }
+
+    @Override
+    public void create(Artist entity) {}
 }

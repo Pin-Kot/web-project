@@ -1,25 +1,25 @@
 package com.epam.jwd.audiotrack_ordering.db;
 
+import com.epam.jwd.audiotrack_ordering.exception.CouldNotInitializeConnectionPoolError;
+import com.epam.jwd.audiotrack_ordering.exception.ResourceLoadingFailedException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
-
-import com.epam.jwd.audiotrack_ordering.exception.CouldNotInitializeConnectionPoolError;
-import com.epam.jwd.audiotrack_ordering.exception.ResourceLoadingFailedException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class LockingConnectionPool implements ConnectionPool {
 
@@ -32,7 +32,7 @@ public class LockingConnectionPool implements ConnectionPool {
     public static final String DB_INITIAL_POOL_SIZE = "db.initialPoolSize";
     public static final double THRESHOLD = 0.25;
 
-    private final Queue<ProxyConnection> availableConnections = new ArrayDeque<>();
+    private final Queue<ProxyConnection> availableConnections = new ConcurrentLinkedQueue<>();
     private final List<ProxyConnection> givenAwayConnections = new ArrayList<>();
 
     private boolean initialized = false;

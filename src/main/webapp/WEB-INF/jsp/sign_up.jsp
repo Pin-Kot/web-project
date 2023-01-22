@@ -32,5 +32,10 @@
     </c:choose>
     <input type="submit" value="Sign up"/>
 </form>
-
+<c:if test="${not empty requestScope.serviceNewAccountCreatedMessage}">
+    <b style="color: #0022ff">${requestScope.serviceNewAccountCreatedMessage}</b>
+    <br>
+    <p>Now you can login </p>
+    <a href="${pageContext.request.contextPath}/controller?command=show_login">login</a>
+</c:if>
 </body>
