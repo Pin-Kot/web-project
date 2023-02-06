@@ -11,7 +11,7 @@ public interface EntityDao<T extends Entity> {
 
     Optional<T> read(Long id);
 
-    List<T> read();
+    List<T> findAll();
 
     void update(T entity);
 

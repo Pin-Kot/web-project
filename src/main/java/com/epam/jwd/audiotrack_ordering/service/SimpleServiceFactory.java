@@ -38,7 +38,7 @@ public class SimpleServiceFactory implements ServiceFactory {
                 case "Artist":
                     return new ArtistService(ArtistDao.getInstance());
                 case "Track":
-                    return ProxyEntityService.of(new TrackService(TrackDao.getInstance()));
+                    return ProxyEntityService.of(new SimpleTrackService(TrackDao.getInstance()));
                 case "User":
                     return ProxyEntityService.of(new SimpleUserService(UserDao.getInstance()));
                 default:

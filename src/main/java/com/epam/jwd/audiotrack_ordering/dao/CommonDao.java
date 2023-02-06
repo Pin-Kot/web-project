@@ -27,7 +27,7 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
     private static final String INSERT_INTO = "insert into %s (%s)";
     private static final String UPDATE = "update %s";
     private static final String SET = "set %s";
-    private static final String QUERY = " = ? ";
+    protected static final String QUERY = " = ? ";
 
     protected final ConnectionPool pool;
     private final String selectAllExpression;
@@ -64,7 +64,7 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
     }
 
     @Override
-    public List<T> read() {
+    public List<T> findAll() {
         try {
             return executeStatement(selectAllExpression, this::extractResultCatchingException);
         } catch (InterruptedException e) {

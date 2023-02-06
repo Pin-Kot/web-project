@@ -6,5 +6,4 @@ import java.util.Optional;
 public interface UserService extends EntityService<User> {
 
         Optional<User> findUserByAccountId(Long accountId);
-
 }

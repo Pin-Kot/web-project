@@ -17,8 +17,8 @@
     <input id="doublePassword-input" type="password" name="doublePassword" value=""/>
     <br/>
     <c:choose>
-        <c:when test="${not empty requestScope.errorAccountExistMessage}">
-            <b style="color: red">${requestScope.errorAccountExistMessage}</b>
+        <c:when test="${not empty requestScope.errorAccountExistsMessage}">
+            <b style="color: red">${requestScope.errorAccountExistsMessage}</b>
             <br>
         </c:when>
         <c:when test="${not empty requestScope.errorSignUpPassMessage}">

@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface EntityService<T extends Entity> {
 
-    List<T> findAll();
-
     void create(T entity);
+
+    List<T> findAll();
 
     void update(T entity);
 }

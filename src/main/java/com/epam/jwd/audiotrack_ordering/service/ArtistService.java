@@ -15,13 +15,15 @@ public class ArtistService implements EntityService<Artist> {
 
     @Override
     public List<Artist> findAll() {
-        return artistDao.read();
+        return artistDao.findAll();
     }
 
     @Override
-    public void update(Artist entity) {
+    public void update(Artist artist) {
     }
 
     @Override
-    public void create(Artist entity) {}
+    public void create(Artist artist) {
+        artistDao.create(artist);
+    }
 }

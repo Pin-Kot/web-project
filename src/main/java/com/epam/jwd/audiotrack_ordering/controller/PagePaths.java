@@ -2,6 +2,7 @@ package com.epam.jwd.audiotrack_ordering.controller;
 
 public enum PagePaths {
     ACCOUNTS("/WEB-INF/jsp/accounts.jsp"),
+    ADD_ARTIST("/WEB-INF/jsp/add_artist.jsp"),
     ADD_USER("/WEB-INF/jsp/add_user.jsp"),
     ADMIN("/WEB-INF/jsp/admin.jsp"),
     ALBUMS("/WEB-INF/jsp/albums.jsp"),

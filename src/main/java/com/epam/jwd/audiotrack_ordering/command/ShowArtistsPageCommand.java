@@ -37,7 +37,8 @@ public class ShowArtistsPageCommand implements Command {
         return instance;
     }
 
-    public ShowArtistsPageCommand(EntityService<Artist> service, RequestFactory requestFactory, PropertyContext propertyContext) {
+    public ShowArtistsPageCommand(EntityService<Artist> service, RequestFactory requestFactory,
+                                  PropertyContext propertyContext) {
         this.service = service;
         this.requestFactory = requestFactory;
         this.propertyContext = propertyContext;

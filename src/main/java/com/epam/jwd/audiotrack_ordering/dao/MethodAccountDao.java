@@ -99,7 +99,7 @@ public final class MethodAccountDao extends CommonDao<Account> implements Accoun
     }
 
     @Override
-    public Optional<Account> readAccountByLogin(String login) {
+    public Optional<Account> findAccountByLogin(String login) {
         try {
             return executePreparedForGenericEntity(selectByLoginExpression,
                     this::extractResultCatchingException, st -> st.setString(1, login));

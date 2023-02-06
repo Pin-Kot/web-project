@@ -30,7 +30,7 @@ public class SimpleAccountService implements AccountService {
             return Optional.empty();
         }
         final byte[] enteredPassword = password.getBytes(StandardCharsets.UTF_8);
-        final Optional<Account> readAccount = accountDao.readAccountByLogin(login);
+        final Optional<Account> readAccount = accountDao.findAccountByLogin(login);
         if (readAccount.isPresent()) {
             final byte[] hashedPassword = readAccount.get()
                     .getPassword()
@@ -46,7 +46,7 @@ public class SimpleAccountService implements AccountService {
 
     @Override
     public Optional<Account> findAccountByLogin(String login) {
-        return accountDao.readAccountByLogin(login);
+        return accountDao.findAccountByLogin(login);
     }
 
     private void protectFromAttack(byte[] enteredPassword) {
@@ -60,7 +60,7 @@ public class SimpleAccountService implements AccountService {
 
     @Override
     public List<Account> findAll() {
-        return accountDao.read();
+        return accountDao.findAll();
     }
 
     @Override

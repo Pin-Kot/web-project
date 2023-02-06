@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface AccountDao extends EntityDao<Account> {
 
-    Optional<Account> readAccountByLogin(String login);
+    Optional<Account> findAccountByLogin(String login);
 
     static AccountDao getInstance() {
         return MethodAccountDao.getInstance();

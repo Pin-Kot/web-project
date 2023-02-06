@@ -15,6 +15,16 @@ public class SimpleUserService implements UserService {
     }
 
     @Override
+    public void create(User user) {
+        userDao.create(user);
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userDao.findAll();
+    }
+
+    @Override
     public Optional<User> findUserByAccountId(Long accountId) {
         return userDao.findUserByAccountId(accountId);
     }
@@ -22,15 +32,5 @@ public class SimpleUserService implements UserService {
     @Override
     public void update(User user) {
         userDao.update(user);
-    }
-
-    @Override
-    public List<User> findAll() {
-        return userDao.read();
-    }
-
-    @Override
-    public void create(User user) {
-        userDao.create(user);
     }
 }

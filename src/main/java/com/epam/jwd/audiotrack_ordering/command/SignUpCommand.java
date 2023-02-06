@@ -25,7 +25,7 @@ public class SignUpCommand implements Command {
     private static final String ERROR_SIGN_UP_PASS_ATTRIBUTE = "errorSignUpPassMessage";
     private static final String ERROR_SIGN_UP_PASS_MESSAGE = "Incorrect login or password";
 
-    private static final String ERROR_ACCOUNT_EXIST_ATTRIBUTE = "errorAccountExistMessage";
+    private static final String ERROR_ACCOUNT_EXISTS_ATTRIBUTE = "errorAccountExistsMessage";
     private static final String ACCOUNT_ALREADY_EXISTS_MESSAGE = "Account already exists";
 
     private static final String ERROR_PASSWORD_MISMATCH_ATTRIBUTE = "errorPasswordMismatchMessage";
@@ -78,7 +78,7 @@ public class SignUpCommand implements Command {
             return requestFactory.createForwardResponse(propertyContext.get(SIGN_UP_PAGE));
         }
         if (accountService.findAccountByLogin(login).isPresent()) {
-            request.addAttributeToJSP(ERROR_ACCOUNT_EXIST_ATTRIBUTE, ACCOUNT_ALREADY_EXISTS_MESSAGE);
+            request.addAttributeToJSP(ERROR_ACCOUNT_EXISTS_ATTRIBUTE, ACCOUNT_ALREADY_EXISTS_MESSAGE);
             return requestFactory.createForwardResponse(propertyContext.get(SIGN_UP_PAGE));
         }
         if (!doublePassword.equals(password)) {

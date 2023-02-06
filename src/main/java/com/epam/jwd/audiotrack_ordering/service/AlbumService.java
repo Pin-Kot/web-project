@@ -15,7 +15,7 @@ public class AlbumService implements EntityService<Album> {
 
     @Override
     public List<Album> findAll() {
-        return albumDao.read();
+        return albumDao.findAll();
     }
 
     @Override

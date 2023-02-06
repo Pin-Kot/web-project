@@ -8,7 +8,9 @@ import org.apache.logging.log4j.Logger;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,19 +25,74 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
     private static final String TITLE_FIELD_NAME = "title";
     private static final String YEAR_FIELD_NAME = "year";
     private static final String PRICE_FIELD_NAME = "price";
+
+    private static final String TRACK_ARTIST_LINK_TABLE_NAME = "track_artist_link";
+    private static final String T_ARTIST_LINK_TRACK_ID_FIELD_NAME = "track_id";
+    private static final String T_ARTIST_LINK_ARTIST_ID_FIELD_NAME = "artist_id";
+
+    private static final String TRACK_ALBUM_LINK_TABLE_NAME = "track_album_link";
+    private static final String T_ALBUM_LINK_TRACK_ID_FIELD_NAME = "track_id";
+    private static final String T_ALBUM_LINK_ALBUM_ID_FIELD_NAME = "album_id";
+
+    private static final String ARTIST_TABLE_NAME = "artist";
+    private static final String ARTIST_TABLE_ID_FIELD_NAME = "id";
+    private static final String ARTIST_TABLE_NAME_FIELD_NAME = "name";
+
+    private static final String ALBUM_TABLE_NAME = "album";
+    private static final String ALBUM_TABLE_ID_FIELD_NAME = "id";
+    private static final String ALBUM_TABLE_TITLE_FIELD_NAME = "title";
+
     private static final String QUERY_AND_COMMA = " = ?, ";
     private static final String VALUES = "values (?, ?, ?)";
+    private static final String DOT = ".";
+    private static final String JOIN_ON = "join %s on %s = %s";
+    private static final String AND = "and %s = ?";
+
+//    private static final String selectByAlbumExpression =
+//            "select track.id, track.title, track.year, track.price from track " +
+//            "join track_album_link on track.id = track_album_link.track_id " +
+//            "join album on track_album_link.album_id = album.id and album.title = ?";
+
+//    private static final String selectByAuthorExpression =
+//            "select track.id, track.title, track.year, track.price from track " +
+//            "join track_artist_link on track.id = track_artist_link.track_id " +
+//            "join artist on track_artist_link.artist_id = artist.id and artist.name = ?";
 
     private static final List<String> FIELDS = Arrays.asList(ID_FIELD_NAME, TITLE_FIELD_NAME, YEAR_FIELD_NAME,
             PRICE_FIELD_NAME);
+
     private static final List<String> INSERT_FIELDS = Arrays.asList(TITLE_FIELD_NAME, YEAR_FIELD_NAME, PRICE_FIELD_NAME);
 
     private final String selectByTitleExpression;
+    private final String selectByAuthorExpression;
+    private final String selectByAlbumExpression;
 
     private MethodTrackDao(ConnectionPool pool) {
         super(pool, LOG);
         this.selectByTitleExpression = format(SELECT_ALL_FROM, String.join(COMMA, getFields())) + getTableName()
                 + SPACE + format(WHERE_FIELD, TITLE_FIELD_NAME);
+        String selectAllFromTableExpression = format(SELECT_ALL_FROM, String.join(COMMA, getTableFields()))
+                + getTableName();
+        this.selectByAuthorExpression = selectAllFromTableExpression + SPACE
+                + format(JOIN_ON, TRACK_ARTIST_LINK_TABLE_NAME,
+                getTableField(getTableName(), ID_FIELD_NAME),
+                getTableField(TRACK_ARTIST_LINK_TABLE_NAME, T_ARTIST_LINK_TRACK_ID_FIELD_NAME))
+                + SPACE
+                + format(JOIN_ON, ARTIST_TABLE_NAME,
+                getTableField(TRACK_ARTIST_LINK_TABLE_NAME, T_ARTIST_LINK_ARTIST_ID_FIELD_NAME),
+                getTableField(ARTIST_TABLE_NAME, ARTIST_TABLE_ID_FIELD_NAME))
+                + SPACE
+                + format(AND, getTableField(ARTIST_TABLE_NAME, ARTIST_TABLE_NAME_FIELD_NAME));
+        this.selectByAlbumExpression = selectAllFromTableExpression + SPACE
+                + format(JOIN_ON, TRACK_ALBUM_LINK_TABLE_NAME,
+                getTableField(getTableName(), ID_FIELD_NAME),
+                getTableField(TRACK_ALBUM_LINK_TABLE_NAME, T_ALBUM_LINK_TRACK_ID_FIELD_NAME))
+                + SPACE
+                + format(JOIN_ON, ALBUM_TABLE_NAME,
+                getTableField(TRACK_ALBUM_LINK_TABLE_NAME, T_ALBUM_LINK_ALBUM_ID_FIELD_NAME),
+                getTableField(ALBUM_TABLE_NAME, ALBUM_TABLE_ID_FIELD_NAME))
+                + SPACE
+                + format(AND, getTableField(ALBUM_TABLE_NAME, ALBUM_TABLE_TITLE_FIELD_NAME));
     }
 
     @Override
@@ -46,6 +103,18 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
     @Override
     protected List<String> getFields() {
         return FIELDS;
+    }
+
+    protected List<String> getTableFields() {
+        List<String> newList = new ArrayList<>();
+        for (int i = 0; i < getFields().size(); i++) {
+            newList.add(getTableName() + DOT + getFields().get(i));
+        }
+        return newList;
+    }
+
+    protected String getTableField(String tableName, String fieldName) {
+        return tableName + DOT + fieldName;
     }
 
     @Override
@@ -104,6 +173,30 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
             LOG.info("takeConnection interrupted", e);
             Thread.currentThread().interrupt();
             return Optional.empty();
+        }
+    }
+
+    @Override
+    public List<Track> findTracksByArtistName(String artistName) {
+        try {
+            return executePreparedForEntities(selectByAuthorExpression,
+                    this::extractResultCatchingException, st -> st.setString(1, artistName));
+        } catch (InterruptedException e) {
+            LOG.info("takeConnection interrupted", e);
+            Thread.currentThread().interrupt();
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    public List<Track> findTRacksByAlbumTitle(String title) {
+        try {
+            return executePreparedForEntities(selectByAlbumExpression,
+                    this::extractResultCatchingException, st -> st.setString(1, title));
+        } catch (InterruptedException e) {
+            LOG.info("takeConnection interrupted", e);
+            Thread.currentThread().interrupt();
+            return Collections.emptyList();
         }
     }
 

@@ -13,6 +13,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static java.lang.String.format;
+
 public final class MethodArtistDao extends CommonDao<Artist> implements ArtistDao {
 
     private static final Logger LOG = LogManager.getLogger(MethodArtistDao.class);
@@ -23,10 +25,14 @@ public final class MethodArtistDao extends CommonDao<Artist> implements ArtistDa
     private static final String QUERY = " = ? ";
     private static final String VALUES = "values (?)";
 
-    public static final List<String> FIELDS = Arrays.asList(ID_FIELD_NAME, NAME_FIELD_NAME);
+    private static final List<String> FIELDS = Arrays.asList(ID_FIELD_NAME, NAME_FIELD_NAME);
+
+    private final String selectByNameExpression;
 
     private MethodArtistDao(ConnectionPool pool) {
         super(pool, LOG);
+        this.selectByNameExpression = format(SELECT_ALL_FROM, String.join(COMMA, getFields())) + getTableName()
+                + SPACE + format(WHERE_FIELD, NAME_FIELD_NAME);
     }
 
     @Override
@@ -84,7 +90,14 @@ public final class MethodArtistDao extends CommonDao<Artist> implements ArtistDa
 
     @Override
     public Optional<Artist> findByName(String name) {
-        return Optional.empty();
+        try {
+            return executePreparedForGenericEntity(selectByNameExpression,
+                    this::extractResultCatchingException, st -> st.setString(1, name));
+        } catch (InterruptedException e) {
+            LOG.info("takeConnection interrupted", e);
+            Thread.currentThread().interrupt();
+            return Optional.empty();
+        }
     }
 
     static ArtistDao getInstance() {
