@@ -73,7 +73,7 @@ public class UserValidator {
     }
 
     public boolean isYearValid(int year) {
-        return year >= 1900 && year <= 2022;
+        return year >= 1900 && year <= 2023;
     }
 
     public boolean isMonthValid(int month) {

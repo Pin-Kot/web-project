@@ -34,9 +34,9 @@ public class SimpleServiceFactory implements ServiceFactory {
                     return ProxyEntityService.of(new SimpleAccountService(AccountDao.getInstance(),
                             BCrypt.withDefaults(), BCrypt.verifyer()));
                 case "Album":
-                    return new AlbumService(AlbumDao.getInstance());
+                    return new SimpleAlbumService(AlbumDao.getInstance());
                 case "Artist":
-                    return new ArtistService(ArtistDao.getInstance());
+                    return new SimpleArtistService(ArtistDao.getInstance());
                 case "Track":
                     return ProxyEntityService.of(new SimpleTrackService(TrackDao.getInstance()));
                 case "User":

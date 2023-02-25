@@ -12,6 +12,7 @@
 <fmt:message bundle="${loc}" key="label.links.users" var="usersLink"/>
 <fmt:message bundle="${loc}" key="label.links.accounts" var="accountsLink"/>
 <fmt:message bundle="${loc}" key="label.links.add_artist" var="addArtistLink"/>
+<fmt:message bundle="${loc}" key="label.links.add_album" var="addAlbumLink"/>
 
 <html lang="${sessionScope.lang}">
 <head>
@@ -22,5 +23,6 @@
 <li><a href="${pageContext.request.contextPath}/controller?command=show_accounts">${accountsLink}</a></li>
 <br>
 <li><a href="${pageContext.request.contextPath}/controller?command=show_add_artist">${addArtistLink}</a></li>
+<li><a href="${pageContext.request.contextPath}/controller?command=show_add_album">${addAlbumLink}</a></li>
 </body>
 </html>

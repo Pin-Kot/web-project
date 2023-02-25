@@ -11,7 +11,7 @@ public interface TrackDao extends EntityDao<Track> {
 
     List<Track> findTracksByArtistName(String artistName);
 
-    List<Track> findTRacksByAlbumTitle(String title);
+    List<Track> findTracksByAlbumTitle(String title);
 
     static TrackDao getInstance() {
         return MethodTrackDao.getInstance();

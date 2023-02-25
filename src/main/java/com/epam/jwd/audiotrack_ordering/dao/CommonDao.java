@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -28,14 +29,17 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
     private static final String UPDATE = "update %s";
     private static final String SET = "set %s";
     protected static final String QUERY = " = ? ";
+    protected static final String DOT = ".";
+    protected static final String JOIN_ON = "join %s on %s = %s";
+    protected static final String AND = "and %s = ?";
 
     protected final ConnectionPool pool;
+    private final Logger logger;
+
     private final String selectAllExpression;
     private final String selectByIdExpression;
     private final String insertSql;
     private final String updateAllByEntityIdExpression;
-
-    private final Logger logger;
 
     protected CommonDao(ConnectionPool pool, Logger logger) {
         this.pool = pool;
@@ -45,7 +49,8 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
         this.selectAllExpression = format(SELECT_ALL_FROM, String.join(COMMA, getFields())) + getTableName();
         this.selectByIdExpression = selectAllExpression + SPACE + format(WHERE_FIELD, getIdFieldName());
         this.updateAllByEntityIdExpression = format(UPDATE, getTableName()) + SPACE
-                + format(SET, String.join(getInsertRequest(), getFields())) + QUERY + format(WHERE_FIELD, getIdFieldName());
+                + format(SET, String.join(getInsertRequest(), getFields())) + QUERY
+                + format(WHERE_FIELD, getIdFieldName());
     }
 
     @Override
@@ -75,7 +80,7 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
     }
 
     @Override
-    public Optional<T> read(Long id) {
+    public Optional<T> find(Long id) {
         try {
             return executePreparedForGenericEntity(selectByIdExpression,
                     this::extractResultCatchingException, st -> st.setLong(1, id));
@@ -89,7 +94,8 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
     @Override
     public void update(T entity) {
         try {
-            final int rowsUpdated = executePreparedUpdate(updateAllByEntityIdExpression, st -> fillUpdatingEntity(st, entity));
+            final int rowsUpdated = executePreparedUpdate(updateAllByEntityIdExpression,
+                    st -> fillUpdatingEntity(st, entity));
             if (rowsUpdated > 0) {
                 logger.info("Updated successfully. New user data {}", entity);
             } else {
@@ -104,6 +110,18 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
     @Override
     public boolean delete(Long id) {
         return false;
+    }
+
+    protected List<String> getTableFields() {
+        List<String> newList = new ArrayList<>();
+        for (int i = 0; i < getFields().size(); i++) {
+            newList.add(getTableName() + DOT + getFields().get(i));
+        }
+        return newList;
+    }
+
+    protected String getTableField(String tableName, String fieldName) {
+        return tableName + DOT + fieldName;
     }
 
     protected List<T> executeStatement(String sql, ResultSetExtractor<T> extractor) throws InterruptedException {

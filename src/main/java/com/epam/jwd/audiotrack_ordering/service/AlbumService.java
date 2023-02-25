@@ -1,27 +1,15 @@
 package com.epam.jwd.audiotrack_ordering.service;
 
-import com.epam.jwd.audiotrack_ordering.dao.AlbumDao;
 import com.epam.jwd.audiotrack_ordering.entity.Album;
 
 import java.util.List;
+import java.util.Optional;
 
-public class AlbumService implements EntityService<Album> {
+public interface AlbumService extends EntityService<Album> {
 
-    private final AlbumDao albumDao;
+    List<Album> findAlbumsByArtistName(String artistName);
 
-    AlbumService(AlbumDao albumDao) {
-        this.albumDao = albumDao;
-    }
+    Optional<Album> findByTitleByYear(String title, int year);
 
-    @Override
-    public List<Album> findAll() {
-        return albumDao.findAll();
-    }
-
-    @Override
-    public void update(Album entity) {
-    }
-
-    @Override
-    public void create(Album entity) {}
+    boolean createByArtistNameWithValidator(String title, String stringYear, String type, String artistName);
 }

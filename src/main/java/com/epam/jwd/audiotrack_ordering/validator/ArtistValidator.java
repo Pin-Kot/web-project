@@ -24,10 +24,10 @@ public class ArtistValidator {
     private ArtistValidator() {
     }
 
-    public boolean isNameValid(String name) {
+    public boolean isNameInvalid(String name) {
         if (name == null || name.isEmpty() || name.length() > 250) {
-            return false;
+            return true;
         }
-        return !Character.isWhitespace(name.charAt(0));
+        return Character.isWhitespace(name.charAt(0));
     }
 }

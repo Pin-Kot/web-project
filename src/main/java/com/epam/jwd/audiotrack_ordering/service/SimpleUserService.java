@@ -33,4 +33,9 @@ public class SimpleUserService implements UserService {
     public void update(User user) {
         userDao.update(user);
     }
+
+    @Override
+    public boolean delete(Long id) {
+        return false;
+    }
 }

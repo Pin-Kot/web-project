@@ -10,7 +10,6 @@
     <label for="artist_name-input">Artist name:</label>
     <input id="artist_name-input" type="text" name="artistName" value=""/>
     <br>
-
     <c:choose>
         <c:when test="${not empty requestScope.errorIncorrectArtistNameMessage}">
             <b style="color: red">${requestScope.errorIncorrectArtistNameMessage}</b>

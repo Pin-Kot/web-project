@@ -9,12 +9,11 @@ public interface EntityDao<T extends Entity> {
 
     void create(T entity);
 
-    Optional<T> read(Long id);
+    Optional<T> find(Long id);
 
     List<T> findAll();
 
     void update(T entity);
 
     boolean delete(Long id);
-
 }

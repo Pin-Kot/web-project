@@ -8,5 +8,5 @@ public interface TrackService extends EntityService<Track> {
 
     List<Track> findTracksByArtistName(String artistName);
 
-    List<Track> findTRacksByAlbumTitle(String title);
+    List<Track> findTracksByAlbumTitle(String title);
 }

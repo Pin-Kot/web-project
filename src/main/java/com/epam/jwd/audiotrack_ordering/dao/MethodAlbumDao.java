@@ -2,7 +2,6 @@ package com.epam.jwd.audiotrack_ordering.dao;
 
 import com.epam.jwd.audiotrack_ordering.db.ConnectionPool;
 import com.epam.jwd.audiotrack_ordering.entity.Album;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -10,8 +9,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import static java.lang.String.format;
 
 public final class MethodAlbumDao extends CommonDao<Album> implements AlbumDao {
 
@@ -22,15 +24,43 @@ public final class MethodAlbumDao extends CommonDao<Album> implements AlbumDao {
     private static final String TITLE_FIELD_NAME = "title";
     private static final String YEAR_FIELD_NAME = "year";
     private static final String TYPE_FIELD_NAME = "type";
+    private static final String AND_FIELD = "and %s = ?";
     private static final String QUERY_AND_COMMA = " = ?, ";
     private static final String VALUES = "values (?, ?, ?)";
 
-    private static final List<String> FIELDS = Arrays.asList("id", "title", "year", "type");
+    private static final String ARTIST_TABLE_NAME = "artist";
+    private static final String ARTIST_TABLE_ID_FIELD_NAME = "id";
+    private static final String ARTIST_TABLE_NAME_FIELD_NAME = "name";
+
+    private static final String ALBUM_ARTIST_LINK_TABLE_NAME = "album_artist_link";
+    private static final String ALBUM_ARTIST_LINK_ALBUM_ID_FIELD_NAME = "album_id";
+    private static final String ALBUM_ARTIST_LINK_ARTIST_ID_FIELD_NAME = "artist_id";
+
+    private static final List<String> FIELDS = Arrays.asList(ID_FIELD_NAME, TITLE_FIELD_NAME, YEAR_FIELD_NAME,
+            TYPE_FIELD_NAME);
     private static final List<String> INSERT_FIELDS = Arrays.asList(TITLE_FIELD_NAME, YEAR_FIELD_NAME,
             TYPE_FIELD_NAME);
 
+//    private static final selectByArtistExpression = "select album.id, album.title, album.year, album.type from album " +
+//            "join album_artist_link on album.id = album_artist_link.album_id " +
+//            "join artist on album_artist_link.artist_id = artist.id and artist.name = ?";
+
+    private final String selectByArtistExpression;
+    private final String selectByTitleByYearExpression;
+
     private MethodAlbumDao(ConnectionPool pool) {
         super(pool, LOG);
+        String selectAllFromTableExpression = format(SELECT_ALL_FROM, String.join(COMMA, getTableFields()))
+                + getTableName();
+        this.selectByTitleByYearExpression = format(SELECT_ALL_FROM, String.join(COMMA, getFields())) + getTableName()
+                + SPACE + format(WHERE_FIELD, TITLE_FIELD_NAME) + SPACE + format(AND_FIELD, YEAR_FIELD_NAME);
+        this.selectByArtistExpression = selectAllFromTableExpression + SPACE
+                + format(JOIN_ON, ALBUM_ARTIST_LINK_TABLE_NAME, getTableField(getTableName(), ID_FIELD_NAME),
+                getTableField(ALBUM_ARTIST_LINK_TABLE_NAME, ALBUM_ARTIST_LINK_ALBUM_ID_FIELD_NAME)) + SPACE
+                + format(JOIN_ON, ARTIST_TABLE_NAME,
+                getTableField(ALBUM_ARTIST_LINK_TABLE_NAME, ALBUM_ARTIST_LINK_ARTIST_ID_FIELD_NAME),
+                getTableField(ARTIST_TABLE_NAME, ARTIST_TABLE_ID_FIELD_NAME)) + SPACE
+                + format(AND, getTableField(ARTIST_TABLE_NAME, ARTIST_TABLE_NAME_FIELD_NAME));
     }
 
     @Override
@@ -91,8 +121,28 @@ public final class MethodAlbumDao extends CommonDao<Album> implements AlbumDao {
     }
 
     @Override
-    public Optional<Album> findByTitle(String title) {
-        return Optional.empty();
+    public Optional<Album> findByTitleByYear(String title, int year) {
+        try {
+            return executePreparedForGenericEntity(selectByTitleByYearExpression,
+                    this::extractResultCatchingException, st -> {st.setString(1, title);
+                        st.setInt(2, year);});
+        } catch (InterruptedException e) {
+            LOG.info("takeConnection interrupted", e);
+            Thread.currentThread().interrupt();
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public List<Album> findAlbumsByArtistName(String artistName) {
+        try {
+            return executePreparedForEntities(selectByArtistExpression,
+                    this::extractResultCatchingException, st -> st.setString(1, artistName));
+        } catch (InterruptedException e) {
+            LOG.info("takeConnection interrupted", e);
+            Thread.currentThread().interrupt();
+            return Collections.emptyList();
+        }
     }
 
     static AlbumDao getInstance() {

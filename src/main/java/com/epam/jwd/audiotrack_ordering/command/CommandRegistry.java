@@ -1,5 +1,6 @@
 package com.epam.jwd.audiotrack_ordering.command;
 
+import com.epam.jwd.audiotrack_ordering.command.impl.*;
 import com.epam.jwd.audiotrack_ordering.entity.Role;
 
 import java.util.Arrays;
@@ -12,6 +13,7 @@ import static com.epam.jwd.audiotrack_ordering.entity.Role.USER;
 public enum CommandRegistry {
     MAIN_PAGE(ShowMainPageCommand.getInstance(), "main_page"),
     ACCOUNTS_PAGE(ShowAccountsPageCommand.getInstance(), "show_accounts", ADMIN),
+    ADD_ALBUM(AddAlbumCommand.getInstance(), "add_album", ADMIN),
     ADD_ARTIST(AddArtistCommand.getInstance(), "add_artist", ADMIN),
     ADD_ARTIST_PAGE(ShowAddArtistPageCommand.getInstance(), "show_add_artist", ADMIN),
     ADD_USER(AddUserCommand.getInstance(), "add_user", USER, ADMIN),
@@ -29,7 +31,9 @@ public enum CommandRegistry {
     LOGIN_PAGE(ShowLoginPageCommand.getInstance(), "show_login", UNAUTHORIZED),
     LOGOUT(LogoutCommand.getInstance(), "logout", USER, ADMIN),
     PERSONAL_DATA_PAGE(ShowPersonalDataCommand.getInstance(), "show_personal_data", USER, ADMIN),
+    SHOW_ADD_ALBUM_PAGE(ShowAddAlbumPageCommand.getInstance(), "show_add_album", ADMIN),
     SHOW_ALBUM_TRACKS(ShowAlbumTracksPageCommand.getInstance(), "show_album_tracks"),
+    SHOW_ARTIST_ALBUMS(ShowArtistAlbumsPageCommand.getInstance(), "show_artist_albums"),
     SHOW_ARTIST_TRACKS(ShowArtistTracksPageCommand.getInstance(), "show_artist_tracks"),
     SIGN_UP(SignUpCommand.getInstance(), "sign_up", UNAUTHORIZED),
     SIGN_UP_PAGE(ShowSignUpPageCommand.getInstance(), "show_sign_up", UNAUTHORIZED),

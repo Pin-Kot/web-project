@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -31,8 +30,8 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
     private static final String T_ARTIST_LINK_ARTIST_ID_FIELD_NAME = "artist_id";
 
     private static final String TRACK_ALBUM_LINK_TABLE_NAME = "track_album_link";
-    private static final String T_ALBUM_LINK_TRACK_ID_FIELD_NAME = "track_id";
-    private static final String T_ALBUM_LINK_ALBUM_ID_FIELD_NAME = "album_id";
+    private static final String TRACK_ALBUM_LINK_TRACK_ID_FIELD_NAME = "track_id";
+    private static final String TRACK_ALBUM_LINK_ALBUM_ID_FIELD_NAME = "album_id";
 
     private static final String ARTIST_TABLE_NAME = "artist";
     private static final String ARTIST_TABLE_ID_FIELD_NAME = "id";
@@ -44,16 +43,13 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
 
     private static final String QUERY_AND_COMMA = " = ?, ";
     private static final String VALUES = "values (?, ?, ?)";
-    private static final String DOT = ".";
-    private static final String JOIN_ON = "join %s on %s = %s";
-    private static final String AND = "and %s = ?";
 
 //    private static final String selectByAlbumExpression =
 //            "select track.id, track.title, track.year, track.price from track " +
 //            "join track_album_link on track.id = track_album_link.track_id " +
 //            "join album on track_album_link.album_id = album.id and album.title = ?";
 
-//    private static final String selectByAuthorExpression =
+//    private static final String selectByArtistExpression =
 //            "select track.id, track.title, track.year, track.price from track " +
 //            "join track_artist_link on track.id = track_artist_link.track_id " +
 //            "join artist on track_artist_link.artist_id = artist.id and artist.name = ?";
@@ -64,7 +60,7 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
     private static final List<String> INSERT_FIELDS = Arrays.asList(TITLE_FIELD_NAME, YEAR_FIELD_NAME, PRICE_FIELD_NAME);
 
     private final String selectByTitleExpression;
-    private final String selectByAuthorExpression;
+    private final String selectByArtistExpression;
     private final String selectByAlbumExpression;
 
     private MethodTrackDao(ConnectionPool pool) {
@@ -73,7 +69,7 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
                 + SPACE + format(WHERE_FIELD, TITLE_FIELD_NAME);
         String selectAllFromTableExpression = format(SELECT_ALL_FROM, String.join(COMMA, getTableFields()))
                 + getTableName();
-        this.selectByAuthorExpression = selectAllFromTableExpression + SPACE
+        this.selectByArtistExpression = selectAllFromTableExpression + SPACE
                 + format(JOIN_ON, TRACK_ARTIST_LINK_TABLE_NAME,
                 getTableField(getTableName(), ID_FIELD_NAME),
                 getTableField(TRACK_ARTIST_LINK_TABLE_NAME, T_ARTIST_LINK_TRACK_ID_FIELD_NAME))
@@ -86,10 +82,10 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
         this.selectByAlbumExpression = selectAllFromTableExpression + SPACE
                 + format(JOIN_ON, TRACK_ALBUM_LINK_TABLE_NAME,
                 getTableField(getTableName(), ID_FIELD_NAME),
-                getTableField(TRACK_ALBUM_LINK_TABLE_NAME, T_ALBUM_LINK_TRACK_ID_FIELD_NAME))
+                getTableField(TRACK_ALBUM_LINK_TABLE_NAME, TRACK_ALBUM_LINK_TRACK_ID_FIELD_NAME))
                 + SPACE
                 + format(JOIN_ON, ALBUM_TABLE_NAME,
-                getTableField(TRACK_ALBUM_LINK_TABLE_NAME, T_ALBUM_LINK_ALBUM_ID_FIELD_NAME),
+                getTableField(TRACK_ALBUM_LINK_TABLE_NAME, TRACK_ALBUM_LINK_ALBUM_ID_FIELD_NAME),
                 getTableField(ALBUM_TABLE_NAME, ALBUM_TABLE_ID_FIELD_NAME))
                 + SPACE
                 + format(AND, getTableField(ALBUM_TABLE_NAME, ALBUM_TABLE_TITLE_FIELD_NAME));
@@ -103,18 +99,6 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
     @Override
     protected List<String> getFields() {
         return FIELDS;
-    }
-
-    protected List<String> getTableFields() {
-        List<String> newList = new ArrayList<>();
-        for (int i = 0; i < getFields().size(); i++) {
-            newList.add(getTableName() + DOT + getFields().get(i));
-        }
-        return newList;
-    }
-
-    protected String getTableField(String tableName, String fieldName) {
-        return tableName + DOT + fieldName;
     }
 
     @Override
@@ -179,7 +163,7 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
     @Override
     public List<Track> findTracksByArtistName(String artistName) {
         try {
-            return executePreparedForEntities(selectByAuthorExpression,
+            return executePreparedForEntities(selectByArtistExpression,
                     this::extractResultCatchingException, st -> st.setString(1, artistName));
         } catch (InterruptedException e) {
             LOG.info("takeConnection interrupted", e);
@@ -189,7 +173,7 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
     }
 
     @Override
-    public List<Track> findTRacksByAlbumTitle(String title) {
+    public List<Track> findTracksByAlbumTitle(String title) {
         try {
             return executePreparedForEntities(selectByAlbumExpression,
                     this::extractResultCatchingException, st -> st.setString(1, title));

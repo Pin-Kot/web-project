@@ -28,11 +28,16 @@ public class SimpleTrackService implements TrackService {
     }
 
     @Override
-    public List<Track> findTRacksByAlbumTitle(String title) {
-        return trackDao.findTRacksByAlbumTitle(title);
+    public List<Track> findTracksByAlbumTitle(String title) {
+        return trackDao.findTracksByAlbumTitle(title);
     }
 
     @Override
     public void update(Track entity) {
+    }
+
+    @Override
+    public boolean delete(Long id) {
+        return false;
     }
 }

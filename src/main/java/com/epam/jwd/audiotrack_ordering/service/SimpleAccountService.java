@@ -59,6 +59,11 @@ public class SimpleAccountService implements AccountService {
     }
 
     @Override
+    public boolean delete(Long id) {
+        return false;
+    }
+
+    @Override
     public List<Account> findAll() {
         return accountDao.findAll();
     }
