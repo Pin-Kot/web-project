@@ -19,29 +19,14 @@
     <label for="album_type-input">Album type:</label>
     <input id="album_type-input" type="text" name="albumType" value=""/>
     <c:choose>
-        <c:when test="${not empty requestScope.errorIncorrectDataTypeMessage}">
-            <b style="color: red">${requestScope.errorIncorrectDataTypeMessage}</b>
-        </c:when>
         <c:when test="${not empty requestScope.errorIncorrectAlbumDataMessage}">
             <b style="color: red">${requestScope.errorIncorrectAlbumDataMessage}</b>
-        </c:when>
-        <c:when test="${not empty requestScope.errorIncorrectAlbumTypeMessage}">
-            <b style="color: red">${requestScope.errorIncorrectAlbumTypeMessage}</b>
         </c:when>
         <c:when test="${not empty requestScope.errorIncorrectArtistNameMessage}">
             <b style="color: red">${requestScope.errorIncorrectArtistNameMessage}</b>
         </c:when>
         <c:when test="${not empty requestScope.errorArtistDoesNotExistMessage}">
             <b style="color: red">${requestScope.errorArtistDoesNotExistMessage}</b>
-        </c:when>
-        <c:when test="${not empty requestScope.errorAlbumExistsMessage}">
-            <b style="color: red">${requestScope.errorAlbumExistsMessage}</b>
-        </c:when>
-        <c:when test="${not empty requestScope.errorAlbumArtistExistsMessage}">
-            <b style="color: red">${requestScope.errorAlbumArtistExistsMessage}</b>
-        </c:when>
-        <c:when test="${not empty requestScope.errorAlbumDoesNotExistMessage}">
-            <b style="color: red">${requestScope.errorAlbumDoesNotExistMessage}</b>
         </c:when>
     </c:choose>
     <input type="submit" value="add"/>

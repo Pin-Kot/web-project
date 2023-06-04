@@ -56,7 +56,7 @@ public final class MethodArtistDao extends CommonDao<Artist> implements ArtistDa
     }
 
     @Override
-    protected String getInsertRequest() {
+    protected String getDelimiter() {
         return QUERY;
     }
 

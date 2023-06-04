@@ -25,9 +25,11 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
     protected static final String WHERE_FIELD = "where %s = ?";
     protected static final String SPACE = " ";
     protected static final String COMMA = ", ";
+
     private static final String INSERT_INTO = "insert into %s (%s)";
     private static final String UPDATE = "update %s";
-    private static final String SET = "set %s";
+    protected static final String SET = "set %s";
+
     protected static final String QUERY = " = ? ";
     protected static final String DOT = ".";
     protected static final String JOIN_ON = "join %s on %s = %s";
@@ -49,7 +51,7 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
         this.selectAllExpression = format(SELECT_ALL_FROM, String.join(COMMA, getFields())) + getTableName();
         this.selectByIdExpression = selectAllExpression + SPACE + format(WHERE_FIELD, getIdFieldName());
         this.updateAllByEntityIdExpression = format(UPDATE, getTableName()) + SPACE
-                + format(SET, String.join(getInsertRequest(), getFields())) + QUERY
+                + format(SET, String.join(getDelimiter(), getFields())) + QUERY
                 + format(WHERE_FIELD, getIdFieldName());
     }
 
@@ -227,6 +229,36 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
         return 0;
     }
 
+    protected boolean executeCompoundUpdate(String setSql, StatementPreparer setStatementPreparation,
+                                            StatementPreparer insertStatementPreparation) throws InterruptedException {
+        try {
+            final Connection connection = pool.takeConnection();
+
+            final PreparedStatement setStatement = connection.prepareStatement(setSql);
+            if (setStatementPreparation != null) {
+                setStatementPreparation.accept(setStatement);
+            }
+            setStatement.executeUpdate();
+
+            final PreparedStatement insertStatement = connection.prepareStatement(insertSql);
+            if (insertStatementPreparation != null) {
+                insertStatementPreparation.accept(insertStatement);
+            }
+            insertStatement.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            logger.error("sql exception occurred", e);
+            logger.debug("sql: {}", setSql);
+            logger.debug("sql: {}", insertSql);
+        } catch (InterruptedException e) {
+            logger.info("takeConnection interrupted", e);
+            Thread.currentThread().interrupt();
+            throw e;
+        }
+        return false;
+    }
+
     protected T extractResultCatchingException(ResultSet rs) throws EntityExtractionFailedException {
         try {
             return extractResult(rs);
@@ -246,7 +278,7 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
 
     protected abstract String getIdFieldName();
 
-    protected abstract String getInsertRequest();
+    protected abstract String getDelimiter();
 
     protected abstract T extractResult(ResultSet rs) throws SQLException;
 

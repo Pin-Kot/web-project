@@ -2,6 +2,7 @@ package com.epam.jwd.audiotrack_ordering.dao;
 
 import com.epam.jwd.audiotrack_ordering.db.ConnectionPool;
 import com.epam.jwd.audiotrack_ordering.entity.Album;
+import com.epam.jwd.audiotrack_ordering.entity.Artist;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,7 +25,7 @@ public final class MethodAlbumDao extends CommonDao<Album> implements AlbumDao {
     private static final String TITLE_FIELD_NAME = "title";
     private static final String YEAR_FIELD_NAME = "year";
     private static final String TYPE_FIELD_NAME = "type";
-    private static final String AND_FIELD = "and %s = ?";
+
     private static final String QUERY_AND_COMMA = " = ?, ";
     private static final String VALUES = "values (?, ?, ?)";
 
@@ -35,6 +36,8 @@ public final class MethodAlbumDao extends CommonDao<Album> implements AlbumDao {
     private static final String ALBUM_ARTIST_LINK_TABLE_NAME = "album_artist_link";
     private static final String ALBUM_ARTIST_LINK_ALBUM_ID_FIELD_NAME = "album_id";
     private static final String ALBUM_ARTIST_LINK_ARTIST_ID_FIELD_NAME = "artist_id";
+
+    private static final String VARIABLE_ARTIST_ID_NAME = "@'artist_id'";
 
     private static final List<String> FIELDS = Arrays.asList(ID_FIELD_NAME, TITLE_FIELD_NAME, YEAR_FIELD_NAME,
             TYPE_FIELD_NAME);
@@ -47,13 +50,14 @@ public final class MethodAlbumDao extends CommonDao<Album> implements AlbumDao {
 
     private final String selectByArtistExpression;
     private final String selectByTitleByYearExpression;
+    private final String setVariableExpression;
 
     private MethodAlbumDao(ConnectionPool pool) {
         super(pool, LOG);
         String selectAllFromTableExpression = format(SELECT_ALL_FROM, String.join(COMMA, getTableFields()))
                 + getTableName();
         this.selectByTitleByYearExpression = format(SELECT_ALL_FROM, String.join(COMMA, getFields())) + getTableName()
-                + SPACE + format(WHERE_FIELD, TITLE_FIELD_NAME) + SPACE + format(AND_FIELD, YEAR_FIELD_NAME);
+                + SPACE + format(WHERE_FIELD, TITLE_FIELD_NAME) + SPACE + format(AND, YEAR_FIELD_NAME);
         this.selectByArtistExpression = selectAllFromTableExpression + SPACE
                 + format(JOIN_ON, ALBUM_ARTIST_LINK_TABLE_NAME, getTableField(getTableName(), ID_FIELD_NAME),
                 getTableField(ALBUM_ARTIST_LINK_TABLE_NAME, ALBUM_ARTIST_LINK_ALBUM_ID_FIELD_NAME)) + SPACE
@@ -61,6 +65,7 @@ public final class MethodAlbumDao extends CommonDao<Album> implements AlbumDao {
                 getTableField(ALBUM_ARTIST_LINK_TABLE_NAME, ALBUM_ARTIST_LINK_ARTIST_ID_FIELD_NAME),
                 getTableField(ARTIST_TABLE_NAME, ARTIST_TABLE_ID_FIELD_NAME)) + SPACE
                 + format(AND, getTableField(ARTIST_TABLE_NAME, ARTIST_TABLE_NAME_FIELD_NAME));
+        this.setVariableExpression = format(SET, getArtistIdVariableName().concat(QUERY));
     }
 
     @Override
@@ -84,13 +89,17 @@ public final class MethodAlbumDao extends CommonDao<Album> implements AlbumDao {
     }
 
     @Override
-    protected String getInsertRequest() {
+    protected String getDelimiter() {
         return QUERY_AND_COMMA;
     }
 
     @Override
     protected String getIdFieldName() {
         return ID_FIELD_NAME;
+    }
+
+    protected String getArtistIdVariableName() {
+        return VARIABLE_ARTIST_ID_NAME;
     }
 
     @Override
@@ -120,12 +129,34 @@ public final class MethodAlbumDao extends CommonDao<Album> implements AlbumDao {
         statement.setLong(5, album.getId());
     }
 
+    protected void fillVariable(PreparedStatement statement, Artist artist) throws SQLException {
+        statement.setLong(1, artist.getId());
+    }
+
+    @Override
+    public void createAlbum(Album album, Artist artist) {
+        try {
+            final boolean isCreated = executeCompoundUpdate(setVariableExpression, st -> fillVariable(st, artist),
+                    st -> fillInsertingEntity(st, album));
+            if (isCreated) {
+                LOG.info("Created successfully. New album {}", album);
+            } else {
+                LOG.error("Update sql error occurred");
+            }
+        } catch (InterruptedException e) {
+            LOG.info("takeConnection interrupted", e);
+            Thread.currentThread().interrupt();
+        }
+    }
+
     @Override
     public Optional<Album> findByTitleByYear(String title, int year) {
         try {
             return executePreparedForGenericEntity(selectByTitleByYearExpression,
-                    this::extractResultCatchingException, st -> {st.setString(1, title);
-                        st.setInt(2, year);});
+                    this::extractResultCatchingException, st -> {
+                        st.setString(1, title);
+                        st.setInt(2, year);
+                    });
         } catch (InterruptedException e) {
             LOG.info("takeConnection interrupted", e);
             Thread.currentThread().interrupt();

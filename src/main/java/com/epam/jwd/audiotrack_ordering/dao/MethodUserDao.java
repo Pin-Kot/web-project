@@ -66,7 +66,7 @@ public final class MethodUserDao extends CommonDao<User> implements UserDao {
     }
 
     @Override
-    protected String getInsertRequest() {
+    protected String getDelimiter() {
         return QUERY_AND_COMMA;
     }
 

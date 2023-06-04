@@ -62,7 +62,7 @@ public final class MethodAccountDao extends CommonDao<Account> implements Accoun
     }
 
     @Override
-    protected String getInsertRequest() {
+    protected String getDelimiter() {
         return QUERY_AND_COMMA;
     }
 

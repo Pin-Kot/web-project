@@ -4,6 +4,7 @@ public enum PagePaths {
     ACCOUNTS("/WEB-INF/jsp/accounts.jsp"),
     ADD_ALBUM("/WEB-INF/jsp/add_album.jsp"),
     ADD_ARTIST("/WEB-INF/jsp/add_artist.jsp"),
+    ADD_TRACK("/WEB-INF/jsp/add_track.jsp"),
     ADD_USER("/WEB-INF/jsp/add_user.jsp"),
     ADMIN("/WEB-INF/jsp/admin.jsp"),
     ALBUMS("/WEB-INF/jsp/albums.jsp"),

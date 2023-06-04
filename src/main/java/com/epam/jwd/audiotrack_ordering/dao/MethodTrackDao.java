@@ -2,9 +2,12 @@ package com.epam.jwd.audiotrack_ordering.dao;
 
 import com.epam.jwd.audiotrack_ordering.db.ConnectionPool;
 import com.epam.jwd.audiotrack_ordering.entity.Track;
+import com.epam.jwd.audiotrack_ordering.entity.Album;
+import com.epam.jwd.audiotrack_ordering.entity.Artist;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -44,6 +47,9 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
     private static final String QUERY_AND_COMMA = " = ?, ";
     private static final String VALUES = "values (?, ?, ?)";
 
+    private static final String ARTIST_ID_VARIABLE_NAME = "@'artist_id'";
+    private static final String ALBUM_ID_VARIABLE_NAME = "@'album_id'";
+
 //    private static final String selectByAlbumExpression =
 //            "select track.id, track.title, track.year, track.price from track " +
 //            "join track_album_link on track.id = track_album_link.track_id " +
@@ -56,12 +62,15 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
 
     private static final List<String> FIELDS = Arrays.asList(ID_FIELD_NAME, TITLE_FIELD_NAME, YEAR_FIELD_NAME,
             PRICE_FIELD_NAME);
-
-    private static final List<String> INSERT_FIELDS = Arrays.asList(TITLE_FIELD_NAME, YEAR_FIELD_NAME, PRICE_FIELD_NAME);
+    private static final List<String> INSERT_FIELDS = Arrays.asList(TITLE_FIELD_NAME, YEAR_FIELD_NAME,
+            PRICE_FIELD_NAME);
+    private static final List<String> VARIABLES = Arrays.asList(ALBUM_ID_VARIABLE_NAME, ARTIST_ID_VARIABLE_NAME);
 
     private final String selectByTitleExpression;
     private final String selectByArtistExpression;
     private final String selectByAlbumExpression;
+    private final String selectByTitleByYearByPriceExpression;
+    private final String setVariablesExpression;
 
     private MethodTrackDao(ConnectionPool pool) {
         super(pool, LOG);
@@ -89,6 +98,11 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
                 getTableField(ALBUM_TABLE_NAME, ALBUM_TABLE_ID_FIELD_NAME))
                 + SPACE
                 + format(AND, getTableField(ALBUM_TABLE_NAME, ALBUM_TABLE_TITLE_FIELD_NAME));
+        this.selectByTitleByYearByPriceExpression = format(SELECT_ALL_FROM, String.join(COMMA, getFields()))
+                + getTableName() + SPACE + format(WHERE_FIELD, TITLE_FIELD_NAME) + SPACE + format(AND, YEAR_FIELD_NAME)
+                + SPACE + format(AND, PRICE_FIELD_NAME);
+//        this.setVariablesExpression = "set @'album_id' = ?, @'artist_id' = ?";
+        this.setVariablesExpression = format(SET, String.join(getDelimiter(), getVariables()).concat(QUERY));
     }
 
     @Override
@@ -112,13 +126,17 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
     }
 
     @Override
-    protected String getInsertRequest() {
+    protected String getDelimiter() {
         return QUERY_AND_COMMA;
     }
 
     @Override
     protected String getIdFieldName() {
         return ID_FIELD_NAME;
+    }
+
+    private List<String> getVariables() {
+        return VARIABLES;
     }
 
     @Override
@@ -142,6 +160,11 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
         statement.setBigDecimal(3, track.getPrice());
     }
 
+    protected void fillVariables(PreparedStatement statement, Album album, Artist artist) throws SQLException {
+        statement.setLong(1, album.getId());
+        statement.setLong(2, artist.getId());
+    }
+
     @Override
     protected void fillUpdatingEntity(PreparedStatement statement, Track track) throws SQLException {
         fillEntity(statement, track);
@@ -149,10 +172,43 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
     }
 
     @Override
+    public void createTrack(Track track, Album album, Artist artist) {
+        try {
+            final boolean isCreated = executeCompoundUpdate(setVariablesExpression,
+                    st -> fillVariables(st, album, artist), st -> fillInsertingEntity(st, track));
+            if (isCreated) {
+                LOG.info("Added successfully. New track {}", track);
+            } else {
+                LOG.error("Update sql error occurred");
+            }
+        } catch (InterruptedException e) {
+            LOG.info("takeConnection interrupted", e);
+            Thread.currentThread().interrupt();
+        }
+    }
+
+
+    @Override
     public Optional<Track> findByTitle(String title) {
         try {
             return executePreparedForGenericEntity(selectByTitleExpression,
                     this::extractResultCatchingException, st -> st.setString(1, title));
+        } catch (InterruptedException e) {
+            LOG.info("takeConnection interrupted", e);
+            Thread.currentThread().interrupt();
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public Optional<Track> findByTitleByYearByPrice(String title, int year, BigDecimal price) {
+        try {
+            return executePreparedForGenericEntity(selectByTitleByYearByPriceExpression,
+                    this::extractResultCatchingException, st -> {
+                        st.setString(1, title);
+                        st.setInt(2, year);
+                        st.setBigDecimal(3, price);
+                    });
         } catch (InterruptedException e) {
             LOG.info("takeConnection interrupted", e);
             Thread.currentThread().interrupt();
