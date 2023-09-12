@@ -44,7 +44,7 @@ public final class MethodAlbumDao extends CommonDao<Album> implements AlbumDao {
     private static final List<String> INSERT_FIELDS = Arrays.asList(TITLE_FIELD_NAME, YEAR_FIELD_NAME,
             TYPE_FIELD_NAME);
 
-//    private static final selectByArtistExpression = "select album.id, album.title, album.year, album.type from album " +
+//    private static final String selectByArtistExpression = "select album.id, album.title, album.year, album.type from album " +
 //            "join album_artist_link on album.id = album_artist_link.album_id " +
 //            "join artist on album_artist_link.artist_id = artist.id and artist.name = ?";
 
@@ -65,7 +65,7 @@ public final class MethodAlbumDao extends CommonDao<Album> implements AlbumDao {
                 getTableField(ALBUM_ARTIST_LINK_TABLE_NAME, ALBUM_ARTIST_LINK_ARTIST_ID_FIELD_NAME),
                 getTableField(ARTIST_TABLE_NAME, ARTIST_TABLE_ID_FIELD_NAME)) + SPACE
                 + format(AND, getTableField(ARTIST_TABLE_NAME, ARTIST_TABLE_NAME_FIELD_NAME));
-        this.setVariableExpression = format(SET, getArtistIdVariableName().concat(QUERY));
+        this.setVariableExpression = format(SET, getVariableName().concat(QUERY));
     }
 
     @Override
@@ -98,7 +98,7 @@ public final class MethodAlbumDao extends CommonDao<Album> implements AlbumDao {
         return ID_FIELD_NAME;
     }
 
-    protected String getArtistIdVariableName() {
+    protected String getVariableName() {
         return VARIABLE_ARTIST_ID_NAME;
     }
 

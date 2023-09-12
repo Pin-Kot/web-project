@@ -2,14 +2,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>Tracks</title>
 </head>
 <body>
 <h3>tracks</h3>
-<ul>
+<ol>
     <c:forEach var="track" items="${requestScope.tracks}">
         <li><span>${track.id}.</span> ${track.title} - ${track.year}, price: ${track.price} $</li>
     </c:forEach>
-</ul>
+</ol>
 </body>
 </html>

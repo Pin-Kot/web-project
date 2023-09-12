@@ -2,9 +2,13 @@ package com.epam.jwd.audiotrack_ordering.controller;
 
 import com.epam.jwd.audiotrack_ordering.command.CommandRequest;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
+import java.io.IOException;
+import java.util.Collection;
 import java.util.Optional;
 
 public class WrappingCommandRequest implements CommandRequest {
@@ -23,6 +27,16 @@ public class WrappingCommandRequest implements CommandRequest {
     @Override
     public String getParameter(String name) {
         return request.getParameter(name);
+    }
+
+    @Override
+    public Part getPart(String name) throws IOException, ServletException {
+        return request.getPart(name);
+    }
+
+    @Override
+    public Collection<Part> getParts() throws IOException, ServletException {
+        return request.getParts();
     }
 
     @Override

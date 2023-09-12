@@ -26,7 +26,7 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
     protected static final String SPACE = " ";
     protected static final String COMMA = ", ";
 
-    private static final String INSERT_INTO = "insert into %s (%s)";
+    protected static final String INSERT_INTO = "insert into %s (%s)";
     private static final String UPDATE = "update %s";
     protected static final String SET = "set %s";
 
@@ -62,7 +62,7 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
             if (rowsUpdated > 0) {
                 logger.info("Added successfully. New entity {}", entity);
             } else {
-                logger.error("Update sql error occurred");
+                logger.error("Add sql error occurred");
             }
         } catch (InterruptedException e) {
             logger.info("takeConnection interrupted", e);

@@ -9,7 +9,6 @@
 <ul>
     <form name="artist_name-form" action="${pageContext.request.contextPath}/controller?command=show_artist_tracks"
           method="post">
-
         <label for="artist_name-input">Artist name:</label>
         <input id="artist_name-input" type="text" name="artistName" value=""/>
         <br>

@@ -47,7 +47,7 @@
 <br>
 <%--<c:choose>--%>
 <%--    <c:when test="${not empty sessionScope.account}">--%>
-<%--        <a href="${pageContext.request.cont  extPath}/controller?command=logout">${logoutLink}</a>--%>
+<%--        <a href="${pageContext.request.contextPath}/controller?command=logout">${logoutLink}</a>--%>
 <%--    </c:when>--%>
 <%--    <c:otherwise>--%>
 <%--        <a href="${pageContext.request.contextPath}/controller?command=show_login">${loginLink}</a>--%>

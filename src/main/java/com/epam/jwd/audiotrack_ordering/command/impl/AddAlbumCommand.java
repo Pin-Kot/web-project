@@ -49,8 +49,6 @@ public class AddAlbumCommand implements Command {
         this.artistService = artistService;
     }
 
-    //
-
     public static AddAlbumCommand getInstance() {
         if (instance == null) {
             try {

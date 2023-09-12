@@ -1,6 +1,12 @@
 package com.epam.jwd.audiotrack_ordering.service;
 
-import com.epam.jwd.audiotrack_ordering.entity.*;
+import com.epam.jwd.audiotrack_ordering.entity.Account;
+import com.epam.jwd.audiotrack_ordering.entity.Album;
+import com.epam.jwd.audiotrack_ordering.entity.Artist;
+import com.epam.jwd.audiotrack_ordering.entity.Entity;
+import com.epam.jwd.audiotrack_ordering.entity.Image;
+import com.epam.jwd.audiotrack_ordering.entity.Track;
+import com.epam.jwd.audiotrack_ordering.entity.User;
 
 public interface ServiceFactory {
 
@@ -18,12 +24,16 @@ public interface ServiceFactory {
         return (ArtistService) serviceFor(Artist.class);
     }
 
-    default UserService userService() {
-        return (UserService) serviceFor(User.class);
+    default ImageService imageService() {
+        return (ImageService) serviceFor(Image.class);
     }
 
     default TrackService trackService() {
         return (TrackService) serviceFor(Track.class);
+    }
+
+    default UserService userService() {
+        return (UserService) serviceFor(User.class);
     }
 
     static ServiceFactory getInstance() {

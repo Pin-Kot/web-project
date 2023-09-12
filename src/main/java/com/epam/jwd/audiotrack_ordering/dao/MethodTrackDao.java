@@ -101,7 +101,6 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
         this.selectByTitleByYearByPriceExpression = format(SELECT_ALL_FROM, String.join(COMMA, getFields()))
                 + getTableName() + SPACE + format(WHERE_FIELD, TITLE_FIELD_NAME) + SPACE + format(AND, YEAR_FIELD_NAME)
                 + SPACE + format(AND, PRICE_FIELD_NAME);
-//        this.setVariablesExpression = "set @'album_id' = ?, @'artist_id' = ?";
         this.setVariablesExpression = format(SET, String.join(getDelimiter(), getVariables()).concat(QUERY));
     }
 
