@@ -40,6 +40,7 @@ public enum CommandRegistry {
     SHOW_ALBUM_TRACKS(ShowAlbumTracksPageCommand.getInstance(), "show_album_tracks"),
     SHOW_ARTIST_ALBUMS(ShowArtistAlbumsPageCommand.getInstance(), "show_artist_albums"),
     SHOW_ARTIST_TRACKS(ShowArtistTracksPageCommand.getInstance(), "show_artist_tracks"),
+    SHOW_TRACK_REVIEWS(ShowTrackReviewsPageCommand.getInstance(), "show_track_reviews"),
     SIGN_UP(SignUpCommand.getInstance(), "sign_up", UNAUTHORIZED),
     SIGN_UP_PAGE(ShowSignUpPageCommand.getInstance(), "show_sign_up", UNAUTHORIZED),
     TRACK_PAGE(ShowTracksPageCommand.getInstance(), "show_tracks"),

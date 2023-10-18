@@ -1,5 +1,7 @@
-package com.epam.jwd.audiotrack_ordering.dao;
+package com.epam.jwd.audiotrack_ordering.dao.impl;
 
+import com.epam.jwd.audiotrack_ordering.dao.AlbumDao;
+import com.epam.jwd.audiotrack_ordering.dao.CommonDao;
 import com.epam.jwd.audiotrack_ordering.db.ConnectionPool;
 import com.epam.jwd.audiotrack_ordering.entity.Album;
 import com.epam.jwd.audiotrack_ordering.entity.Artist;
@@ -26,7 +28,6 @@ public final class MethodAlbumDao extends CommonDao<Album> implements AlbumDao {
     private static final String YEAR_FIELD_NAME = "year";
     private static final String TYPE_FIELD_NAME = "type";
 
-    private static final String QUERY_AND_COMMA = " = ?, ";
     private static final String VALUES = "values (?, ?, ?)";
 
     private static final String ARTIST_TABLE_NAME = "artist";
@@ -176,7 +177,7 @@ public final class MethodAlbumDao extends CommonDao<Album> implements AlbumDao {
         }
     }
 
-    static AlbumDao getInstance() {
+    public static AlbumDao getInstance() {
         return Holder.INSTANCE;
     }
 

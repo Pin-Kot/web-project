@@ -1,5 +1,7 @@
-package com.epam.jwd.audiotrack_ordering.dao;
+package com.epam.jwd.audiotrack_ordering.dao.impl;
 
+import com.epam.jwd.audiotrack_ordering.dao.ArtistDao;
+import com.epam.jwd.audiotrack_ordering.dao.CommonDao;
 import com.epam.jwd.audiotrack_ordering.db.ConnectionPool;
 import com.epam.jwd.audiotrack_ordering.entity.Artist;
 import org.apache.logging.log4j.LogManager;
@@ -22,7 +24,6 @@ public final class MethodArtistDao extends CommonDao<Artist> implements ArtistDa
     private static final String ARTIST_TABLE_NAME = "artist";
     private static final String ID_FIELD_NAME = "id";
     private static final String NAME_FIELD_NAME = "name";
-    private static final String QUERY = " = ? ";
     private static final String VALUES = "values (?)";
 
     private static final List<String> FIELDS = Arrays.asList(ID_FIELD_NAME, NAME_FIELD_NAME);
@@ -100,7 +101,7 @@ public final class MethodArtistDao extends CommonDao<Artist> implements ArtistDa
         }
     }
 
-    static ArtistDao getInstance() {
+    public static ArtistDao getInstance() {
         return Holder.INSTANCE;
     }
 

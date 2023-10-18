@@ -1,5 +1,6 @@
 package com.epam.jwd.audiotrack_ordering.dao;
 
+import com.epam.jwd.audiotrack_ordering.dao.impl.MethodImageDao;
 import com.epam.jwd.audiotrack_ordering.entity.Album;
 import com.epam.jwd.audiotrack_ordering.entity.Image;
 

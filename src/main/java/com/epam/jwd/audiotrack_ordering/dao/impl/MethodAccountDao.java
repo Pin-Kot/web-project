@@ -1,5 +1,7 @@
-package com.epam.jwd.audiotrack_ordering.dao;
+package com.epam.jwd.audiotrack_ordering.dao.impl;
 
+import com.epam.jwd.audiotrack_ordering.dao.AccountDao;
+import com.epam.jwd.audiotrack_ordering.dao.CommonDao;
 import com.epam.jwd.audiotrack_ordering.db.ConnectionPool;
 import com.epam.jwd.audiotrack_ordering.entity.Account;
 import com.epam.jwd.audiotrack_ordering.entity.Role;
@@ -24,7 +26,6 @@ public final class MethodAccountDao extends CommonDao<Account> implements Accoun
     private static final String LOGIN_FIELD_NAME = "login";
     private static final String PASSWORD_FIELD_NAME = "acc_password";
     private static final String ROLE_FIELD_NAME = "role";
-    private static final String QUERY_AND_COMMA = " = ?, ";
     private static final String VALUES = "values (?, ?, ?)";
 
     private static final List<String> FIELDS = Arrays.asList(ID_FIELD_NAME, LOGIN_FIELD_NAME, PASSWORD_FIELD_NAME,
@@ -110,7 +111,7 @@ public final class MethodAccountDao extends CommonDao<Account> implements Accoun
         }
     }
 
-    static AccountDao getInstance() {
+    public static AccountDao getInstance() {
         return MethodAccountDao.Holder.INSTANCE;
     }
 

@@ -1,5 +1,7 @@
-package com.epam.jwd.audiotrack_ordering.dao;
+package com.epam.jwd.audiotrack_ordering.dao.impl;
 
+import com.epam.jwd.audiotrack_ordering.dao.CommonDao;
+import com.epam.jwd.audiotrack_ordering.dao.ImageDao;
 import com.epam.jwd.audiotrack_ordering.db.ConnectionPool;
 import com.epam.jwd.audiotrack_ordering.entity.Album;
 import com.epam.jwd.audiotrack_ordering.entity.Image;
@@ -38,7 +40,6 @@ public class MethodImageDao extends CommonDao<Image> implements ImageDao {
     private static final String ALBUM_TABLE_TITLE_FIELD_NAME = "title";
 
     private static final String VALUES = "values (?)";
-    private static final String QUERY = " = ? ";
 
     private static final String VARIABLE_ALBUM_ID_NAME = "@'album_id'";
 
@@ -174,7 +175,7 @@ public class MethodImageDao extends CommonDao<Image> implements ImageDao {
         }
     }
 
-    static ImageDao getInstance() {
+    public static ImageDao getInstance() {
         return Holder.INSTANCE;
     }
 

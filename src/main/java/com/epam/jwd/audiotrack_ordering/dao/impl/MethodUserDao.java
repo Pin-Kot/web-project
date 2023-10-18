@@ -1,5 +1,7 @@
-package com.epam.jwd.audiotrack_ordering.dao;
+package com.epam.jwd.audiotrack_ordering.dao.impl;
 
+import com.epam.jwd.audiotrack_ordering.dao.CommonDao;
+import com.epam.jwd.audiotrack_ordering.dao.UserDao;
 import com.epam.jwd.audiotrack_ordering.db.ConnectionPool;
 import com.epam.jwd.audiotrack_ordering.entity.User;
 import org.apache.logging.log4j.LogManager;
@@ -27,7 +29,6 @@ public final class MethodUserDao extends CommonDao<User> implements UserDao {
     private static final String BIRTHDAY_FIELD_NAME = "birthday";
     private static final String DISCOUNT_FIELD_NAME = "discount";
     private static final String ACCOUNT_ID_FIELD_NAME = "account_id";
-    private static final String QUERY_AND_COMMA = " = ?, ";
     private static final String VALUES = "values (?, ?, ?, ?, ?, ?)";
 
     private static final List<String> FIELDS = Arrays.asList(ID_FIELD_NAME, FIRST_NAME_FIELD_NAME, LAST_NAME_FIELD_NAME,
@@ -37,7 +38,6 @@ public final class MethodUserDao extends CommonDao<User> implements UserDao {
             EMAIL_FIELD_NAME, BIRTHDAY_FIELD_NAME, DISCOUNT_FIELD_NAME, ACCOUNT_ID_FIELD_NAME);
 
     private final String selectByAccountIdExpression;
-
 
     private MethodUserDao(ConnectionPool pool) {
         super(pool, LOG);
@@ -122,7 +122,7 @@ public final class MethodUserDao extends CommonDao<User> implements UserDao {
 
     }
 
-    static UserDao getInstance() {
+    public static UserDao getInstance() {
         return MethodUserDao.Holder.INSTANCE;
     }
 

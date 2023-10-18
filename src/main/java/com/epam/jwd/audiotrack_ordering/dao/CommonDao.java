@@ -31,6 +31,7 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
     protected static final String SET = "set %s";
 
     protected static final String QUERY = " = ? ";
+    protected static final String QUERY_AND_COMMA = " = ?, ";
     protected static final String DOT = ".";
     protected static final String JOIN_ON = "join %s on %s = %s";
     protected static final String AND = "and %s = ?";

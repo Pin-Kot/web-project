@@ -1,5 +1,6 @@
 package com.epam.jwd.audiotrack_ordering.dao;
 
+import com.epam.jwd.audiotrack_ordering.dao.impl.MethodArtistDao;
 import com.epam.jwd.audiotrack_ordering.entity.Artist;
 
 import java.util.Optional;

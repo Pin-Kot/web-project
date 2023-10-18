@@ -8,7 +8,14 @@
 <h3>tracks</h3>
 <ol>
     <c:forEach var="track" items="${requestScope.tracks}">
-        <li><span>${track.id}.</span> ${track.title} - ${track.year}, price: ${track.price} $</li>
+        <li>
+                ${track.title} - ${track.year}, price: ${track.price} $ <p>Add to cart</p>
+                    <form name="" action="${pageContext.request.contextPath}/controller?command=show_track_reviews"
+                          method="post">
+                        <input type="hidden" name="trackId" value="${track.id}"/>
+                        <td><input type="submit" value="show reviews"></td>
+                    </form>
+        </li>
     </c:forEach>
 </ol>
 </body>

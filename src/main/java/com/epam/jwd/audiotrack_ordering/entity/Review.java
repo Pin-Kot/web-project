@@ -1,26 +1,26 @@
 package com.epam.jwd.audiotrack_ordering.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class Review implements Entity {
 
     private final Long id;
-    private final Date date;
+    private final LocalDate date;
     private final String text;
-    private final Long userId;
-    private final Long audiotrackId;
+    private final String accountLogin;
+    private final Long trackId;
 
-    public Review(Long id, Date date, String text, Long userId, Long audiotrackId) {
+    public Review(Long id, LocalDate date, String text, String accountLogin, Long trackId) {
         this.id = id;
         this.date = date;
         this.text = text;
-        this.userId = userId;
-        this.audiotrackId = audiotrackId;
+        this.accountLogin = accountLogin;
+        this.trackId = trackId;
     }
 
-    public Review(Date date, String text, Long userId, Long audiotrackId) {
-        this(null, date, text, userId, audiotrackId);
+    public Review(LocalDate date, String text, String accountLogin, Long trackId) {
+        this(null, date, text, accountLogin, trackId);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class Review implements Entity {
         return id;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
@@ -36,12 +36,12 @@ public class Review implements Entity {
         return text;
     }
 
-    public Long getUserId() {
-        return userId;
+    public String getAccountLogin() {
+        return accountLogin;
     }
 
-    public Long getAudiotrackId() {
-        return audiotrackId;
+    public Long getTrackId() {
+        return trackId;
     }
 
     @Override
@@ -52,13 +52,13 @@ public class Review implements Entity {
         return Objects.equals(id, review.id) &&
                 Objects.equals(date, review.date) &&
                 Objects.equals(text, review.text) &&
-                Objects.equals(userId, review.userId) &&
-                Objects.equals(audiotrackId, review.audiotrackId);
+                Objects.equals(accountLogin, review.accountLogin) &&
+                Objects.equals(trackId, review.trackId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, date, text, userId, audiotrackId);
+        return Objects.hash(id, date, text, accountLogin, trackId);
     }
 
     @Override
@@ -67,8 +67,8 @@ public class Review implements Entity {
                 "id=" + id +
                 ", date=" + date +
                 ", text='" + text + '\'' +
-                ", userId=" + userId +
-                ", audiotrackId=" + audiotrackId +
+                ", accountLogin=" + accountLogin +
+                ", trackId=" + trackId +
                 '}';
     }
 }

@@ -1,5 +1,7 @@
-package com.epam.jwd.audiotrack_ordering.dao;
+package com.epam.jwd.audiotrack_ordering.dao.impl;
 
+import com.epam.jwd.audiotrack_ordering.dao.CommonDao;
+import com.epam.jwd.audiotrack_ordering.dao.TrackDao;
 import com.epam.jwd.audiotrack_ordering.db.ConnectionPool;
 import com.epam.jwd.audiotrack_ordering.entity.Track;
 import com.epam.jwd.audiotrack_ordering.entity.Album;
@@ -44,7 +46,6 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
     private static final String ALBUM_TABLE_ID_FIELD_NAME = "id";
     private static final String ALBUM_TABLE_TITLE_FIELD_NAME = "title";
 
-    private static final String QUERY_AND_COMMA = " = ?, ";
     private static final String VALUES = "values (?, ?, ?)";
 
     private static final String ARTIST_ID_VARIABLE_NAME = "@'artist_id'";
@@ -239,7 +240,7 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
         }
     }
 
-    static TrackDao getInstance() {
+    public static TrackDao getInstance() {
         return Holder.INSTANCE;
     }
 

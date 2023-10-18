@@ -45,7 +45,6 @@
                 <option>English</option>
                 <option>Russian</option>
             </select>
-            <%--    </label>--%>
         </form>
     </li>
 

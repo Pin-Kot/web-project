@@ -21,9 +21,6 @@
             </form>
             <td>${album.year}</td>
             <td>${album.type}</td>
-<%--            <td>--%>
-<%--                <a href="${pageContext.request.contextPath}/controller?command=show_album_images">${"show arts"}</a>            --%>
-<%--            </td>--%>
             <form name="" action="${pageContext.request.contextPath}/controller?command=show_album_images"
                   method="post">
                 <input type="hidden" name="albumTitle" value="${album.title}"/>
