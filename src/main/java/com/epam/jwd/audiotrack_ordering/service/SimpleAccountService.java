@@ -45,12 +45,22 @@ public class SimpleAccountService implements AccountService {
     }
 
     @Override
-    public Optional<Account> findAccountByLogin(String login) {
-        return accountDao.findAccountByLogin(login);
+    public void create(Account account) {
+        accountDao.create(account.withPassword(retrieveHashedPassword(account.getPassword())));
     }
 
     private void protectFromAttack(byte[] enteredPassword) {
         verifyer.verify(enteredPassword, DUMMY_PASSWORD);
+    }
+
+    @Override
+    public Optional<Account> find(Long id) {
+        return accountDao.find(id);
+    }
+
+    @Override
+    public Optional<Account> findAccountByLogin(String login) {
+        return accountDao.findAccountByLogin(login);
     }
 
     @Override
@@ -68,10 +78,6 @@ public class SimpleAccountService implements AccountService {
         return accountDao.findAll();
     }
 
-    @Override
-    public void create(Account account) {
-        accountDao.create(account.withPassword(retrieveHashedPassword(account.getPassword())));
-    }
 
     private String retrieveHashedPassword(String password) {
         final char[] rawPassword = password.toCharArray();

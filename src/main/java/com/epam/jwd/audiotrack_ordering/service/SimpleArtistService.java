@@ -15,6 +15,26 @@ public class SimpleArtistService implements ArtistService {
     }
 
     @Override
+    public void create(Artist artist) {
+        artistDao.create(artist);
+    }
+
+    @Override
+    public Optional<Artist> find(Long id) {
+        return artistDao.find(id);
+    }
+
+    @Override
+    public List<Artist> findArtistsByAlbum(String albumTitle) {
+        return null;
+    }
+
+    @Override
+    public Optional<Artist> findByName(String name) {
+        return artistDao.findByName(name);
+    }
+
+    @Override
     public List<Artist> findAll() {
         return artistDao.findAll();
     }
@@ -28,18 +48,5 @@ public class SimpleArtistService implements ArtistService {
         return false;
     }
 
-    @Override
-    public void create(Artist artist) {
-        artistDao.create(artist);
-    }
 
-    @Override
-    public List<Artist> findArtistsByAlbum(String albumTitle) {
-        return null;
-    }
-
-    @Override
-    public Optional<Artist> findByName(String name) {
-        return artistDao.findByName(name);
-    }
 }

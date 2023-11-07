@@ -12,7 +12,7 @@ import com.epam.jwd.audiotrack_ordering.service.ArtistService;
 import com.epam.jwd.audiotrack_ordering.service.ServiceFactory;
 import com.epam.jwd.audiotrack_ordering.service.TrackService;
 import com.epam.jwd.audiotrack_ordering.validator.ArtistValidator;
-import com.epam.jwd.audiotrack_ordering.validator.MusicEntityValidator;
+import com.epam.jwd.audiotrack_ordering.validator.EnteredDataValidator;
 
 import java.util.Optional;
 import java.util.concurrent.locks.ReentrantLock;
@@ -97,7 +97,7 @@ public class AddTrackCommand implements Command {
             return requestFactory.createForwardResponse(propertyContext.get(ADD_TRACK_PAGE));
         }
 
-        MusicEntityValidator validator = MusicEntityValidator.getInstance();
+        EnteredDataValidator validator = EnteredDataValidator.getInstance();
         if (!validator.isNumeric(albumYearFromRequest) && !validator.isNumeric(trackYearFromRequest)) {
             request.addAttributeToJSP(ERROR_INCORRECT_YEAR_FORMAT_ATTRIBUTE, ERROR_INCORRECT_YEAR_FORMAT_MESSAGE);
             return requestFactory.createForwardResponse(propertyContext.get(ADD_TRACK_PAGE));

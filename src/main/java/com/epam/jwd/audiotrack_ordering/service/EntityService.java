@@ -3,10 +3,13 @@ package com.epam.jwd.audiotrack_ordering.service;
 import com.epam.jwd.audiotrack_ordering.entity.Entity;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EntityService<T extends Entity> {
 
     void create(T entity);
+
+    Optional<T> find(Long id);
 
     List<T> findAll();
 

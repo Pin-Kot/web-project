@@ -3,22 +3,22 @@ package com.epam.jwd.audiotrack_ordering.validator;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
 
-public class MusicEntityValidator {
+public class EnteredDataValidator {
 
     private static final String YEAR_REGEX = "\\d{4}";
     private static final String TYPE_REGEX = "[A-Z]{4,20}";
     private static final String PRICE_REGEX = "^\\d{0,8}(\\.\\d{1,2})?$";
     private static final String TRACK_YEAR_REGEX = "(?:(?:18|19)[0-9]{2})|(?:(?:200|201)[0-9]{1})|(?:(?:202)[0-3]{1})";
 
-    private static MusicEntityValidator instance = null;
+    private static EnteredDataValidator instance = null;
     private static final ReentrantLock LOCK = new ReentrantLock();
 
-    public static MusicEntityValidator getInstance() {
+    public static EnteredDataValidator getInstance() {
         if (instance == null) {
             try {
                 LOCK.lock();
                 if (instance == null) {
-                    instance = new MusicEntityValidator();
+                    instance = new EnteredDataValidator();
                 }
             } finally {
                 LOCK.unlock();
@@ -27,7 +27,7 @@ public class MusicEntityValidator {
         return instance;
     }
 
-    private MusicEntityValidator() {
+    private EnteredDataValidator() {
     }
 
     public boolean isTitleValid(String title) {
@@ -91,9 +91,5 @@ public class MusicEntityValidator {
 
     public boolean isTrackDataValid(String title, String strYear, String strPrice) {
         return isTitleValid(title) && isTrackYearValid(strYear) && isDecimal(strPrice);
-    }
-
-    public boolean isTrackDataValid(String title, int year, String strPrice) {
-        return isTitleAndYearValid(title, year) && isDecimal(strPrice);
     }
 }

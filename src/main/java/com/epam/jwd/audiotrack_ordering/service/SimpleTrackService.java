@@ -4,7 +4,7 @@ import com.epam.jwd.audiotrack_ordering.dao.TrackDao;
 import com.epam.jwd.audiotrack_ordering.entity.Album;
 import com.epam.jwd.audiotrack_ordering.entity.Artist;
 import com.epam.jwd.audiotrack_ordering.entity.Track;
-import com.epam.jwd.audiotrack_ordering.validator.MusicEntityValidator;
+import com.epam.jwd.audiotrack_ordering.validator.EnteredDataValidator;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -25,7 +25,7 @@ public class SimpleTrackService implements TrackService {
     @Override
     public boolean createByArtistByAlbumWithValidator(Artist artist, Album album, String title, String strYear,
                                                       String strPrice) {
-        MusicEntityValidator validator = MusicEntityValidator.getInstance();
+        EnteredDataValidator validator = EnteredDataValidator.getInstance();
         if (validator.isTrackDataValid(title, strYear, strPrice)){
             final int year = Integer.parseInt(strYear);
             if (trackDao.findTracksByArtistName(artist.getName())
@@ -47,6 +47,11 @@ public class SimpleTrackService implements TrackService {
     @Override
     public List<Track> findAll() {
         return trackDao.findAll();
+    }
+
+    @Override
+    public Optional<Track> find(Long id) {
+        return trackDao.find(id);
     }
 
     @Override

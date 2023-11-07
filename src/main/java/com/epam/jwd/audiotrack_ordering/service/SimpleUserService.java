@@ -20,6 +20,11 @@ public class SimpleUserService implements UserService {
     }
 
     @Override
+    public Optional<User> find(Long id) {
+        return userDao.find(id);
+    }
+
+    @Override
     public List<User> findAll() {
         return userDao.findAll();
     }

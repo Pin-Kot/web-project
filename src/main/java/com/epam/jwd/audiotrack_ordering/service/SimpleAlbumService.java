@@ -3,7 +3,7 @@ package com.epam.jwd.audiotrack_ordering.service;
 import com.epam.jwd.audiotrack_ordering.dao.AlbumDao;
 import com.epam.jwd.audiotrack_ordering.entity.Album;
 import com.epam.jwd.audiotrack_ordering.entity.Artist;
-import com.epam.jwd.audiotrack_ordering.validator.MusicEntityValidator;
+import com.epam.jwd.audiotrack_ordering.validator.EnteredDataValidator;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +24,7 @@ public class SimpleAlbumService implements AlbumService {
     @Override
     public boolean createByArtistNameWithValidator(String title, String stringYear, String type,
                                                    Artist artist) {
-        MusicEntityValidator validator = MusicEntityValidator.getInstance();
+        EnteredDataValidator validator = EnteredDataValidator.getInstance();
         if (validator.isNumeric(stringYear)) {
             final int year = Integer.parseInt(stringYear);
             if (validator.isAlbumDataValid(title, year, type)) {
@@ -43,6 +43,11 @@ public class SimpleAlbumService implements AlbumService {
             }
         }
         return false;
+    }
+
+    @Override
+    public Optional<Album> find(Long id) {
+        return albumDao.find(id);
     }
 
     @Override

@@ -9,7 +9,7 @@ import com.epam.jwd.audiotrack_ordering.entity.Album;
 import com.epam.jwd.audiotrack_ordering.service.AlbumService;
 import com.epam.jwd.audiotrack_ordering.service.ImageService;
 import com.epam.jwd.audiotrack_ordering.service.ServiceFactory;
-import com.epam.jwd.audiotrack_ordering.validator.MusicEntityValidator;
+import com.epam.jwd.audiotrack_ordering.validator.EnteredDataValidator;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
@@ -72,7 +72,7 @@ public class AddImageCommand implements Command {
         final String albumYearFromRequest = request.getParameter(ALBUM_YEAR_REQUEST_PARAM_NAME);
         final String albumType = request.getParameter(ALBUM_TYPE_REQUEST_PARAM_NAME);
 
-        MusicEntityValidator validator = MusicEntityValidator.getInstance();
+        EnteredDataValidator validator = EnteredDataValidator.getInstance();
 
         if (!validator.isNumeric(albumYearFromRequest)) {
             request.addAttributeToJSP(ERROR_INCORRECT_YEAR_FORMAT_ATTRIBUTE, ERROR_INCORRECT_YEAR_FORMAT_MESSAGE);

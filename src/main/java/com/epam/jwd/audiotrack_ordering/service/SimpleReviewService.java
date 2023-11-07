@@ -4,6 +4,7 @@ import com.epam.jwd.audiotrack_ordering.dao.ReviewDao;
 import com.epam.jwd.audiotrack_ordering.entity.Review;
 
 import java.util.List;
+import java.util.Optional;
 
 public class SimpleReviewService implements ReviewService {
 
@@ -14,23 +15,27 @@ public class SimpleReviewService implements ReviewService {
     }
 
     @Override
+    public void create(Review entity) {
+        reviewDao.create(entity);
+    }
+
+    @Override
     public List<Review> findReviewsByTrackId(Long trackId) {
         return reviewDao.findReviewsByTrackId(trackId);
     }
 
     @Override
-    public void create(Review entity) {
-
+    public Optional<Review> find(Long id) {
+        return reviewDao.find(id);
     }
 
     @Override
     public List<Review> findAll() {
-        return null;
+        return reviewDao.findAll();
     }
 
     @Override
     public void update(Review entity) {
-
     }
 
     @Override
