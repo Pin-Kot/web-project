@@ -6,6 +6,13 @@
 </head>
 <body>
 <h3>albums</h3>
+<form name="album_title-form" action="${pageContext.request.contextPath}/controller?command=show_album_tracks"
+      method="post">
+    <label for="album_title-input">Album title:</label>
+    <input id="album_title-input" type="text" name="albumTitle" value=""/>
+    <br>
+    <input type="submit" value="find"/>
+</form>
 <table>
     <tr>
         <th>title</th>
@@ -28,14 +35,6 @@
             </form>
         </tr>
     </c:forEach>
-
-    <form name="album_title-form" action="${pageContext.request.contextPath}/controller?command=show_album_tracks"
-          method="post">
-        <label for="album_title-input">Album title:</label>
-        <input id="album_title-input" type="text" name="albumTitle" value=""/>
-        <br>
-        <input type="submit" value="find"/>
-    </form>
 </table>
 </body>
 </html>

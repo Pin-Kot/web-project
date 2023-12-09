@@ -34,9 +34,6 @@
         <c:when test="${not empty requestScope.errorIncorrectAlbumDataMessage}">
             <b style="color: red">${requestScope.errorIncorrectAlbumDataMessage}</b>
         </c:when>
-        <c:when test="${not empty requestScope.errorIncorrectYearFormatMessage}">
-            <b style="color: red">${requestScope.errorIncorrectYearFormatMessage}</b>
-        </c:when>
         <c:when test="${not empty requestScope.errorArtistOrAlbumDoNotExistMessage}">
             <b style="color: red">${requestScope.errorArtistOrAlbumDoNotExistMessage}</b>
         </c:when>

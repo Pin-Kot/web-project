@@ -24,9 +24,6 @@ public class AddImageCommand implements Command {
     private static final String ALBUM_TYPE_REQUEST_PARAM_NAME = "albumType";
     private static final String IMAGE_REQUEST_PARAM_NAME = "image";
 
-    private static final String ERROR_INCORRECT_YEAR_FORMAT_ATTRIBUTE = "errorIncorrectYearFormatMessage";
-    private static final String ERROR_INCORRECT_YEAR_FORMAT_MESSAGE = "Incorrect format of year";
-
     private static final String ERROR_INCORRECT_ALBUM_DATA_ATTRIBUTE = "errorIncorrectAlbumDataMessage";
     private static final String ERROR_INCORRECT_ALBUM_DATA_MESSAGE = "Incorrect entered album's data";
 
@@ -74,16 +71,12 @@ public class AddImageCommand implements Command {
 
         EnteredDataValidator validator = EnteredDataValidator.getInstance();
 
-        if (!validator.isNumeric(albumYearFromRequest)) {
-            request.addAttributeToJSP(ERROR_INCORRECT_YEAR_FORMAT_ATTRIBUTE, ERROR_INCORRECT_YEAR_FORMAT_MESSAGE);
-            return requestFactory.createForwardResponse(propertyContext.get(ADD_IMAGE_PAGE));
-        }
-        int albumYear = Integer.parseInt(albumYearFromRequest);
-
-        if (!validator.isAlbumDataValid(albumTitle, albumYear, albumType)) {
+        if (!validator.isAlbumDataValid(albumTitle, albumYearFromRequest, albumType)){
             request.addAttributeToJSP(ERROR_INCORRECT_ALBUM_DATA_ATTRIBUTE, ERROR_INCORRECT_ALBUM_DATA_MESSAGE);
             return requestFactory.createForwardResponse(propertyContext.get(ADD_IMAGE_PAGE));
         }
+
+        int albumYear = Integer.parseInt(albumYearFromRequest);
         final Optional<Album> albumFromRequest = albumService.findByTitleByYear(albumTitle, albumYear);
 
         if (!albumFromRequest.isPresent()) {

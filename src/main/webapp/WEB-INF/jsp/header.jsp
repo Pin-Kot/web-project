@@ -1,9 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="jwds" uri="online-store.jwd.epam.com" %>
-<%--<%@ page import="com.epam.jwd.audiotrack_ordering.entity.Role" %>--%>
-<%@ page contentType="text/html;charset=UTF-8" language="java"
-         pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+
 
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="l10n.page.main" var="loc"/>
@@ -14,9 +13,11 @@
 <fmt:message bundle="${loc}" key="label.links.sign_up" var="sign_upLink"/>
 <fmt:message bundle="${loc}" key="label.links.home_page" var="home_pageLink"/>
 <fmt:message bundle="${loc}" key="label.links.personal_data" var="personal_data_pageLink"/>
+<fmt:message bundle="${loc}" key="label.links.shopping_cart" var="shopping_cart_pageLink"/>
 
 <html lang="${sessionScope.lang}">
 <head>
+    <meta charset="UTF-8">
     <title>${pageTitle}</title>
 </head>
 <body>
@@ -60,6 +61,8 @@
             <a href="${pageContext.request.contextPath}/controller?command=show_sign_up">${sign_upLink}</a>
         </c:otherwise>
     </c:choose>
+    <br>
+    <a href="${pageContext.request.contextPath}/controller?command=show_shopping_cart">${shopping_cart_pageLink}</a>
 </ul>
 </body>
 </html>

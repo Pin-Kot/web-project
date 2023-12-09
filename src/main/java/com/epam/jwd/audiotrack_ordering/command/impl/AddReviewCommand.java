@@ -10,6 +10,7 @@ import com.epam.jwd.audiotrack_ordering.entity.Review;
 import com.epam.jwd.audiotrack_ordering.entity.Track;
 import com.epam.jwd.audiotrack_ordering.service.ReviewService;
 import com.epam.jwd.audiotrack_ordering.service.ServiceFactory;
+import com.epam.jwd.audiotrack_ordering.validator.EnteredDataValidator;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -18,14 +19,12 @@ import java.util.concurrent.locks.ReentrantLock;
 public class AddReviewCommand implements Command {
 
     private static final String MAIN_PAGE = "page.main";
-    private static final String INDEX_PAGE = "page.index";
     private static final String REVIEWS_PAGE = "page.reviews";
 
     private static final String ACCOUNT_ATTRIBUTE_NAME = "account";
     private static final String TRACK_ATTRIBUTE_NAME = "track";
     private static final String TEXT_REQUEST_PARAM_NAME = "text";
 
-    private static final String ERROR_ACCOUNT_ARE_NOT_AUTHORIZED_ATTRIBUTE = "errorAccountAreNotAuthorizedMessage";
     private static final String ACCOUNT_ARE_NOT_AUTHORIZED_MESSAGE = "You aren't authorized, please log in";
 
     private static final String TRACK_DOES_NOT_EXIST_MESSAGE = "Track  doesn't exist";
@@ -73,7 +72,7 @@ public class AddReviewCommand implements Command {
                 final Track track = (Track) trackFromSession.get();
                 final LocalDate date = LocalDate.now();
                 final String text = request.getParameter(TEXT_REQUEST_PARAM_NAME);
-                if (isTextValid(text)) {
+                if (EnteredDataValidator.getInstance().isTextReviewValid(text)) {
                     reviewService.create(new Review(date, text, account.getLogin(), track.getId()));
                     return requestFactory.createForwardResponse(propertyContext.get(MAIN_PAGE));
                 }
@@ -83,12 +82,5 @@ public class AddReviewCommand implements Command {
             throw new IllegalArgumentException(TRACK_DOES_NOT_EXIST_MESSAGE);
         }
         throw new IllegalArgumentException(ACCOUNT_ARE_NOT_AUTHORIZED_MESSAGE);
-    }
-
-    public boolean isTextValid(String text) {
-        if (text == null || text.isEmpty() || text.length() > 4000) {
-            return false;
-        }
-        return !Character.isWhitespace(text.charAt(0));
     }
 }

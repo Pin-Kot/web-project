@@ -9,7 +9,7 @@ import com.epam.jwd.audiotrack_ordering.entity.Artist;
 import com.epam.jwd.audiotrack_ordering.service.AlbumService;
 import com.epam.jwd.audiotrack_ordering.service.ArtistService;
 import com.epam.jwd.audiotrack_ordering.service.ServiceFactory;
-import com.epam.jwd.audiotrack_ordering.validator.ArtistValidator;
+import com.epam.jwd.audiotrack_ordering.validator.EnteredDataValidator;
 
 import java.util.Optional;
 import java.util.concurrent.locks.ReentrantLock;
@@ -72,7 +72,7 @@ public class AddAlbumCommand implements Command {
         final String albumYearFromRequest = request.getParameter(ALBUM_YEAR_REQUEST_PARAM_NAME);
         final String albumType = request.getParameter(ALBUM_TYPE_REQUEST_PARAM_NAME);
 
-        if (ArtistValidator.getInstance().isNameInvalid(artistName)) {
+        if (!EnteredDataValidator.getInstance().isTitleValid(artistName)) {
             request.addAttributeToJSP(ERROR_INCORRECT_ARTIST_NAME_ATTRIBUTE, ERROR_INCORRECT_ARTIST_NAME_MESSAGE);
             return requestFactory.createForwardResponse(propertyContext.get(ADD_ALBUM_PAGE));
         }

@@ -5,10 +5,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"
          pageEncoding="UTF-8" %>
 
-<%@include file="header.jsp"%>
+<%@include file="header.jsp" %>
 
 <fmt:setLocale value="${sessionScope.lang}"/>
-<fmt:setBundle basename="l10n.page.main" var="loc" />
+<fmt:setBundle basename="l10n.page.main" var="loc"/>
 
 <fmt:message bundle="${loc}" key="label.title" var="pageTitle"/>
 <fmt:message bundle="${loc}" key="label.invitation" var="invitationMessage"/>
@@ -24,6 +24,7 @@
 
 <html lang="${sessionScope.lang}">
 <head>
+    <meta charset="UTF-8">
     <title>${pageTitle}</title>
 </head>
 <body>
@@ -37,7 +38,7 @@
 <br>
 
 <c:if test="${not empty sessionScope.account && sessionScope.account.role eq Role.ADMIN}">
-    <li><a href="${pageContext.request.contextPath}/controller?command=show_admin">${adminLink}</a> </li>
+    <li><a href="${pageContext.request.contextPath}/controller?command=show_admin">${adminLink}</a></li>
     <br>
 </c:if>
 
@@ -45,13 +46,5 @@
 <li><a href="${pageContext.request.contextPath}/controller?command=show_albums&page=albums">${albumsLink}</a></li>
 <li><a href="${pageContext.request.contextPath}/controller?command=show_tracks">${tracksLink}</a></li>
 <br>
-<%--<c:choose>--%>
-<%--    <c:when test="${not empty sessionScope.account}">--%>
-<%--        <a href="${pageContext.request.contextPath}/controller?command=logout">${logoutLink}</a>--%>
-<%--    </c:when>--%>
-<%--    <c:otherwise>--%>
-<%--        <a href="${pageContext.request.contextPath}/controller?command=show_login">${loginLink}</a>--%>
-<%--    </c:otherwise>--%>
-<%--</c:choose>--%>
 </body>
 </html>

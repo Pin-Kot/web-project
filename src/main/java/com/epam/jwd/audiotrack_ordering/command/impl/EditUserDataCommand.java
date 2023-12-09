@@ -108,7 +108,7 @@ public class EditUserDataCommand implements Command {
             final int day = Integer.parseInt(dayFromRequest);
             final int month = Integer.parseInt(monthFromRequest);
             final int year = Integer.parseInt(yearFromRequest);
-            if (validator.isAllValid(firstName, lastName, email, year, month, day)) {
+            if (validator.isUserDataValid(firstName, lastName, email, year, month, day)) {
                 userService.update(new User(user.getId(), firstName, lastName, email,
                         LocalDate.of(year, month, day), user.getDiscount(), user.getAccId()));
                 return requestFactory.createForwardResponse(propertyContext.get(MAIN_PAGE));

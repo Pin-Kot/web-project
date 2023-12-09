@@ -101,8 +101,8 @@ public class AddUserCommand implements Command {
             final int day = Integer.parseInt(dayFromRequest);
             final int month = Integer.parseInt(monthFromRequest);
             final int year = Integer.parseInt(yearFromRequest);
-            if (validator.isAllValid(firstName, lastName, email, year, month, day)) {
-                userService.create(new User( firstName, lastName, email,
+            if (validator.isUserDataValid(firstName, lastName, email, year, month, day)) {
+                userService.create(new User(firstName, lastName, email,
                         LocalDate.of(year, month, day), new BigDecimal(0), account.getId()));
                 return requestFactory.createForwardResponse(propertyContext.get(MAIN_PAGE));
             } else {

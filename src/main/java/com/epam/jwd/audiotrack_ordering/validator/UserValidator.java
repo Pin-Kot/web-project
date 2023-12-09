@@ -61,11 +61,11 @@ public class UserValidator {
     }
 
     public boolean isNumeric(String strNum) {
-        if (strNum == null) {
+        if (strNum == null || strNum.isEmpty()) {
             return false;
         }
         try {
-            int number = Integer.parseInt(strNum);
+            Integer.parseInt(strNum);
         } catch (NumberFormatException e) {
             return false;
         }
@@ -96,7 +96,7 @@ public class UserValidator {
         return isYearValid(year) && isMonthValid(month) && isDayValid(year, month, day);
     }
 
-    public boolean isAllValid(String firstName, String lastName, String email, int year, int month, int day) {
+    public boolean isUserDataValid(String firstName, String lastName, String email, int year, int month, int day) {
         return isFirstNameValid(firstName) && isLastNameValid(lastName) && isEmailValid(email)
                 && isDateValid(year, month, day);
     }

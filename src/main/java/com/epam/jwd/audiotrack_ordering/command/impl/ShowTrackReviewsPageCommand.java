@@ -17,10 +17,11 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class ShowTrackReviewsPageCommand implements Command {
 
-    private static final String TRACK_SESSION_ATTRIBUTE_NAME = "track";
-    private static final String JSP_TRACK_REVIEWS_ATTRIBUTE_NAME = "reviews";
     private static final String REVIEWS_PAGE = "page.reviews";
     private static final String TRACKS_PAGE = "page.tracks";
+
+    private static final String TRACK_SESSION_ATTRIBUTE_NAME = "track";
+    private static final String JSP_TRACK_REVIEWS_ATTRIBUTE_NAME = "reviews";
     private static final String TRACK_ID_REQUEST_PARAM_NAME = "trackId";
 
     private static final String ERROR_ID_TRACK_ATTRIBUTE = "errorIdTrackMessage";

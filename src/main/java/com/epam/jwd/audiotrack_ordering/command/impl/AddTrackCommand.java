@@ -11,7 +11,6 @@ import com.epam.jwd.audiotrack_ordering.service.AlbumService;
 import com.epam.jwd.audiotrack_ordering.service.ArtistService;
 import com.epam.jwd.audiotrack_ordering.service.ServiceFactory;
 import com.epam.jwd.audiotrack_ordering.service.TrackService;
-import com.epam.jwd.audiotrack_ordering.validator.ArtistValidator;
 import com.epam.jwd.audiotrack_ordering.validator.EnteredDataValidator;
 
 import java.util.Optional;
@@ -34,16 +33,13 @@ public class AddTrackCommand implements Command {
     private static final String ERROR_INCORRECT_ARTIST_NAME_MESSAGE = "Incorrect artist name";
 
     private static final String ERROR_INCORRECT_ALBUM_DATA_ATTRIBUTE = "errorIncorrectAlbumDataMessage";
-    private static final String ERROR_INCORRECT_ALBUM_DATA_MESSAGE = "Incorrect entered album's data";
-
-    private static final String ERROR_INCORRECT_YEAR_FORMAT_ATTRIBUTE = "errorIncorrectYearFormatMessage";
-    private static final String ERROR_INCORRECT_YEAR_FORMAT_MESSAGE = "Incorrect format of year";
+    private static final String ERROR_INCORRECT_ALBUM_DATA_MESSAGE = "Incorrect album's data";
 
     private static final String ERROR_INCORRECT_TITLE_DATA_ATTRIBUTE = "errorIncorrectTitleDataMessage";
-    private static final String ERROR_INCORRECT_TITLE_DATA_MESSAGE = "Incorrect entered title's data";
+    private static final String ERROR_INCORRECT_TITLE_DATA_MESSAGE = "Incorrect title's data";
 
     private static final String ERROR_ARTIST_OR_ALBUM_DO_NOT_EXIST_ATTRIBUTE = "errorArtistOrAlbumDoNotExistMessage";
-    private static final String ARTIST_OR_ALBUM_DO_NOT_EXIST_MESSAGE = "T he artist or the album don't exist";
+    private static final String ARTIST_OR_ALBUM_DO_NOT_EXIST_MESSAGE = "The artist or the album don't exist";
 
     private static AddTrackCommand instance = null;
     private static final ReentrantLock LOCK = new ReentrantLock();
@@ -92,23 +88,19 @@ public class AddTrackCommand implements Command {
         final String trackYearFromRequest = request.getParameter(TRACK_YEAR_REQUEST_PARAM_NAME);
         final String trackPriceFromRequest = request.getParameter(TRACK_PRICE_REQUEST_PARAM_NAME);
 
-        if (ArtistValidator.getInstance().isNameInvalid(artistName)) {
+        if (!EnteredDataValidator.getInstance().isTitleValid(artistName)) {
             request.addAttributeToJSP(ERROR_INCORRECT_ARTIST_NAME_ATTRIBUTE, ERROR_INCORRECT_ARTIST_NAME_MESSAGE);
             return requestFactory.createForwardResponse(propertyContext.get(ADD_TRACK_PAGE));
         }
 
         EnteredDataValidator validator = EnteredDataValidator.getInstance();
-        if (!validator.isNumeric(albumYearFromRequest) && !validator.isNumeric(trackYearFromRequest)) {
-            request.addAttributeToJSP(ERROR_INCORRECT_YEAR_FORMAT_ATTRIBUTE, ERROR_INCORRECT_YEAR_FORMAT_MESSAGE);
+
+        if (!validator.isAlbumDataValid(albumTitle, albumYearFromRequest, albumType)) {
+            request.addAttributeToJSP(ERROR_INCORRECT_ALBUM_DATA_ATTRIBUTE, ERROR_INCORRECT_ALBUM_DATA_MESSAGE);
             return requestFactory.createForwardResponse(propertyContext.get(ADD_TRACK_PAGE));
         }
 
         int albumYear = Integer.parseInt(albumYearFromRequest);
-
-        if (!validator.isAlbumDataValid(albumTitle, albumYear, albumType)) {
-            request.addAttributeToJSP(ERROR_INCORRECT_ALBUM_DATA_ATTRIBUTE, ERROR_INCORRECT_ALBUM_DATA_MESSAGE);
-            return requestFactory.createForwardResponse(propertyContext.get(ADD_TRACK_PAGE));
-        }
 
         final Optional<Artist> artistFromRequest = artistService.findByName(artistName);
         final Optional<Album> albumFromRequest = albumService.findByTitleByYear(albumTitle, albumYear);

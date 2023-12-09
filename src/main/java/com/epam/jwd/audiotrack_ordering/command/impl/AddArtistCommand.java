@@ -8,7 +8,7 @@ import com.epam.jwd.audiotrack_ordering.controller.RequestFactory;
 import com.epam.jwd.audiotrack_ordering.entity.Artist;
 import com.epam.jwd.audiotrack_ordering.service.ArtistService;
 import com.epam.jwd.audiotrack_ordering.service.ServiceFactory;
-import com.epam.jwd.audiotrack_ordering.validator.ArtistValidator;
+import com.epam.jwd.audiotrack_ordering.validator.EnteredDataValidator;
 
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -55,7 +55,7 @@ public class AddArtistCommand implements Command {
     @Override
     public CommandResponse execute(CommandRequest request) {
         final String name = request.getParameter(ARTIST_NAME_REQUEST_PARAM_NAME);
-        if (ArtistValidator.getInstance().isNameInvalid(name)) {
+        if (!EnteredDataValidator.getInstance().isTitleValid(name)) {
             request.addAttributeToJSP(ERROR_INCORRECT_ARTIST_NAME_ATTRIBUTE, ERROR_INCORRECT_ARTIST_NAME_MESSAGE);
             return requestFactory.createForwardResponse(propertyContext.get(ADD_ARTIST_PAGE));
         }

@@ -25,20 +25,18 @@ public class SimpleAlbumService implements AlbumService {
     public boolean createByArtistNameWithValidator(String title, String stringYear, String type,
                                                    Artist artist) {
         EnteredDataValidator validator = EnteredDataValidator.getInstance();
-        if (validator.isNumeric(stringYear)) {
+        if (validator.isAlbumDataValid(title, stringYear, type)) {
             final int year = Integer.parseInt(stringYear);
-            if (validator.isAlbumDataValid(title, year, type)) {
-                if (albumDao.findAll()
+            if (albumDao.findAll()
+                    .stream()
+                    .filter(st -> st.getTitle().equals(title))
+                    .filter(st -> st.getYear() == year)
+                    .noneMatch(st -> st.getType() == Album.typeOf(type))) {
+                if (albumDao.findAlbumsByArtistName(artist.getName())
                         .stream()
-                        .filter(st -> st.getTitle().equals(title))
-                        .filter(st -> st.getYear() == year)
-                        .noneMatch(st -> st.getType() == Album.typeOf(type))) {
-                    if (albumDao.findAlbumsByArtistName(artist.getName())
-                            .stream()
-                            .noneMatch(st -> st.getTitle().equals(title))) {
-                        albumDao.createAlbum(new Album(title, year, Album.typeOf(type)), artist);
-                        return true;
-                    }
+                        .noneMatch(st -> st.getTitle().equals(title))) {
+                    albumDao.createAlbum(new Album(title, year, Album.typeOf(type)), artist);
+                    return true;
                 }
             }
         }

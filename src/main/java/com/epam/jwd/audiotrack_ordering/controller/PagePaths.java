@@ -19,6 +19,7 @@ public enum PagePaths {
     MAIN("/WEB-INF/jsp/main.jsp"),
     PERSONAL_DATA("/WEB-INF/jsp/personal_data.jsp"),
     REVIEWS("/WEB-INF/jsp/reviews.jsp"),
+    SHOPPING_CART("/WEB-INF/jsp/shopping_cart.jsp"),
     SIGN_UP("/WEB-INF/jsp/sign_up.jsp"),
     TRACKS("/WEB-INF/jsp/tracks.jsp"),
     USERS("/WEB-INF/jsp/users.jsp");
