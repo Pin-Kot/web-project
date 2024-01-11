@@ -27,7 +27,7 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
     protected static final String COMMA = ", ";
 
     protected static final String INSERT_INTO = "insert into %s (%s)";
-    private static final String UPDATE = "update %s";
+    protected static final String UPDATE = "update %s";
     protected static final String SET = "set %s";
 
     protected static final String QUERY = " = ? ";
@@ -231,7 +231,8 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
     }
 
     protected boolean executeCompoundUpdate(String setSql, StatementPreparer setStatementPreparation,
-                                            StatementPreparer insertStatementPreparation) throws InterruptedException {
+                                            StatementPreparer insertStatementPreparation)
+            throws InterruptedException {
         try {
             final Connection connection = pool.takeConnection();
 
@@ -251,6 +252,39 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
         } catch (SQLException e) {
             logger.error("sql exception occurred", e);
             logger.debug("sql: {}", setSql);
+            logger.debug("sql: {}", insertSql);
+        } catch (InterruptedException e) {
+            logger.info("takeConnection interrupted", e);
+            Thread.currentThread().interrupt();
+            throw e;
+        }
+        return false;
+    }
+
+    protected boolean executeListUpdate(String insertLinkSql, List<StatementPreparer> setStatementsPreparation,
+                                        StatementPreparer insertStatementPreparation)
+            throws InterruptedException {
+        try {
+            final Connection connection = pool.takeConnection();
+
+            final PreparedStatement insertStatement = connection.prepareStatement(insertSql);
+            if (insertStatementPreparation != null) {
+                insertStatementPreparation.accept(insertStatement);
+            }
+            insertStatement.executeUpdate();
+
+            for (StatementPreparer setStatementPreparation : setStatementsPreparation) {
+                final PreparedStatement setStatement = connection.prepareStatement(insertLinkSql);
+                if (setStatementPreparation != null) {
+                    setStatementPreparation.accept(setStatement);
+                }
+                setStatement.executeUpdate();
+            }
+
+            return true;
+        } catch (SQLException e) {
+            logger.error("sql exception occurred", e);
+            logger.debug("sql: {}", insertLinkSql);
             logger.debug("sql: {}", insertSql);
         } catch (InterruptedException e) {
             logger.info("takeConnection interrupted", e);

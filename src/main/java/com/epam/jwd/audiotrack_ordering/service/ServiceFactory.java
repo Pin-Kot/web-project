@@ -3,8 +3,10 @@ package com.epam.jwd.audiotrack_ordering.service;
 import com.epam.jwd.audiotrack_ordering.entity.Account;
 import com.epam.jwd.audiotrack_ordering.entity.Album;
 import com.epam.jwd.audiotrack_ordering.entity.Artist;
+import com.epam.jwd.audiotrack_ordering.entity.Card;
 import com.epam.jwd.audiotrack_ordering.entity.Entity;
 import com.epam.jwd.audiotrack_ordering.entity.Image;
+import com.epam.jwd.audiotrack_ordering.entity.Order;
 import com.epam.jwd.audiotrack_ordering.entity.Review;
 import com.epam.jwd.audiotrack_ordering.entity.Track;
 import com.epam.jwd.audiotrack_ordering.entity.User;
@@ -25,11 +27,21 @@ public interface ServiceFactory {
         return (ArtistService) serviceFor(Artist.class);
     }
 
+    default CardService cardService() {
+        return (CardService) serviceFor(Card.class);
+    }
+
     default ImageService imageService() {
         return (ImageService) serviceFor(Image.class);
     }
 
-    default ReviewService reviewService() {return (ReviewService) serviceFor(Review.class);}
+    default OrderService orderService() {
+        return (OrderService) serviceFor(Order.class);
+    }
+
+    default ReviewService reviewService() {
+        return (ReviewService) serviceFor(Review.class);
+    }
 
     default TrackService trackService() {
         return (TrackService) serviceFor(Track.class);

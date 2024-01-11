@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<%@include file="header.jsp" %>
 <html>
 <head>
     <title>Personal data</title>
@@ -16,6 +16,23 @@
     <a href="${pageContext.request.contextPath}/controller?command=show_editor">edit data</a>
     <br>
     <a href="${pageContext.request.contextPath}/controller?command=show_password_editor">edit password</a>
+</c:if>
+<c:if test="${not empty requestScope.userOrders}">
+    <p>My orders:</p>
+    <table>
+       <tr>
+           <th>Date</th>
+           <th>Status</th>
+           <th>Value</th>
+       </tr>
+        <c:forEach var="order" items="${requestScope.userOrders}">
+          <tr>
+              <td>${order.date}</td>
+              <td>${order.status}</td>
+              <td>${order.value}</td>
+          </tr>
+        </c:forEach>
+    </table>
 </c:if>
 <c:if test="${empty requestScope.user && not empty sessionScope.account}">
     <p>User data is empty, please enter data</p>

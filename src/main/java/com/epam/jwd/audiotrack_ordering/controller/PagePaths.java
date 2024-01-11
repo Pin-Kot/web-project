@@ -10,6 +10,7 @@ public enum PagePaths {
     ADMIN("/WEB-INF/jsp/admin.jsp"),
     ALBUMS("/WEB-INF/jsp/albums.jsp"),
     ARTISTS("/WEB-INF/jsp/artists.jsp"),
+    CHECKOUT("/WEB-INF/jsp/checkout.jsp"),
     EDIT_DATA("/WEB-INF/jsp/edit_data.jsp"),
     EDIT_PASSWORD("/WEB-INF/jsp/edit_password.jsp"),
     ERROR("/WEB-INF/jsp/error.jsp"),

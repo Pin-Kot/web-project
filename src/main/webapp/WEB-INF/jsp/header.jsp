@@ -54,6 +54,8 @@
             <a href="${pageContext.request.contextPath}/controller?command=logout">${logoutLink}</a>
             <br>
             <a href="${pageContext.request.contextPath}/controller?command=show_personal_data">${personal_data_pageLink}</a>
+            <br>
+            <a href="${pageContext.request.contextPath}/controller?command=show_shopping_cart">${shopping_cart_pageLink}</a>
         </c:when>
         <c:otherwise>
             <a href="${pageContext.request.contextPath}/controller?command=show_login">${loginLink}</a>
@@ -61,8 +63,7 @@
             <a href="${pageContext.request.contextPath}/controller?command=show_sign_up">${sign_upLink}</a>
         </c:otherwise>
     </c:choose>
-    <br>
-    <a href="${pageContext.request.contextPath}/controller?command=show_shopping_cart">${shopping_cart_pageLink}</a>
+
 </ul>
 </body>
 </html>

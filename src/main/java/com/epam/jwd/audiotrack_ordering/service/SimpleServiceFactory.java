@@ -1,13 +1,7 @@
 package com.epam.jwd.audiotrack_ordering.service;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
-import com.epam.jwd.audiotrack_ordering.dao.AccountDao;
-import com.epam.jwd.audiotrack_ordering.dao.AlbumDao;
-import com.epam.jwd.audiotrack_ordering.dao.ArtistDao;
-import com.epam.jwd.audiotrack_ordering.dao.ImageDao;
-import com.epam.jwd.audiotrack_ordering.dao.ReviewDao;
-import com.epam.jwd.audiotrack_ordering.dao.TrackDao;
-import com.epam.jwd.audiotrack_ordering.dao.UserDao;
+import com.epam.jwd.audiotrack_ordering.dao.*;
 import com.epam.jwd.audiotrack_ordering.entity.Entity;
 
 import java.util.Map;
@@ -39,10 +33,14 @@ public class SimpleServiceFactory implements ServiceFactory {
                     return new SimpleAlbumService(AlbumDao.getInstance());
                 case "Artist":
                     return new SimpleArtistService(ArtistDao.getInstance());
+                case "Card":
+                    return ProxyEntityService.of(new SimpleCardService(CardDao.getInstance()));
                 case "Image":
                     return new SimpleImageService(ImageDao.getInstance());
+                case "Order":
+                    return ProxyEntityService.of(new SimpleOrderService(OrderDao.getInstance()));
                 case "Review":
-                    return  new SimpleReviewService(ReviewDao.getInstance());
+                    return new SimpleReviewService(ReviewDao.getInstance());
                 case "Track":
                     return ProxyEntityService.of(new SimpleTrackService(TrackDao.getInstance()));
                 case "User":

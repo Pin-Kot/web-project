@@ -5,6 +5,8 @@ import java.util.Objects;
 
 public class Review implements Entity {
 
+    private static final long serialVersionUID = -6108395797786173782L;
+
     private final Long id;
     private final LocalDate date;
     private final String text;
