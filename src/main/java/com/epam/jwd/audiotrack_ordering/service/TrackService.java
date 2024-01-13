@@ -16,6 +16,8 @@ public interface TrackService extends EntityService<Track> {
 
     List<Track> findTracksByAlbumTitle(String title);
 
+    List<Track> findTracksByOrderId(Long id);
+
     boolean createByArtistByAlbumWithValidator(Artist artist, Album album, String title, String strYear,
                                                String strPrice);
 }

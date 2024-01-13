@@ -1,7 +1,8 @@
-package com.epam.jwd.audiotrack_ordering.service;
+package com.epam.jwd.audiotrack_ordering.service.impl;
 
 import com.epam.jwd.audiotrack_ordering.dao.UserDao;
 import com.epam.jwd.audiotrack_ordering.entity.User;
+import com.epam.jwd.audiotrack_ordering.service.UserService;
 
 import java.util.List;
 import java.util.Optional;

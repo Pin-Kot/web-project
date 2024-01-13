@@ -1,9 +1,10 @@
-package com.epam.jwd.audiotrack_ordering.service;
+package com.epam.jwd.audiotrack_ordering.service.impl;
 
 import com.epam.jwd.audiotrack_ordering.dao.TrackDao;
 import com.epam.jwd.audiotrack_ordering.entity.Album;
 import com.epam.jwd.audiotrack_ordering.entity.Artist;
 import com.epam.jwd.audiotrack_ordering.entity.Track;
+import com.epam.jwd.audiotrack_ordering.service.TrackService;
 import com.epam.jwd.audiotrack_ordering.validator.EnteredDataValidator;
 
 import java.math.BigDecimal;
@@ -70,11 +71,16 @@ public class SimpleTrackService implements TrackService {
     }
 
     @Override
+    public List<Track> findTracksByOrderId(Long id) {
+        return trackDao.findTracksByOrderId(id);
+    }
+
+    @Override
     public void update(Track entity) {
     }
 
     @Override
     public boolean delete(Long id) {
-        return false;
+        return trackDao.delete(id);
     }
 }

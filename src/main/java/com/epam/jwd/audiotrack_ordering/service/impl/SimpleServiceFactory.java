@@ -1,8 +1,10 @@
-package com.epam.jwd.audiotrack_ordering.service;
+package com.epam.jwd.audiotrack_ordering.service.impl;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.epam.jwd.audiotrack_ordering.dao.*;
 import com.epam.jwd.audiotrack_ordering.entity.Entity;
+import com.epam.jwd.audiotrack_ordering.service.EntityService;
+import com.epam.jwd.audiotrack_ordering.service.ServiceFactory;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -51,7 +53,7 @@ public class SimpleServiceFactory implements ServiceFactory {
         };
     }
 
-    static SimpleServiceFactory getInstance() {
+    public static SimpleServiceFactory getInstance() {
         return Holder.INSTANCE;
     }
 

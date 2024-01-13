@@ -27,8 +27,9 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
     protected static final String COMMA = ", ";
 
     protected static final String INSERT_INTO = "insert into %s (%s)";
-    protected static final String UPDATE = "update %s";
     protected static final String SET = "set %s";
+    protected static final String UPDATE = "update %s";
+    protected static final String DELETE_FROM = "delete from %s";
 
     protected static final String QUERY = " = ? ";
     protected static final String QUERY_AND_COMMA = " = ?, ";
@@ -43,6 +44,7 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
     private final String selectByIdExpression;
     private final String insertSql;
     private final String updateAllByEntityIdExpression;
+    private final String deleteSql;
 
     protected CommonDao(ConnectionPool pool, Logger logger) {
         this.pool = pool;
@@ -54,6 +56,7 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
         this.updateAllByEntityIdExpression = format(UPDATE, getTableName()) + SPACE
                 + format(SET, String.join(getDelimiter(), getFields())) + QUERY
                 + format(WHERE_FIELD, getIdFieldName());
+        this.deleteSql = format(DELETE_FROM, getTableName()) + SPACE + format(WHERE_FIELD, getIdFieldName());
     }
 
     @Override
@@ -112,7 +115,20 @@ public abstract class CommonDao<T extends Entity> implements EntityDao<T> {
 
     @Override
     public boolean delete(Long id) {
-        return false;
+        try {
+            final int rowsUpdated = executePreparedUpdate(deleteSql, st -> st.setLong(1, id));
+            if (rowsUpdated > 0) {
+                logger.info("Entity with id= {} deleted successfully", id);
+                return true;
+            } else {
+                logger.error("Delete error occurred");
+                return false;
+            }
+        } catch (InterruptedException e) {
+            logger.info("takeConnection interrupted", e);
+            Thread.currentThread().interrupt();
+            return false;
+        }
     }
 
     protected List<String> getTableFields() {

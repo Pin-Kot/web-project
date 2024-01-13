@@ -38,6 +38,10 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
     private static final String TRACK_ALBUM_LINK_TRACK_ID_FIELD_NAME = "track_id";
     private static final String TRACK_ALBUM_LINK_ALBUM_ID_FIELD_NAME = "album_id";
 
+    private static final String ORDER_TRACK_LINK_TABLE_NAME = "order_track_link";
+    private static final String ORDER_TRACK_LINK_ORDER_ID_FIELD_NAME = "order_id";
+    private static final String ORDER_TRACK_LINK_TRACK_ID_FIELD_NAME = "track_id";
+
     private static final String ARTIST_TABLE_NAME = "artist";
     private static final String ARTIST_TABLE_ID_FIELD_NAME = "id";
     private static final String ARTIST_TABLE_NAME_FIELD_NAME = "name";
@@ -45,6 +49,9 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
     private static final String ALBUM_TABLE_NAME = "album";
     private static final String ALBUM_TABLE_ID_FIELD_NAME = "id";
     private static final String ALBUM_TABLE_TITLE_FIELD_NAME = "title";
+
+    private static final String ORDER_TABLE_NAME = "`order`";
+    private static final String ORDER_ID_FIELD_NAME = "id";
 
     private static final String VALUES = "values (?, ?, ?)";
 
@@ -61,6 +68,11 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
 //            "join track_artist_link on track.id = track_artist_link.track_id " +
 //            "join artist on track_artist_link.artist_id = artist.id and artist.name = ?";
 
+//    private static final String selectByOrderExpression =
+//        "select track.id, track.title, track.year, track.price from track " +
+//                "join order_track_link on track.id = order_track_link.track_id " +
+//                "join `order` on order_track_link.order_id = `order`.id and `order`.id = ?";
+
     private static final List<String> FIELDS = Arrays.asList(ID_FIELD_NAME, TITLE_FIELD_NAME, YEAR_FIELD_NAME,
             PRICE_FIELD_NAME);
     private static final List<String> INSERT_FIELDS = Arrays.asList(TITLE_FIELD_NAME, YEAR_FIELD_NAME,
@@ -72,6 +84,7 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
     private final String selectByAlbumExpression;
     private final String selectByTitleByYearByPriceExpression;
     private final String setVariablesExpression;
+    private final String selectByOrderExpression;
 
     private MethodTrackDao(ConnectionPool pool) {
         super(pool, LOG);
@@ -102,6 +115,14 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
         this.selectByTitleByYearByPriceExpression = format(SELECT_ALL_FROM, String.join(COMMA, getFields()))
                 + getTableName() + SPACE + format(WHERE_FIELD, TITLE_FIELD_NAME) + SPACE + format(AND, YEAR_FIELD_NAME)
                 + SPACE + format(AND, PRICE_FIELD_NAME);
+        this.selectByOrderExpression = selectAllFromTableExpression + SPACE
+                +format(JOIN_ON, ORDER_TRACK_LINK_TABLE_NAME,
+                getTableField(getTableName(), ID_FIELD_NAME),
+                getTableField(ORDER_TRACK_LINK_TABLE_NAME, ORDER_TRACK_LINK_TRACK_ID_FIELD_NAME)) + SPACE
+                +format(JOIN_ON, ORDER_TABLE_NAME,
+                getTableField(ORDER_TRACK_LINK_TABLE_NAME, ORDER_TRACK_LINK_ORDER_ID_FIELD_NAME),
+                getTableField(ORDER_TABLE_NAME, ORDER_ID_FIELD_NAME)) + SPACE
+                +format(AND, getTableField(ORDER_TABLE_NAME, ORDER_ID_FIELD_NAME));
         this.setVariablesExpression = format(SET, String.join(getDelimiter(), getVariables()).concat(QUERY));
     }
 
@@ -238,6 +259,23 @@ public final class MethodTrackDao extends CommonDao<Track> implements TrackDao {
             Thread.currentThread().interrupt();
             return Collections.emptyList();
         }
+    }
+
+    @Override
+    public List<Track> findTracksByOrderId(Long id) {
+        try {
+            return executePreparedForEntities(selectByOrderExpression,
+                    this::extractResultCatchingException, st -> st.setLong(1, id));
+        } catch (InterruptedException e) {
+            LOG.info("takeConnection interrupted", e);
+            Thread.currentThread().interrupt();
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    public boolean deleteTrackFromAlbum(Long id) {
+        return false;
     }
 
     public static TrackDao getInstance() {

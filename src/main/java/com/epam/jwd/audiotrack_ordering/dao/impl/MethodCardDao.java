@@ -94,10 +94,6 @@ public class MethodCardDao extends CommonDao<Card> implements CardDao {
         }
     }
 
-    @Override
-    public boolean delete(Long id) {
-        return false;
-    }
 
     @Override
     protected String getTableName() {

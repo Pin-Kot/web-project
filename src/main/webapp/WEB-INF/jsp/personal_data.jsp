@@ -24,12 +24,18 @@
            <th>Date</th>
            <th>Status</th>
            <th>Value</th>
+           <th>Details</th>
        </tr>
         <c:forEach var="order" items="${requestScope.userOrders}">
           <tr>
               <td>${order.date}</td>
               <td>${order.status}</td>
               <td>${order.value}</td>
+              <form name="" action="${pageContext.request.contextPath}/controller?command=show_order_tracks"
+                    method="post">
+                  <input type="hidden" name="orderId" value="${order.id}"/>
+                  <td><input type="submit" value="show tracks"></td>
+              </form>
           </tr>
         </c:forEach>
     </table>

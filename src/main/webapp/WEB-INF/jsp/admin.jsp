@@ -15,6 +15,7 @@
 <fmt:message bundle="${loc}" key="label.links.add_album" var="addAlbumLink"/>
 <fmt:message bundle="${loc}" key="label.links.add_track" var="addTrackLink"/>
 <fmt:message bundle="${loc}" key="label.links.add_image" var="addImageLink"/>
+<fmt:message bundle="${loc}" key="label.links.delete" var="deleteLink"/>
 
 <html lang="${sessionScope.lang}">
 <head>
@@ -28,5 +29,6 @@
 <li><a href="${pageContext.request.contextPath}/controller?command=show_add_album">${addAlbumLink}</a></li>
 <li><a href="${pageContext.request.contextPath}/controller?command=show_add_track">${addTrackLink}</a></li>
 <li><a href="${pageContext.request.contextPath}/controller?command=show_add_image">${addImageLink}</a></li>
+<li><a href="${pageContext.request.contextPath}/controller?command=show_delete">${deleteLink}</a></li>
 </body>
 </html>

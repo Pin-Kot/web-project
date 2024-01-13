@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="jwds" uri="online-store.jwd.epam.com" %>
+<%@ page import="com.epam.jwd.audiotrack_ordering.entity.Role" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 
 
@@ -10,10 +11,10 @@
 <fmt:message bundle="${loc}" key="label.title" var="pageTitle"/>
 <fmt:message bundle="${loc}" key="label.links.logout" var="logoutLink"/>
 <fmt:message bundle="${loc}" key="label.links.login" var="loginLink"/>
-<fmt:message bundle="${loc}" key="label.links.sign_up" var="sign_upLink"/>
-<fmt:message bundle="${loc}" key="label.links.home_page" var="home_pageLink"/>
-<fmt:message bundle="${loc}" key="label.links.personal_data" var="personal_data_pageLink"/>
-<fmt:message bundle="${loc}" key="label.links.shopping_cart" var="shopping_cart_pageLink"/>
+<fmt:message bundle="${loc}" key="label.links.sign_up" var="signUpLink"/>
+<fmt:message bundle="${loc}" key="label.links.home_page" var="homePageLink"/>
+<fmt:message bundle="${loc}" key="label.links.personal_data" var="personalDataPageLink"/>
+<fmt:message bundle="${loc}" key="label.links.shopping_cart" var="shoppingCartPageLink"/>
 
 <html lang="${sessionScope.lang}">
 <head>
@@ -27,7 +28,7 @@
 </style>
 
 <ul id="menu">
-    <li><a href="${pageContext.request.contextPath}/controller?command=main_page">${home_pageLink}</a></li>
+    <li><a href="${pageContext.request.contextPath}/controller?command=main_page">${homePageLink}</a></li>
     <li>
         <form name="lang" action="${pageContext.request.contextPath}/controller?command=change_language" method="post">
             <select class="select-css" name="lang" onchange="submit()">
@@ -53,14 +54,16 @@
         <c:when test="${not empty sessionScope.account}">
             <a href="${pageContext.request.contextPath}/controller?command=logout">${logoutLink}</a>
             <br>
-            <a href="${pageContext.request.contextPath}/controller?command=show_personal_data">${personal_data_pageLink}</a>
+            <a href="${pageContext.request.contextPath}/controller?command=show_personal_data">${personalDataPageLink}</a>
             <br>
-            <a href="${pageContext.request.contextPath}/controller?command=show_shopping_cart">${shopping_cart_pageLink}</a>
+            <c:if test="${sessionScope.account.role eq Role.USER}">
+                <a href="${pageContext.request.contextPath}/controller?command=show_shopping_cart">${shoppingCartPageLink}</a>
+            </c:if>
         </c:when>
         <c:otherwise>
             <a href="${pageContext.request.contextPath}/controller?command=show_login">${loginLink}</a>
             <br>
-            <a href="${pageContext.request.contextPath}/controller?command=show_sign_up">${sign_upLink}</a>
+            <a href="${pageContext.request.contextPath}/controller?command=show_sign_up">${signUpLink}</a>
         </c:otherwise>
     </c:choose>
 

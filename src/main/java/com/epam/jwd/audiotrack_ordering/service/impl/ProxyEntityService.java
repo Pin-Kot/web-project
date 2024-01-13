@@ -1,7 +1,9 @@
-package com.epam.jwd.audiotrack_ordering.service;
+package com.epam.jwd.audiotrack_ordering.service.impl;
 
 import com.epam.jwd.audiotrack_ordering.db.TransactionManager;
 import com.epam.jwd.audiotrack_ordering.entity.Entity;
+import com.epam.jwd.audiotrack_ordering.service.EntityService;
+import com.epam.jwd.audiotrack_ordering.service.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

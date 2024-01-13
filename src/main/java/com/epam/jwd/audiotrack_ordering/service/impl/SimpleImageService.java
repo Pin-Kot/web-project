@@ -1,8 +1,9 @@
-package com.epam.jwd.audiotrack_ordering.service;
+package com.epam.jwd.audiotrack_ordering.service.impl;
 
 import com.epam.jwd.audiotrack_ordering.dao.ImageDao;
 import com.epam.jwd.audiotrack_ordering.entity.Album;
 import com.epam.jwd.audiotrack_ordering.entity.Image;
+import com.epam.jwd.audiotrack_ordering.service.ImageService;
 
 import java.io.InputStream;
 import java.util.List;
@@ -47,6 +48,6 @@ public class SimpleImageService implements ImageService {
 
     @Override
     public boolean delete(Long id) {
-        return false;
+        return imageDao.delete(id);
     }
 }

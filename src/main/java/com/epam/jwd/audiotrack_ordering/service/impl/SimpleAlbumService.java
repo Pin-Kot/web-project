@@ -1,8 +1,9 @@
-package com.epam.jwd.audiotrack_ordering.service;
+package com.epam.jwd.audiotrack_ordering.service.impl;
 
 import com.epam.jwd.audiotrack_ordering.dao.AlbumDao;
 import com.epam.jwd.audiotrack_ordering.entity.Album;
 import com.epam.jwd.audiotrack_ordering.entity.Artist;
+import com.epam.jwd.audiotrack_ordering.service.AlbumService;
 import com.epam.jwd.audiotrack_ordering.validator.EnteredDataValidator;
 
 import java.util.List;
@@ -69,6 +70,6 @@ public class SimpleAlbumService implements AlbumService {
 
     @Override
     public boolean delete(Long id) {
-        return false;
+        return albumDao.delete(id);
     }
 }

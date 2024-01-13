@@ -21,6 +21,10 @@ public interface TrackDao extends EntityDao<Track> {
 
     List<Track> findTracksByAlbumTitle(String title);
 
+    List<Track> findTracksByOrderId(Long id);
+
+    boolean deleteTrackFromAlbum(Long id);
+
     static TrackDao getInstance() {
         return MethodTrackDao.getInstance();
     }

@@ -45,10 +45,6 @@ public final class MethodAlbumDao extends CommonDao<Album> implements AlbumDao {
     private static final List<String> INSERT_FIELDS = Arrays.asList(TITLE_FIELD_NAME, YEAR_FIELD_NAME,
             TYPE_FIELD_NAME);
 
-//    private static final String selectByArtistExpression = "select album.id, album.title, album.year, album.type from album " +
-//            "join album_artist_link on album.id = album_artist_link.album_id " +
-//            "join artist on album_artist_link.artist_id = artist.id and artist.name = ?";
-
     private final String selectByArtistExpression;
     private final String selectByTitleByYearExpression;
     private final String setVariableExpression;
