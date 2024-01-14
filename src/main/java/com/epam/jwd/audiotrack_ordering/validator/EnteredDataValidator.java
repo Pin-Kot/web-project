@@ -7,6 +7,8 @@ public class EnteredDataValidator {
 
     private static final String TYPE_REGEX = "[A-Z]{4,20}";
     private static final String PRICE_REGEX = "^\\d{0,8}(\\.\\d{1,2})?$";
+    private static final String DISCOUNT_REGEX = "^(0|1?\\d|20)$";
+    private static final String LONG_REGEX = "^\\d+$";
     private static final String ENTERED_YEAR_REGEX = "(?:(?:18|19)[0-9]{2})|(?:(?:200|201)[0-9])|(?:(?:202)[0-3])";
 
     private static EnteredDataValidator instance = null;
@@ -55,6 +57,20 @@ public class EnteredDataValidator {
             return false;
         }
         return Pattern.compile(TYPE_REGEX).matcher(type).matches();
+    }
+
+    public boolean isDiscountValid(String discount) {
+        if (discount == null || discount.isEmpty()) {
+            return false;
+        }
+        return Pattern.compile(DISCOUNT_REGEX).matcher(discount).matches();
+    }
+
+    public boolean isLongNumberValid(String number) {
+        if (number == null || number.isEmpty()) {
+            return false;
+        }
+        return Pattern.compile(LONG_REGEX).matcher(number).matches();
     }
 
     public boolean isAlbumDataValid(String title, String strYear, String type) {

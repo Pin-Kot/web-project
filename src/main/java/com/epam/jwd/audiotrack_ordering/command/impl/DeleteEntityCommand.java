@@ -10,6 +10,7 @@ import com.epam.jwd.audiotrack_ordering.service.ArtistService;
 import com.epam.jwd.audiotrack_ordering.service.ImageService;
 import com.epam.jwd.audiotrack_ordering.service.ServiceFactory;
 import com.epam.jwd.audiotrack_ordering.service.TrackService;
+import com.epam.jwd.audiotrack_ordering.validator.EnteredDataValidator;
 
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -26,6 +27,9 @@ public class DeleteEntityCommand implements Command {
 
     private static final String ERROR_WRONG_ENTITY_NAME_ATTRIBUTE = "errorWrongEntityNameFoundMessage";
     private static final String WRONG_ENTITY_NAME_MESSAGE = "Entity not found";
+
+    private static final String ERROR_ENTERED_ID_ATTRIBUTE = "errorEnteredIdMessage";
+    private static final String WRONG_ID_MESSAGE = "Incorrect user id";
 
     private static DeleteEntityCommand instance = null;
     private static final ReentrantLock LOCK = new ReentrantLock();
@@ -67,6 +71,10 @@ public class DeleteEntityCommand implements Command {
     private boolean isEntityDeleted(CommandRequest request) {
         final String entityFromRequest = request.getParameter(ENTITY_REQUEST_PARAM_NAME);
         final String idFromRequest = request.getParameter(ID_REQUEST_PARAM_NAME);
+        if (!EnteredDataValidator.getInstance().isLongNumberValid(idFromRequest)){
+            request.addAttributeToJSP(ERROR_ENTERED_ID_ATTRIBUTE, WRONG_ID_MESSAGE);
+            return false;
+        }
         final Long id = Long.parseLong(idFromRequest);
         switch (entityFromRequest) {
             case "album":

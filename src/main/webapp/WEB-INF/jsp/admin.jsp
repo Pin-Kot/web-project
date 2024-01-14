@@ -16,6 +16,7 @@
 <fmt:message bundle="${loc}" key="label.links.add_track" var="addTrackLink"/>
 <fmt:message bundle="${loc}" key="label.links.add_image" var="addImageLink"/>
 <fmt:message bundle="${loc}" key="label.links.delete" var="deleteLink"/>
+<fmt:message bundle="${loc}" key="label.links.assign_discount" var="discountLink"/>
 
 <html lang="${sessionScope.lang}">
 <head>
@@ -24,6 +25,7 @@
 <body>
 <li><a href="${pageContext.request.contextPath}/controller?command=show_users">${usersLink}</a></li>
 <li><a href="${pageContext.request.contextPath}/controller?command=show_accounts">${accountsLink}</a></li>
+<li><a href="${pageContext.request.contextPath}/controller?command=show_assign_discount">${discountLink}</a></li>
 <br>
 <li><a href="${pageContext.request.contextPath}/controller?command=show_add_artist">${addArtistLink}</a></li>
 <li><a href="${pageContext.request.contextPath}/controller?command=show_add_album">${addAlbumLink}</a></li>

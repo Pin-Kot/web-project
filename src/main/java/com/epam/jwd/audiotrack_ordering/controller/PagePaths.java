@@ -12,6 +12,7 @@ public enum PagePaths {
     ARTISTS("/WEB-INF/jsp/artists.jsp"),
     CHECKOUT("/WEB-INF/jsp/checkout.jsp"),
     DELETE("/WEB-INF/jsp/delete.jsp"),
+    ASSIGN_DISCOUNT("/WEB-INF/jsp/assign_discount.jsp"),
     EDIT_DATA("/WEB-INF/jsp/edit_data.jsp"),
     EDIT_PASSWORD("/WEB-INF/jsp/edit_password.jsp"),
     ERROR("/WEB-INF/jsp/error.jsp"),

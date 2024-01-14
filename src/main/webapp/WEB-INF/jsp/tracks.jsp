@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="com.epam.jwd.audiotrack_ordering.entity.Role" %>
 <%@include file="header.jsp" %>
 <html>
 <head>
@@ -21,8 +22,10 @@
 <ol>
     <c:forEach var="track" items="${requestScope.tracks}">
         <li>
+            <c:if test="${not empty sessionScope.account && sessionScope.account.role eq Role.ADMIN}">
+                ID ${track.id}.
+            </c:if>
                 ${track.title} - ${track.year}, price: ${track.price} $
-
             <form name="" action="${pageContext.request.contextPath}/controller?command=show_track_reviews"
                   method="post">
                 <input type="hidden" name="trackId" value="${track.id}"/>
