@@ -35,7 +35,7 @@ public class AccountValidator {
         return Pattern.compile(LOGIN_REGEX).matcher(login).matches();
     }
 
-    public boolean isPasswordValid(String password) {
+        public boolean isPasswordValid(String password) {
         if (password == null || password.isEmpty()) {
             return false;
         }

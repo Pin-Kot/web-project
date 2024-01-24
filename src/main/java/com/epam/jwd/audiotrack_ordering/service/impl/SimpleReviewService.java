@@ -11,7 +11,7 @@ public class SimpleReviewService implements ReviewService {
 
     private final ReviewDao reviewDao;
 
-    public SimpleReviewService(ReviewDao reviewDao) {
+    SimpleReviewService(ReviewDao reviewDao) {
         this.reviewDao = reviewDao;
     }
 

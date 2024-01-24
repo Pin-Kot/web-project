@@ -19,7 +19,7 @@ public class SimpleAccountService implements AccountService {
     private final BCrypt.Hasher hasher;
     private final BCrypt.Verifyer verifyer;
 
-    public SimpleAccountService(AccountDao accountDao, BCrypt.Hasher hasher, BCrypt.Verifyer verifyer) {
+    SimpleAccountService(AccountDao accountDao, BCrypt.Hasher hasher, BCrypt.Verifyer verifyer) {
         this.accountDao = accountDao;
         this.hasher = hasher;
         this.verifyer = verifyer;

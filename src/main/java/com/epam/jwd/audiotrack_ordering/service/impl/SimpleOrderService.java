@@ -12,7 +12,7 @@ public class SimpleOrderService implements OrderService {
 
     private final OrderDao orderDao;
 
-    public SimpleOrderService(OrderDao orderDao) {
+    SimpleOrderService(OrderDao orderDao) {
         this.orderDao = orderDao;
     }
 

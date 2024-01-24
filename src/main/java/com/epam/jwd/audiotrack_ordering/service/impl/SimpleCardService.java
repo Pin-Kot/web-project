@@ -15,7 +15,7 @@ public class SimpleCardService implements CardService {
     private final CardDao cardDao;
     private final ReentrantLock lock;
 
-    public SimpleCardService(CardDao cardDao) {
+    SimpleCardService(CardDao cardDao) {
         this.cardDao = cardDao;
         this.lock = new ReentrantLock();
     }

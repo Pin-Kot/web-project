@@ -82,7 +82,7 @@ public class EnteredDataValidator {
     }
 
     public boolean isTextReviewValid(String text) {
-        if (text == null || text.isEmpty() || text.length() > 4000) {
+        if (text == null || text.isEmpty() || text.length() > 3000) {
             return false;
         }
         return !Character.isWhitespace(text.charAt(0));
