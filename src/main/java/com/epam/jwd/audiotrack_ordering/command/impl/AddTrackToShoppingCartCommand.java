@@ -25,8 +25,8 @@ public class AddTrackToShoppingCartCommand implements Command {
     private static final String SHOPPING_CART_ATTRIBUTE_NAME = "shoppingCart";
     private static final String TOTAL_PRICE_ATTRIBUTE_NAME = "totalPrice";
 
-    private static final String ERROR_ACCOUNT_DOES_NOT_EXIST_ATTRIBUTE = "errorAccountDoesNotExistMessage";
-    private static final String ACCOUNT_DOES_NOT_EXIST_MESSAGE = "You have no access, please log in";
+    private static final String ERROR_ACCOUNT_DOES_NOT_LOGGED_ATTRIBUTE = "errorAccountDoesNotLoggedMessage";
+    private static final String ACCOUNT_DOES_NOT_LOGGED_MESSAGE = "You have no access, please log in";
 
     private static final String ERROR_ID_TRACK_ATTRIBUTE = "errorIdTrackMessage";
     private static final String ERROR_ID_TRACK_MESSAGE = "Incorrect track id";
@@ -66,7 +66,7 @@ public class AddTrackToShoppingCartCommand implements Command {
         final Optional<Object> accountFromSession = request.retrieveFromSession(ACCOUNT_ATTRIBUTE_NAME);
 
         if (!request.sessionExists() || !accountFromSession.isPresent()) {
-            request.addAttributeToJSP(ERROR_ACCOUNT_DOES_NOT_EXIST_ATTRIBUTE, ACCOUNT_DOES_NOT_EXIST_MESSAGE);
+            request.addAttributeToJSP(ERROR_ACCOUNT_DOES_NOT_LOGGED_ATTRIBUTE, ACCOUNT_DOES_NOT_LOGGED_MESSAGE);
             return requestFactory.createForwardResponse(propertyContext.get(TRACKS_PAGE));
         }
         final String trackIdFromRequest = request.getParameter(TRACK_ID_REQUEST_PARAM_NAME);

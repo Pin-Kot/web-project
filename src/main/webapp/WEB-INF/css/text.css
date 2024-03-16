@@ -1,96 +1,166 @@
-body{
+body {
     font-family: "Times New Roman", serif;
 }
-p{
+
+p {
     text-align: center;
     font-size: 18px;
 }
-.left{
-    text-align: left;
+
+span {
+    display: inline-block;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
 }
-.bolt{
-    font-weight: bold;
+
+h1 {
+    text-align: center;
+    font-size: 40px;
+    font-weight: 900;
 }
 
 h2 {
     text-align: left;
     font-size: 22px;
+    margin: 0px 0px 0px 25px;
 }
 
-.list{
-    text-align: left;
-}
-.shadow{
-    text-shadow: 3px 2px 1px #999;
-    font-size: 45px;
-}
-
-h1{
+h3 {
+    display: block;
     text-align: center;
-    font-size: 40px;
-    font-weight: 900;
-}
-.main{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: #edf9ff;
-    -webkit-text-stroke: 1px #484848;
-    -webkit-text-fill-color: white;
+    font-size: 1.5em;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
 }
 
-label{
-    margin-left: 5px;
-    margin-top: 15px;
+h4 {
+    display: block;
+    text-align: center;
+    font-size: 1.2em;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: 600;
+    text-decoration: underline;
 }
 
-li{
+ol, ul, li, .list_block ol, .list_block ul, .list_block li {
+    list-style: none;
+}
+
+li {
     padding: 0.5%;
-    list-style-type:disc;
-    text-align: left;
+    margin: 0;
+    text-align: center;
     font-size: 25px;
 }
-a.button {
-    color: white;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    border-radius: 30px;
-    font-weight: bold;
-    width: 20%;
-    padding: 10px 18px;
-    background-color: #2544ad;
-    display:block;
-    margin-top:20px;
-    margin-left: 40%;
+
+.list_block {
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
     text-align: center;
 }
-input[type=text], input[type=password] {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 1% 0;
+
+.list_block form {
+    margin-block-end: 2px;
+}
+
+.list_block li {
+    padding: 0.1%;
+    margin: 0;
+    text-align: center;
+}
+
+.list_block li input[type=submit] {
+    list-style: none;
+    background: none !important;
+    border: none;
+    padding: 0 !important;
+    display: inline;
+    outline: 0;
+    /*optional*/
+    font-family: arial, sans-serif;
+    /*input has OS specific font-family*/
+    color: #069;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bolder;
+}
+
+.list_block li input[type=submit]:hover {
+    color: #f8cf03;
+}
+
+.list_part ol, .list_part ul, .list_part li {
+    list-style-type: decimal;
+    list-style-position: inside;
+}
+
+.list_part li::marker {
     display: inline-block;
-    border: 1px solid #2544ad;
-    box-sizing: border-box;
-    margin-left: 1%;
 }
-label{
-    padding-top: 5%;
-    margin-left: 1%;
+
+.inner-btn-link {
+    display: inline-block;
 }
-/* Set a style for all buttons */
-button {
-    background-color: #2544ad;
-    color: white;
-    padding: 14px 10px;
+
+.inner-btn-link form {
     margin: auto;
-    border: none;
-    cursor: pointer;
-    width: 150px;
-    border-radius: 30px;
-    font-weight: bold;
-    text-align: center;
     display: block;
-    position: relative;
+    margin-block-end: 0.5em;
+}
+
+.inner-btn-link input[type=submit] {
+    background: none !important;
+    border: none;
+    padding: 0 !important;
+    /*optional*/
+    font-family: arial, sans-serif;
+    /*input has OS specific font-family*/
+    font-weight: bold;
+    font-size: 20px;
+    color: #069;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.inner-btn-link input[type=submit]:hover {
+    color: #f8cf03;
+}
+
+span.review {
+    display: block;
+    width: 70%;
+    height: auto;
+    padding: 5px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 15px;
+}
+
+span.author {
+    display: inline-block;
+    width: auto;
+    height: auto;
+    padding: 5px;
+    margin: 0px 0px 0px 25px;
+    font-size: 16px;
+    text-decoration: underline;
+    color: #0066ff;
+}
+
+span.pblctn-date {
+    display: inline-block;
+    width: auto;
+    height: auto;
+    margin: 0;
+    font-size: 16px;
 }

@@ -1,0 +1,308 @@
+/*format text*/
+#enter_data body {
+    font-family: "Times New Roman";
+    font-size: 20px;
+}
+
+/* Bordered form */
+#enter_data form {
+    border: 2px solid #2544ad;
+    margin: 0px 450px 25px 450px;
+    padding: 20px;
+}
+
+#enter_data label {
+    margin: 0px 0px 0px 0px;
+    display: block;
+    text-align: center;
+    font-size: 20px;
+    padding-right: 5px;
+    padding-top: 0%;
+}
+
+/* Full-width inputs */
+#enter_data input[type=text], #enter_data input[type=password] {
+    width: 70%;
+    padding: 2px 5px;
+    display: block;
+    box-sizing: border-box;
+    font-size: 18px;
+    justify-content: flex-end;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    align-content: center;
+    text-align: center;
+    margin: 5px auto auto;
+}
+
+#enter_data input[type=text]:focus, #enter_data input[type=password]:focus {
+    background-color: lightblue;
+}
+
+/* Set a style for all buttons */
+#enter_data input[type=submit], .inner-btn input[type=submit] {
+    background-color: #2544ad;
+    color: white;
+    padding: 14px 10px;
+    margin: auto;
+    border: none;
+    cursor: pointer;
+    width: 150px;
+    border-radius: 30px;
+    font-weight: bold;
+    text-align: center;
+    display: block;
+    position: relative;
+}
+
+.image_file-input {
+    position: relative;
+}
+
+.image_file-input span {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    outline: none;
+    text-decoration: none;
+    font-size: 14px;
+    vertical-align: middle;
+    color: rgb(255 255 255);
+    text-align: center;
+    border-radius: 4px;
+    background-color: #547bd0;;
+    line-height: 22px;
+    height: 40px;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    border: none;
+    margin-bottom: 15px;
+    transition: background-color 0.2s;
+}
+
+.image_file-input input[type=file] {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+    display: block;
+    width: 0;
+    height: 0;
+}
+
+/* Focus */
+.image_file-input input[type=file]:focus + span {
+    box-shadow: 0 0 0 0.2rem rgba(252, 247, 3, 0.7);
+}
+
+/* Hover/active */
+.image_file-input:hover span {
+    background-color: #132bce;
+}
+
+.image_file-input:active span {
+    background-color: #2E703A;
+}
+
+/* Disabled */
+.image_file-input input[type=file]:disabled + span {
+    background-color: #eee;
+}
+
+/* Add a hover effect for buttons */
+#enter_data input[type=submit]:hover {
+    opacity: 0.8;
+}
+
+#enter_data .alert, .alert {
+    padding: 20px;
+    background-color: #f44336;
+    color: white;
+    font-weight: 900;
+    text-align: center;
+    opacity: 1;
+    transition: opacity 0.6s;
+    margin-bottom: 15px;
+}
+
+#enter_data .closebtn, .closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#enter_data .closebtn:hover, .closebtn:hover {
+    color: black;
+}
+
+#enter_data .service {
+    padding: 0px;
+    background-color: white;
+    color: black;
+    font-weight: bolder;
+    text-align: center;
+    opacity: 1;
+    transition: opacity 0.6s;
+    margin-bottom: 15px;
+}
+
+#enter_data a {
+    font-family: "Times New Roman";
+    font-size: 20px;
+    color: #2544ad;
+    display: block;
+    outline: 0;
+    text-decoration: none;
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: 900;
+}
+
+#enter_data a:hover {
+    color: yellowgreen;
+    text-decoration: underline;
+}
+
+.search-field {
+    padding: 10px 15px;
+    min-width: 55%;
+    font-size: 1rem;
+    line-height: 1.5em;
+    color: #373D41;
+    background-color: #FFF;
+    background-clip: padding-box;
+    border: 1px solid #C5C5C7;
+    border-radius: 6px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    flex-grow: 1;
+    border-right: none;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.search-submit {
+    background-color: #547bd0;
+    color: #ffffff;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: normal;
+    -webkit-transition: none;
+    transition: none;
+    cursor: pointer;
+    outline: 0;
+    padding: 14px 24px 13px;
+    font-size: 1rem;
+    line-height: 1.25rem;
+    border-radius: 6px;
+    border-width: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.search-form .input-group {
+    text-align: center;
+}
+
+.select-type {
+    float: right;
+    display: inline;
+    text-align: center;
+    position: relative;
+    padding: 2px 25px 4px 10px;
+    margin: -22px 210px 0px 0px;
+    font-size: 16px;
+    font-family: sans-serif;
+    font-weight: 700;
+    color: #444;
+    line-height: 1.0;
+    max-width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #aaa;
+    box-shadow: 0 1px 0 1px rgba(0, 0, 0, .04);
+    border-radius: .5em;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'), linear-gradient(to bottom, #ffffff 0%, #e5e5e5 100%);
+    background-repeat: no-repeat, repeat;
+    background-position: right .7em top 50%, 0 0;
+    background-size: .65em auto, 100%;
+}
+
+.select-type::-ms-expand {
+    display: none;
+}
+
+.select-type:hover {
+    border-color: #888;
+}
+
+.select-type:focus {
+    border-color: #aaa;
+    box-shadow: 0 0 1px 3px rgba(59, 153, 252, .7);
+    box-shadow: 0 0 0 3px -moz-mac-focusring;
+    color: #222;
+    outline: none;
+}
+
+.select-type option {
+    font-weight: normal;
+}
+
+*[dir="rtl"] .select-type, :root:lang(ar) .select-type, :root:lang(iw) .select-type {
+    background-position: left .7em top 100%, 0 0;
+    padding: .6em .8em .5em 1.4em;
+}
+
+textarea {
+    width: 100%;
+    height: 150px;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    font-size: 16px;
+    resize: none;
+}
+
+#sndbttn, #clrbttn {
+    cursor: pointer;
+    margin-top: 10px;
+    float: right;
+    height: 38px;
+    padding-left: 24px;
+    padding-right: 24px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 15px;
+    color: #FFF;
+    text-shadow: 0px -1px 0px #000000;
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
+    border-top: 1px solid #FFF;
+    -webkit-box-shadow: 0px 2px 14px #000;
+    box-shadow: 0px 2px 14px #000;
+    background-color: #62add6;
+    background-image: url(https://static.tumblr.com/maopbtg/ZHLmgtok7/button.png);
+    background-repeat: repeat-x;
+}
+
+#sndbttn:active, #clrbttn:active {
+    zoom: 1;
+    filter: alpha(opacity=80);
+    opacity: 0.8;
+}
+
+#sndbttn:focus, #clrbttn:focus {
+    zoom: 1;
+    filter: alpha(opacity=80);
+    opacity: 0.8;
+}

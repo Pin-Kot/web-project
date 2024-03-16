@@ -8,7 +8,7 @@
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="l10n.page.main" var="loc"/>
 
-<fmt:message bundle="${loc}" key="label.title" var="pageTitle"/>
+<fmt:message bundle="${loc}" key="label.title" var="pageLoggingTitle"/>
 <fmt:message bundle="${loc}" key="label.links.logout" var="logoutLink"/>
 <fmt:message bundle="${loc}" key="label.links.login" var="loginLink"/>
 <fmt:message bundle="${loc}" key="label.links.sign_up" var="signUpLink"/>
@@ -19,7 +19,7 @@
 <html lang="${sessionScope.lang}">
 <head>
     <meta charset="UTF-8">
-    <title>${pageTitle}</title>
+    <title>${pageLoggingTitle}</title>
 </head>
 <body>
 
@@ -52,21 +52,23 @@
 
     <c:choose>
         <c:when test="${not empty sessionScope.account}">
-            <a href="${pageContext.request.contextPath}/controller?command=logout">${logoutLink}</a>
+            <a class="top-link" href="${pageContext.request.contextPath}/controller?command=logout">${logoutLink}</a>
             <br>
-            <a href="${pageContext.request.contextPath}/controller?command=show_personal_data">${personalDataPageLink}</a>
+            <a class="top-link"
+               href="${pageContext.request.contextPath}/controller?command=show_personal_data">${personalDataPageLink}</a>
             <br>
             <c:if test="${sessionScope.account.role eq Role.USER}">
-                <a href="${pageContext.request.contextPath}/controller?command=show_shopping_cart">${shoppingCartPageLink}</a>
+                <a class="top-link"
+                   href="${pageContext.request.contextPath}/controller?command=show_shopping_cart">${shoppingCartPageLink}</a>
             </c:if>
         </c:when>
         <c:otherwise>
-            <a href="${pageContext.request.contextPath}/controller?command=show_login">${loginLink}</a>
+            <a class="top-link" href="${pageContext.request.contextPath}/controller?command=show_login">${loginLink}</a>
             <br>
-            <a href="${pageContext.request.contextPath}/controller?command=show_sign_up">${signUpLink}</a>
+            <a class="top-link"
+               href="${pageContext.request.contextPath}/controller?command=show_sign_up">${signUpLink}</a>
         </c:otherwise>
     </c:choose>
-
 </ul>
 </body>
 </html>

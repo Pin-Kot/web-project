@@ -12,3 +12,7 @@ li a {
     text-align: center;
     font-weight: 900;
 }
+
+li a:hover {
+    color: #f8cf03;
+}

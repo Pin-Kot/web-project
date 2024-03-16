@@ -8,7 +8,7 @@
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="l10n.page.main" var="loc"/>
 
-<fmt:message bundle="${loc}" key="label.title.admin" var="pageTitle"/>
+<fmt:message bundle="${loc}" key="label.title.admin" var="pageLoggingTitle"/>
 <fmt:message bundle="${loc}" key="label.links.users" var="usersLink"/>
 <fmt:message bundle="${loc}" key="label.links.accounts" var="accountsLink"/>
 <fmt:message bundle="${loc}" key="label.links.add_artist" var="addArtistLink"/>
@@ -20,9 +20,13 @@
 
 <html lang="${sessionScope.lang}">
 <head>
-    <title>${pageTitle}</title>
+    <title>${pageLoggingTitle}</title>
 </head>
 <body>
+<style>
+    <%@include file="/WEB-INF/css/text.css"%>
+    <%@include file="/WEB-INF/css/main.css"%>
+</style>
 <li><a href="${pageContext.request.contextPath}/controller?command=show_users">${usersLink}</a></li>
 <li><a href="${pageContext.request.contextPath}/controller?command=show_accounts">${accountsLink}</a></li>
 <li><a href="${pageContext.request.contextPath}/controller?command=show_assign_discount">${discountLink}</a></li>
